@@ -1,0 +1,17 @@
+
+
+ul.TimePicker					{font:normal 12px helvetica; color:black; padding:0px;width:200px; }
+ul.TimePicker ul				{padding:0px;}
+ul.TimePicker li				{list-style:none; padding:2px; border:1px solid lightgray; background:white; }
+ul.TimePicker li li:hover			{background:gray; color:white;}
+
+ul.TimePicker li ul li 				{float:left; width:75px; cursor:pointer; position:relative; height:15px;}
+ul.TimePicker li ul li ul li 			{float:none; z-index:10; background:white; color:black; width:50px;padding:2px 15px 2px 5px ; }
+ul.TimePicker li ul li ul li:hover 		{background:gray;}
+ul.TimePicker li.arrow 				{display:block; width:10px; }
+ul.TimePicker li ul li+li.arrow:hover ul 	{display:block; left:10px; top:5px;}
+ul.TimePicker ul ul 				{position:absolute; display:none; left:100px;}
+
+
+
+
