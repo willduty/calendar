@@ -39,9 +39,12 @@ class EntriesController extends AppController{
 		$this->set('month', $month);
 		$this->set('day', $day);
 
-echo 'ok6';
 			
+try {
 		$this->Entry->user_id = $this->Auth->user('id');
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
 			
 		
 			
