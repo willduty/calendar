@@ -41,8 +41,8 @@ class EntriesController extends AppController{
 		$this->Entry->user_id = $this->Auth->user('id');
 		
 		$userId = $this->Auth->user('id');
-			
-				
+			echo 'ok';
+			die();	
 		// set category in user session if set in url
 		// or unset if url param is set to zero
 		if(isset($this->params['named']['categoryId'])){
