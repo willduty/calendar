@@ -85,7 +85,6 @@ try {
 		$this->loadModel('Category');
 		$this->set('categories', $this->Category->find('list'));
 		$this->set('userId', $this->Auth->user('id'));
-		die();
 	}
 	
 	
