@@ -8,8 +8,78 @@ class EntriesController extends AppController{
 	
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
-			echo 'ok';
-			die();
+			
+		// if set explicitly in url, write calendar view type to session
+		if($view){
+			CakeSession::write('UserValues.view', $view);
+		}
+		elseif(CakeSession::read('UserValues.view'))
+			$view = CakeSession::read('UserValues.view');
+		else 
+			$view = "month"; // default is month view
+			
+		$this->set('view', $view);
+				
+		$today = new DateTime();
+		if($month == null)
+			$month = $today->format('n');
+			
+		if($year == null)
+			$year = $today->format('Y');
+		
+		if($day == null)
+			$day = 1;
+		$day = intval($day);
+			
+		$today->setDate($year, $month, $day);
+
+		$this->set('today', $today);
+		$this->set('year', $year);
+		$this->set('month', $month);
+		$this->set('day', $day);
+		
+		$this->Entry->user_id = $this->Auth->user('id');
+		
+		$userId = $this->Auth->user('id');
+			
+				
+		// set category in user session if set in url
+		// or unset if url param is set to zero
+		if(isset($this->params['named']['categoryId'])){
+			$val = $this->params['named']['categoryId'];
+			($val == 0) ?
+				CakeSession::delete('UserValues.categoryId') :
+				CakeSession::write('UserValues.categoryId', $val);
+		}
+			
+		// if category is set filter by category, else get all
+		$categoryId = CakeSession::read('UserValues.categoryId');	
+		if(isset($categoryId)){
+			$this->set('category', $categoryId );
+			$this->Entry->recursive = 2;
+			// $this->set('entries', $this->Entry->findAllByCategoryId($this->params['named']['categoryId']));
+			
+			$this->set('entries', $this->Entry->find('all',
+										array('conditions'=>
+											array('Entry.user_id'=>$userId,
+												'category_id' => $categoryId 
+												))));
+			
+		}
+		else {
+			$this->Entry->recursive = 2;
+			$this->set('entries', $this->Entry->findAllByUserId($userId));
+		}
+
+		if(isset($search)){
+			$this->set('search', true);
+		}
+		
+		// to list categories for user to filter calendar
+		$this->loadModel('Category');
+		$this->set('categories', $this->Category->find('list'));
+		$this->set('userId', $this->Auth->user('id'));
+		die();
 	}
 	
 	
