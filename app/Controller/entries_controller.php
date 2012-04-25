@@ -8,7 +8,8 @@ class EntriesController extends AppController{
 	
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
-			
+			echo 'ok2';
+			die();
 		// if set explicitly in url, write calendar view type to session
 		if($view){
 			CakeSession::write('UserValues.view', $view);
@@ -41,8 +42,7 @@ class EntriesController extends AppController{
 		$this->Entry->user_id = $this->Auth->user('id');
 		
 		$userId = $this->Auth->user('id');
-			echo 'ok';
-			die();	
+				
 		// set category in user session if set in url
 		// or unset if url param is set to zero
 		if(isset($this->params['named']['categoryId'])){
