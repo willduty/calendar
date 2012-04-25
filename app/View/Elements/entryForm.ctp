@@ -216,21 +216,19 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <div class=switch id=additionalDetailsSwitch style='width:10em;'>more options...</div>
 <div id=additionalDetails style='display:none;'>
 	<?php
-		echo $this->Form->input('url', array('type'=>'text'));
-		echo $this->Form->input('email', array('type'=>'text'));
-		echo $this->Form->input('address', array('type'=>'text'));
-		echo $this->Form->input('city', array('type'=>'text'));
-		echo $this->Form->input('state', array('type'=>'text'));
-		echo $this->Form->input('zip_code', array('type'=>'text'));
+		echo $this->Form->input('url', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('email', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('address', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('city', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('state', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('zip_code', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		
 		
 	?>
 	
-	
 </div>
+<br><br>
 
-
-<br>
 
 
 <?php if($_EDIT): 

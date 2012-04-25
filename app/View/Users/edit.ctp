@@ -74,9 +74,8 @@
 </script>
 
 <style type="text/css">
-	label{float:left;width:120px;font-weight:bold;}
-	input, textarea{width:180px;margin-bottom:5px;}
-	textarea{width:250px;height:150px;}
+	form.neatForm input, textarea{width:180px;margin-bottom:5px;}
+	form.neatForm textarea{width:250px;height:75px;}
 	.boxes{width:1em;}
 	#editFormSubmitBtn{margin-left:120px; margin-top:5px; width:90px;}
 	br{clear:left;}
@@ -87,7 +86,7 @@
 <h2>Profile:</h2>
 <div class=simpleSection>
 <?php
-	echo $this->Form->create('User', array('action' => 'edit'));
+	echo $this->Form->create('User', array('action' => 'edit', 'class'=>'neatForm'));
 	echo $this->Form->input('username', array('style' => 'padding:0px' ));
 	echo $this->Form->input('email', array('style' => 'padding:0px' ));
 	echo $this->Form->input('about', array('style' => 'padding:0px;'));

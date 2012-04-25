@@ -67,6 +67,17 @@ form input[type=submit], a[type=button], button {
 	border-radius: 5px;
 }
 
+form.neatForm label{
+	float:left;
+	width:120px;
+	font-weight:bold;
+}
+
+.neatForm70{
+	float:left;
+	width:60px;
+	font-weight:bold;
+}
 
 ul.buttonList {
 	list-style:none;
