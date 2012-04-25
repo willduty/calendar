@@ -124,7 +124,7 @@
 	
 	
 	function updateEntry(elem){
-		$.post('/calendar/entries/updateEntryDetails/' + gEntryId, 
+		$.post('/entries/updateEntryDetails/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
 				var result = $.parseJSON(resp).result;
@@ -143,7 +143,7 @@
 			return;
 		
 		var id = btn.value;
-		$.get('/calendar/dates/delete/' + id + '/' + 0, function(resp){
+		$.get('/dates/delete/' + id + '/' + 0, function(resp){
 			var result = $.parseJSON(resp).result;
 			alert((result == 'ok') ? 'delete succeeded' : 'could not delete date')
 			if(result == 'ok'){
@@ -161,7 +161,7 @@
 			return;
 			
 		
-		$.post('/calendar/dates/add/' + gEntryId, 
+		$.post('/dates/add/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
 				try{
@@ -429,7 +429,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <?php if($EDIT): ?>
 
 	<tr><td style='vertical-align:middle;'>
-	<?php echo $this->Form->button('return to calendar', array('type'=>'button', 'onclick'=>'location=\'/calendar/entries\';')); ?>
+	<?php echo $this->Form->button('return to calendar', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>
 	</td></tr>
 	
 <?php else: ?>
@@ -437,7 +437,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 	<tr><td style='vertical-align:middle;'>
 	<?php echo $this->Form->button('save all'); ?>
 	</td><td style='vertical-align:middle;'>
-	<?php echo $this->Form->button('cancel', array('type'=>'button', 'onclick'=>'location=\'/calendar/entries\';')); ?>
+	<?php echo $this->Form->button('cancel', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>
 	</td></tr>
 
 <?php endif; ?>	
