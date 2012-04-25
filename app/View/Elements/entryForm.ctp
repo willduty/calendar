@@ -3,12 +3,10 @@
 	echo $this->Html->script('jquery-1.6.2.min.js'); 
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
-	echo $this->Html->script('wd_TimePicker.js'); 
 	echo $this->Html->script('TimePicker.js'); 
 	echo $this->Html->script('wd_FormDropdown.js'); 
 	echo $this->Html->script('GuiTree.js'); 
 	echo $this->Html->css('wd_FormDropdown');
-	echo $this->Html->css('wd_TimePicker');
 	echo $this->Html->css('TimePicker');
 	
 	
