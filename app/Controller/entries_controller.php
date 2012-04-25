@@ -18,11 +18,7 @@ class EntriesController extends AppController{
 			$view = "month"; // default is month view
 			
 		$this->set('view', $view);
-			
-
-echo 'ok3';
-			die();
-	
+		
 
 			
 		$today = new DateTime();
@@ -44,7 +40,11 @@ echo 'ok3';
 		$this->set('day', $day);
 		
 		$this->Entry->user_id = $this->Auth->user('id');
-		
+			
+
+echo 'ok4';
+			die();
+	
 		$userId = $this->Auth->user('id');
 				
 		// set category in user session if set in url
