@@ -38,13 +38,13 @@ class EntriesController extends AppController{
 		$this->set('year', $year);
 		$this->set('month', $month);
 		$this->set('day', $day);
-		
+
+echo 'ok5';
+			die();
+			
 		$this->Entry->user_id = $this->Auth->user('id');
 			
 
-echo 'ok4';
-			die();
-	
 		$userId = $this->Auth->user('id');
 				
 		// set category in user session if set in url
