@@ -46,10 +46,6 @@ try {
     echo 'Caught exception: '.  $e->getMessage(). "\n";
 }
 			
-		echo 'ok';
-			
-die();			
-			
 			
 		$userId = $this->Auth->user('id');
 				
