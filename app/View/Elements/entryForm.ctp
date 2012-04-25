@@ -10,7 +10,7 @@
 	echo $this->Html->css('TimePicker');
 	
 	
-	$EDIT = $this->action == 'edit' || FALSE;
+	$_EDIT = $this->action == 'edit' || FALSE;
 	
 ?>
 
@@ -20,7 +20,7 @@
 <script type=text/javascript>
 
 	<?php
-		if($EDIT)
+		if($_EDIT)
 			echo 'gEntryId = ' . $this->data['Entry']['id'] . ';';
 		
 		if(isset($date))
@@ -201,7 +201,7 @@
 
 <?php if($this->action == 'add'): ?>
 	<h2>New Calendar Entry</h2>
-<?php elseif ($EDIT): ?>	
+<?php elseif ($_EDIT): ?>	
 	<h2>Entry Details</h2>
 <?php endif; ?>
 
@@ -233,7 +233,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <br>
 
 
-<?php if($EDIT): 
+<?php if($_EDIT): 
 	echo $this->Form->input('id'); ?>
 <button name='save' class='small' type=button onclick='return updateEntry(this);'>save</button>
 <br><br>
@@ -243,7 +243,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <!-- LIST OF EXISTING DATES -->
 <?php 
 
-	if($EDIT):
+	if($_EDIT):
 	echo '<div style="padding:5px 0px 5px 0px;" id=existingDates ><h2>Dates</h2>'; 
 	foreach($this->data['Date'] as $date):
 ?>
@@ -267,7 +267,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <!-- DATE GUI -->
 
 
-<?php if($EDIT)
+<?php if($_EDIT)
 	
 	//$data = $this->__get('data');
 	//debug($this->data);
@@ -275,7 +275,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 ?>	
 
 
-<?php if($EDIT): ?>
+<?php if($_EDIT): ?>
 <br>
 <div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
 <?php else: ?>
@@ -409,7 +409,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 	<br>
 	
 	
-	<?php if($EDIT): ?>
+	<?php if($_EDIT): ?>
 
 	<button name='save' class='small'  type=button onclick='return saveDate(this);'>save</button>
 	<button name='cancel' class='small'  type=button onclick='return hideDateGui();'>cancel</button>	
@@ -424,7 +424,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <table style='width:13em;'>
 
-<?php if($EDIT): ?>
+<?php if($_EDIT): ?>
 
 	<tr><td style='vertical-align:middle;'>
 	<?php echo $this->Form->button('return to calendar', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>

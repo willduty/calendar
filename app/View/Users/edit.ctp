@@ -1,6 +1,7 @@
 
-
 <?php 
+	
+	echo $this->Html->script('jquery-1.7.1.min.js'); 
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
 
@@ -13,7 +14,8 @@
 	
 		// set up reset pwd dialog
 		$('#resetPwdDlg').hide();
-		$("#resetSuccessElem").hide();
+		
+		$("#closeResetBtn").hide();
 		$('#closeResetDlgBtn').click(function(){
 			$('#resetPwdDlg').dialog('close');
 			return false;
@@ -23,37 +25,47 @@
 		$('#resetPwdBtn').click(function(){
 			$('#resetPwdDlg').dialog({title:'Reset Password', width:"25em"});
 			
-			// on submitting the form in the dialog, post by ajax
-			$('#UserResetPwdForm').submit(function(){
-			
-				// validate form
-				var pwd1 = $('#UserResetPwdForm').find('#newPassword1').val();
+			$('#UserResetPwdForm')
+				.find('input[type=password]').val('')
+				.end().show();
 				
-				if(pwd1 == ""){
-					alert("please enter a new password");
-					return false;
-				}
-				
-				// send reset by ajax 
-				$.post($('#UserResetPwdForm').attr('action'),
-					$('#UserResetPwdForm').serialize(),
-					
-					function(ajaxResponse){	
-						// response comes as json obj of type ajaxResponse
-						// adjust the dialog html depending on result
-						var respObj = $.parseJSON(ajaxResponse);
-						if(respObj.success){
-							$('#UserResetPwdForm').hide();
-							$("#resetSuccessElem").show();
-						}
-						else{
-							$('#resetStatus').css("background", "red");
-							$('#resetStatus').html("Error: "+respObj.errMsg);
-						}
-					});
-				return false;
-			})
+				$("#resetStatus").empty();
+				$("#closeResetBtn").hide();		
 		})
+		
+		// on submitting the form in the dialog, post by ajax
+		$('#UserResetPwdForm').submit(function(){
+		
+			// validate form
+			var pwd1 = $('#UserResetPwdForm').find('#newPassword1').val();
+			
+			if(pwd1 == ""){
+				alert("please enter a new password");
+				return false;
+			}
+			
+			// send reset by ajax 
+			$.post($('#UserResetPwdForm').attr('action'),
+				$('#UserResetPwdForm').serialize(),
+				
+				function(ajaxResponse){	
+					try{
+					// adjust the dialog html depending on result
+					var respObj = $.parseJSON(ajaxResponse);
+					
+					if(respObj.success){
+						$('#UserResetPwdForm').hide();
+						$("#closeResetBtn").show();
+						$('#resetStatus').css("background", "green").html("New Password Saved");
+					}
+					else{
+						$('#resetStatus').css("background", "red").html("Error: "+respObj.errMsg);
+					}
+					}catch(e){alert('response err: '+e)}
+				});
+			return false;
+		})
+	
 		
 		// $('#resetPwdBtn').button();
 		$('#cancelBtn').button();
@@ -79,9 +91,10 @@
 	echo $this->Form->input('username', array('style' => 'padding:0px' ));
 	echo $this->Form->input('email', array('style' => 'padding:0px' ));
 	echo $this->Form->input('about', array('style' => 'padding:0px;'));
+	echo '<label></label>';
 	echo $this->Form->end('save changes', array('id'=>'editFormSubmitBtn'));
-	
 ?>	
+<?php echo $this->Session->Flash(); ?>
 </div>
 <br>
 
@@ -91,8 +104,7 @@
 <div id="resetPwdDlg">
 	<?php echo $this->element('reset_pwd', array('user'=>$this->data)); ?>
 	<div id='resetStatus'></div>
-	<div id='resetSuccessElem'>
-		<div>New password saved.</div>
+	<div id='closeResetBtn'>
 		<a href=# id=closeResetDlgBtn>close</a>
 	</div>
 	
@@ -109,6 +121,6 @@
 <?php
 	$arr = Router::parse("/", $_SERVER['HTTP_REFERER']);
 	unset($arr['pass']);
-	echo $this->Html->link('cancel', $arr, array('id'=>'cancelBtn'));
+	echo $this->Html->link('done', $arr, array('id'=>'cancelBtn'));
 ?>
 

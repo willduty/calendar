@@ -19,8 +19,7 @@ class EntriesController extends AppController{
 			
 		$this->set('view', $view);
 		
-
-			
+		
 		$today = new DateTime();
 		if($month == null)
 			$month = $today->format('n');
@@ -39,12 +38,12 @@ class EntriesController extends AppController{
 		$this->set('month', $month);
 		$this->set('day', $day);
 
-			
-try {
-		$this->Entry->user_id = $this->Auth->user('id');
-} catch (Exception $e) {
-    echo 'Caught exception: '.  $e->getMessage(). "\n";
-}
+					
+		try {
+				$this->Entry->user_id = $this->Auth->user('id');
+		} catch (Exception $e) {
+				echo 'Caught exception: '.  $e->getMessage(). "\n";
+		}
 			
 			
 		$userId = $this->Auth->user('id');

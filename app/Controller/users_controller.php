@@ -15,9 +15,7 @@ class UsersController extends AppController{
 			if ($this->Auth->login()) {
 				return $this->redirect($this->Auth->redirect());
 			} else {
-				// $this->Session->setFlash(__('Username or password is incorrect'), 'flashElem', array(), 'auth');
 				$this->Session->setFlash("Login Failed", 'flashElem');
-				
 			}
 		}
  	}
@@ -60,9 +58,9 @@ class UsersController extends AppController{
 			$this->data = $this->User->read();
 		}
 		else{
-			$this->User->save($this->data);
-			$this->Session->setFlash('user changes saved');
-			$this->redirect(array('action' => 'index'));
+			if($this->User->save($this->data)){
+				$this->Session->setFlash('user changes saved', 'flashElem');
+			}
 		}
 	}
 	
@@ -78,8 +76,8 @@ class UsersController extends AppController{
 		if($this->RequestHandler->isAjax() && $_SERVER['REQUEST_METHOD'] == 'POST'){
 			
 			// check old password
-			$oldPwdHash = $this->data['UserResetPwdForm']['oldPassword'];
-			if($this->Auth->password($oldPwdHash) != $user['User']['password']){
+			$oldPwd = $this->data['UserResetPwdForm']['oldPassword'];
+			if($this->Auth->password($oldPwd) != $user['User']['password']){
 				$arr = array('success' => false, 'errMsg' => "old password invalid");
 				$json = json_encode($arr);
 				echo $json;
@@ -92,63 +90,33 @@ class UsersController extends AppController{
 					$arr = array('success' => false, 'errMsg' => "new passwords do not match");
 					$json = json_encode($arr);
 					echo $json;
+					die();
+				}
+				
+				// validate
+				$regex = '/^[A-Z0-9]*[0-9][A-Z][A-Z0-9]*$|^[A-Z0-9]*[A-Z][0-9][A-Z0-9]*$/i';
+				if(strlen($newPwd1) < 8 || strlen($newPwd1) > 20
+					|| !preg_match($regex, $newPwd1, $matches)){
+					$arr = array('success' => false, 
+						'errMsg' => "Password must be between 8 and 20 characters and contain at least one number.");
+					$json = json_encode($arr);
+					echo $json;
+					die();
+				}
+				
+				// try to save password
+				$user['User']['password'] = $this->Auth->password($newPwd1);
+				if($this->User->save($user)){
+					$arr = array('success' => true, 'errMsg' => "");
+					$json = json_encode($arr);
+					echo $json;
 				}
 				else{
-					// validate new password
-					
-					
-					
-					
-					
-					/*
-					
-					
-					
-					'password1' => array(
-						'alphaNumeric' => array(
-							'rule' => 'alphaNumeric',
-							'required' => true,
-							'message' => 'Password must contain letters and numbers only'
-						),
-						'between' => array(
-							'rule' => array('between', 8, 12),
-							'message' => 'Password must be between 8 and 12 characters'
-						)
-					),
-					
-					'password2' => array(
-						'alphaNumeric' => array(
-							'rule' => 'alphaNumeric',
-							'required' => true,
-							'message' => 'Password must contain letters and numbers only'
-						),
-						'between' => array(
-							'rule' => array('between', 6, 12),
-							'message' => 'Password must be between 6 and 12 characters'
-						),
-						'mustMatch' => array(
-							'rule' => 'mustMatch',
-							'message' => 'Passwords do not match.'
-						)
-					)
-				
-					*/
-					
-					
-					
-					
-					$user['User']['password'] = $this->Auth->password($newPwd1);
-					if($this->User->save($user)){
-						$arr = array('success' => true, 'errMsg' => "");
-						$json = json_encode($arr);
-						echo $json;
-					}
-					else{
-						$arr = array('success' => false, 'errMsg' => "could not save password" . nl2br(print_r($user, true)));
-						$json = json_encode($arr);
-						echo $json;
-					}
+					$arr = array('success' => false, 'errMsg' => "could not save password" . nl2br(print_r($user, true)));
+					$json = json_encode($arr);
+					echo $json;
 				}
+			
 			}
 		}
 		die();

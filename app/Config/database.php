@@ -58,7 +58,7 @@
  * For MySQL to connect via socket specify the `unix_socket` parameter instead of `host` and `port`
  */
 class DATABASE_CONFIG {
-
+/*
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
@@ -66,6 +66,18 @@ class DATABASE_CONFIG {
 		'login' => 'CakePHP-38719',
 		'password' => 'Superman1',
 		'database' => 'cakecalendar_phpfogapp_com',
+		'prefix' => '',
+		//'encoding' => 'utf8',
+	);
+	*/
+	
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => 'superman',
+		'database' => 'cakecalendar',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
