@@ -1,9 +1,4 @@
 
-<?php 
-
-?>
-
-
 
 <?php 
 	echo $this->Html->script('jquery-1.7.1.min.js'); 
