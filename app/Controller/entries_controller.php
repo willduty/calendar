@@ -8,9 +8,7 @@ class EntriesController extends AppController{
 	
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
-			echo 'ok2';
-			die();
-		// if set explicitly in url, write calendar view type to session
+				// if set explicitly in url, write calendar view type to session
 		if($view){
 			CakeSession::write('UserValues.view', $view);
 		}
@@ -20,7 +18,13 @@ class EntriesController extends AppController{
 			$view = "month"; // default is month view
 			
 		$this->set('view', $view);
-				
+			
+
+echo 'ok3';
+			die();
+	
+
+			
 		$today = new DateTime();
 		if($month == null)
 			$month = $today->format('n');
