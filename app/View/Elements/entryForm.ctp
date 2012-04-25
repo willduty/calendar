@@ -205,9 +205,13 @@
 	<h2>Entry Details</h2>
 <?php endif; ?>
 
+
 <?php
 
 echo $this->Form->create('Entry');
+
+echo '<div class="simpleSectionLight">';
+
 echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 ?>
@@ -222,20 +226,20 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 		echo $this->Form->input('city', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('state', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('zip_code', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		
-		
 	?>
 	
 </div>
-<br><br>
-
+<br>
 
 
 <?php if($_EDIT): 
 	echo $this->Form->input('id'); ?>
-<button name='save' class='small' type=button onclick='return updateEntry(this);'>save</button>
-<br><br>
+	<button name='save' class='small' type=button onclick='return updateEntry(this);'>save</button>
+	<br>
+
 <?php endif; ?>
+	</div>
+	<br><br>
 
 
 <!-- LIST OF EXISTING DATES -->
@@ -263,15 +267,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 
 <!-- DATE GUI -->
-
-
-<?php if($_EDIT)
-	
-	//$data = $this->__get('data');
-	//debug($this->data);
-	
-?>	
-
 
 <?php if($_EDIT): ?>
 <br>
@@ -307,22 +302,22 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				</td></tr>
 			</table>
 		
-			<div id=tool_singleDateOptions style='margin-left:20px;'>
+			<div id=tool_singleDateOptions style='margin-left:20px; display:none;'>
 				<input name=singleDateOptions type=radio checked tool='' defaultChecked><label>all day</label>
 				<input name=singleDateOptions type=radio tool=tool_timesOptions><label>set start/end time & date...</label>
 			
 				<div id=tool_timesOptions style='display:none; margin-left:20px;'>
 				
+					<br>
 					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text')); ?>
-					
-					
+						array('type'=>'text', 'label'=>array('class'=>'neatForm80'))); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text')); ?>
+						array('type'=>'text', 'label'=>array('class'=>'neatForm80'))); ?>
 					
-					
+					<br>
 					<input type=checkbox tool=tool_endDate style='margin-left:10px;'><label>ends on separate day</label>
+						<br>
 						<div id=tool_endDate style='display:none; margin-left:20px;'>
 							<?php echo $this->Form->input('Date.0.end_date',
 								array('type'=>'text')); ?>
