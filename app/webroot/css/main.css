@@ -16,7 +16,9 @@
 	#border: 1px solid gray; 
 }
 
-
+.msgErr {font:bold 12px arial; padding:0px 0px 0px 10px; background:#900; color:white;}
+.msgSuccess {font:bold 12px arial; background:green; color:white;}
+	
 .dateElem{
 	border:1px solid gray;
 	background:#eee;
@@ -137,7 +139,7 @@ ul.buttonList li:last-child{
 
 .flashClass{
 	color:white;
-	background:#990000;
+	background:#900;
 	width:100%;
 }
 

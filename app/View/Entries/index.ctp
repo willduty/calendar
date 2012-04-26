@@ -255,16 +255,15 @@
 			
 			
 			// new category add form and callback
-			function newCatCallback(ajaxResp){
-			//	alert(ajaxResp)
-				var obj = ajaxResp;
-				location = location;
-			}
 			
 			$('#newCatForm').submit(function(){
 				$.post(basePath + "/categories/add",
 					$(this).serialize(),
-					newCatCallback
+					function newCatCallback(ajaxResp){
+						alert(ajaxResp)
+						var obj = ajaxResp;
+						location = location;
+					}
 				)
 				return false;
 			})

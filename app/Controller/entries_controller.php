@@ -8,6 +8,32 @@ class EntriesController extends AppController{
 	
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
+	
+	
+	
+	
+		$to      = $this->request->data['User']['email'];
+				$subject = 'el calendario registration';
+				$message = 'Hello,	
+							To complete your registration, simply click the link below:\n\n
+							<a href="localhost/users/confirm_registration/5" target=_blank>confirm link</a>
+							\n\nThank you for registering. -Webmaster, El Calendario';
+							
+				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
+					'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
+					'MIME-version: 1.0\n'.
+					'Content-type: text/html; charset= iso-8859-1\n';
+					
+				mail($to, $subject, $message, $headers);
+
+	
+	
+	
+	
+	
+	
+	
+	
 		// if set explicitly in url, write calendar view type to session
 		if($view){
 			CakeSession::write('UserValues.view', $view);

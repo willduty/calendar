@@ -37,10 +37,13 @@
 		$('#UserResetPwdForm').submit(function(){
 		
 			// validate form
-			var pwd1 = $('#UserResetPwdForm').find('#newPassword1').val();
-			
-			if(pwd1 == ""){
-				alert("please enter a new password");
+			var bEmpty = false;
+			$('#UserResetPwdForm input[type=password]').each(function(){
+					if(this.value == "")
+						bEmpty = true;
+			});
+			if(bEmpty){
+				alert('all fields must be filled out');
 				return false;
 			}
 			
@@ -52,14 +55,13 @@
 					try{
 					// adjust the dialog html depending on result
 					var respObj = $.parseJSON(ajaxResponse);
-					
-					if(respObj.success){
+					if(respObj.success){	
 						$('#UserResetPwdForm').hide();
 						$("#closeResetBtn").show();
-						$('#resetStatus').css("background", "green").html("New Password Saved");
+						$('#resetStatus').removeClass().addClass("msgSuccess").html("New Password Saved");
 					}
 					else{
-						$('#resetStatus').css("background", "red").html("Error: "+respObj.errMsg);
+						$('#resetStatus').removeClass().addClass("msgErr").html("Error: "+respObj.errMsg);
 					}
 					}catch(e){alert('response err: '+e)}
 				});
@@ -87,7 +89,7 @@
 <div class=simpleSection>
 <?php
 	echo $this->Form->create('User', array('action' => 'edit', 'class'=>'neatForm'));
-	echo $this->Form->input('username', array('style' => 'padding:0px' ));
+	echo $this->Form->input('username', array('style' => 'padding:0px'));
 	echo $this->Form->input('email', array('style' => 'padding:0px' ));
 	echo $this->Form->input('about', array('style' => 'padding:0px;'));
 	echo '<label></label>';

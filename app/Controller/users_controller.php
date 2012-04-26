@@ -13,6 +13,11 @@ class UsersController extends AppController{
 		
        	if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
+				// clear user session items (todo, make this an option?)
+				CakeSession::delete('UserValues.view');
+				CakeSession::delete('UserValues.categoryId');
+				
+				// main calendar page
 				return $this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash("Login Failed", 'flashElem');

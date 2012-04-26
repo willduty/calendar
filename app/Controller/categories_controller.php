@@ -23,31 +23,37 @@
 		}
 		
 		function add(){
-			
-			if(!empty($this->request->data)){
-				if($this->RequestHandler->isAjax()){
-					$success = $this->Category->save($this->request->data);
-					$json = array();
-					$json['message'] = 'New Category Saved';
-					$json['success'] = $success;
-					echo json_encode($json);
-					die();
+			$json = array();
+			try{
+				if(!empty($this->request->data)){
+					$data = $this->request->data;
+					$data['Category']['user_id'] = $this->Auth->user('id');
+					if($this->RequestHandler->isAjax()){
+						$success = $this->Category->save($data);
+						$json['success'] = $success;
+						$json['message'] = $success ? 'New Category Saved' : 'Save Failed';
+						echo json_encode($json);
+						die();
+					}
+					else {
+						if($this->Category->save($this->request->data))
+							$this->Session->setFlash("new category added");
+						
+						$this->redirect(array('action' => 'index'));
+					}
 				}
-				else {
-					if($this->Category->save($this->request->data))
-						$this->Session->setFlash("new category added");
-					
-					$this->redirect(array('action' => 'index'));
-				}
+			}catch(Exception $e){
+				$json['success'] = false;
+				$json['message'] = $e->message; // maybe not in production..
+				echo json_encode($json);
+				die();
 			}
 		}
 		
 		
 		function delete($id){
-		
-		
-			$this->Category->delete($id);
-		
+	
+			$this->Category->delete($id);	
 			$arr = explode('/', CakeRequest::referer());
 			
 			foreach($arr as $key => $urlpart){
