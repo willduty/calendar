@@ -14,6 +14,7 @@
 	
 		// set up reset pwd dialog
 		$('#resetPwdDlg').hide();
+		$('#closeAcctDlg').hide();
 		
 		$("#closeResetBtn").hide();
 		$('#closeResetDlgBtn').click(function(){
@@ -32,6 +33,16 @@
 				$("#resetStatus").empty();
 				$("#closeResetBtn").hide();		
 		})
+		
+		
+		// close acct dlg
+		$('#closeAcctBtn').click(function(){
+			$('#closeAcctDlg').dialog({title:'Close Account', width:"25em"});
+			$('#UserCloseAcctForm').show();	
+			$('#closeCloseDlgBtn').click(function(){$('#closeAcctDlg').dialog('close')})
+		})
+		
+		
 		
 		// on submitting the form in the dialog, post by ajax
 		$('#UserResetPwdForm').submit(function(){
@@ -99,8 +110,28 @@
 </div>
 <br>
 
+
+
+<h2>Summary:</h2>
+<div class=simpleSection>
+	<div style='font:bold 12px arial;'>
+	Acct Created: <span class=data><?php echo $user['User']['created']; ?></span><br>
+	Calendar Entries: <span class=data><?php echo count($user['Entry']); ?></span><br>
+	Active Alerts: <span class=data>todo</span><br>
+	</div>
+</div>
+<br>
+
 <div id="resetPwdBtn" class='simpleSection hand'>Reset Password &raquo;</div>
 <br>
+
+<div id="contacts_emails" class='simpleSection hand'>Contacts/Emails &raquo;</div>
+
+<br>
+<div id="closeAcctBtn" class='simpleSection hand'>Close Account &raquo;</div>
+
+
+
 
 <div id="resetPwdDlg">
 	<?php echo $this->element('reset_pwd', array('user'=>$this->data)); ?>
@@ -108,11 +139,12 @@
 	<div id='closeResetBtn'>
 		<a href=# id=closeResetDlgBtn>close</a>
 	</div>
-	
 </div>
 
-<div id="contacts/emails" class=simpleSection>contacts/emails &raquo;</div>
 
+<div id="closeAcctDlg">
+	<?php echo $this->element('close_acct', array('user'=>$this->data)); ?>	
+</div>
 
 
 <br>
@@ -120,8 +152,15 @@
 	
 	
 <?php
-	$arr = Router::parse("/", $_SERVER['HTTP_REFERER']);
-	unset($arr['pass']);
+
+	// back to whereever we came from, or entries controller
+	if(isset($_SERVER['HTTP_REFERER'])){
+		$arr = Router::parse("/", $_SERVER['HTTP_REFERER']);
+		unset($arr['pass']);
+	}
+	else{
+		$arr = array('controller'=>'entries');
+	}
 	echo $this->Html->link('done', $arr, array('id'=>'cancelBtn'));
 ?>
 

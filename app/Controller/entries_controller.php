@@ -102,7 +102,7 @@ class EntriesController extends AppController{
 
 			$this->adjustDataArray($data);
 			$data['Entry']['user_id'] = $this->Auth->user('id');
-			
+		
 			if($this->Entry->saveAll($data)){
 			
 				$this->Session->setFlash("New Calendar Entry Saved", 'flashElem');

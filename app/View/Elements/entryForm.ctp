@@ -53,13 +53,15 @@
 		new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').get(0))
 		
 		// pre submit validation
-		$('#EntryAddForm').bind('submit', validateForm);
-		$('#EntryEditForm').bind('submit', validateForm);
+		$('#EntryForm').bind('submit', validateForm);
 		
 	})
 	
 	
 	function validateForm(){
+		
+		
+		var form = $('#EntryForm');
 		
 		var name = $('#EntryName').val();
 		if($.trim(name) == ""){
@@ -67,11 +69,8 @@
 			return false;
 		}
 		
-		var form = $('#EntryEditForm')
-		
 		var wp = form.find('[name$=weeks_pattern\\\]]:checked')
 		
-			
 		if(wp.val() == 'nth_weekdays_of_month'){
 			if(0 == form.find('[name$=weeks_of_month\\\]\\\[\\\]]:checked').length){
 				alert('for Nth days of month you must select at least one day')
@@ -155,6 +154,11 @@
 			function(resp){
 				try{
 				
+				
+				//alert(resp)
+				//return false;
+				
+				
 				var result = $.parseJSON(resp)
 				
 				if(result.result != 'ok') {
@@ -199,7 +203,7 @@
 
 <?php
 
-echo $this->Form->create('Entry');
+echo $this->Form->create('Entry', array('id'=>'EntryForm'));
 
 echo '<div class="simpleSectionLight">';
 

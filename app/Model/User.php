@@ -6,6 +6,20 @@ class User extends AppModel{
 	
 	// var $hasMany = array('Entry' => array( 'className'  => 'Entry'));
 
+	
+	
+	var $hasMany = array(
+		"Entry" => array(
+			'className' => 'Entry',
+			'dependent' => true),
+		"Category" => array(
+			'className' => 'Category',
+			'dependent' => true)	
+			
+		);
+	
+	
+	
 	var $validate = array(
 		'name' => array(
 			'rule' => array('minLength', 3),

@@ -6,6 +6,8 @@
 
 .hand { cursor: pointer; }
 
+.data {font:normal 12px courier;}
+
 #entryFormTable{
 	margin:0px; 
 	spacing:5px; 

@@ -39,7 +39,6 @@
 				<div id="content">
 					<?php echo $content_for_layout; ?>
 				</div>
-			asdf
 			</td>
 		</tr>
 		

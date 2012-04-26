@@ -71,7 +71,7 @@ class UsersController extends AppController{
 				$user = $this->User->read();
 		
 				$to      = $this->request->data['User']['email'];					
-				$subject = 'el calendario registration test 3';
+				$subject = 'El Calendario Registration';
 				$message = 'Hello,	
 							To complete El Calendario registration, simply click the link below:<br><br>
 							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/'.$reg_token.'" target=_blank>-- El Calendario registration confirmation -- </a>
@@ -117,6 +117,7 @@ class UsersController extends AppController{
 		$this->User->id = $id;
 		if(empty($this->data)){
 			$this->data = $this->User->read();
+			$this->set('user', $this->User->read());
 		}
 		else{
 			if($this->User->save($this->data)){
@@ -172,13 +173,27 @@ class UsersController extends AppController{
 	}
 	
 	
-	function delete($id){
-
+	function delete(){
+		$userId = $this->Auth->user('id');
+		$user = $this->User->findById($userId);
+		
+		if($user['User']['user_group_id'] == 1){
+			echo 'you can\'t close your account, you are an admin.';
+			die();
+		}
+		
+		// logout first
+		$this->Auth->logout($userId);
+		
+		// delete the user...
+		$this->User->delete($userId, true);
+		
 	}
 	
 	
 	function validatePasswords($newPwd1, $newPwd2){
 	
+		// only alphanumeric & at least one num & one letter
 		$regex = '/^[A-Z0-9]*[0-9][A-Z][A-Z0-9]*$|^[A-Z0-9]*[A-Z][0-9][A-Z0-9]*$/i';
 	
 		if(trim($newPwd1) == '' || trim($newPwd2) == '' ){
