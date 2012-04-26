@@ -9,31 +9,6 @@ class EntriesController extends AppController{
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
 	
-	
-	
-	
-		$to      = 'willduty@yahoo.com';
-				$subject = 'el calendario registration test 3';
-				$message = 'Hello,	
-							To complete El Calendario registration, simply click the link below:<br><br>
-							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/5" target=_blank>-- El Calendario registration confirmation -- </a>
-							<br><br>Thank you for registering. -Webmaster, El Calendario';
-							
-				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
-					'Reply-To: webmaster@cakecalendar.com' . "\r\n";
-				$headers .= "MIME-Version: 1.0\r\n";
-				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-
-				mail($to, $subject, $message, $headers);
-
-	
-	
-	
-	
-	
-	
-	
-	
 		// if set explicitly in url, write calendar view type to session
 		if($view){
 			CakeSession::write('UserValues.view', $view);
