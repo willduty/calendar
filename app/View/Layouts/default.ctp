@@ -13,8 +13,8 @@
 	?>
 	
 </head>
-<body>
 
+<body>
 	<table id=mainTable>
 		<tr>
 			<td id="header">				

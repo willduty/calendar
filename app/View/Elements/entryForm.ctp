@@ -9,7 +9,6 @@
 	echo $this->Html->css('wd_FormDropdown');
 	echo $this->Html->css('TimePicker');
 	
-	
 	$_EDIT = $this->action == 'edit' || FALSE;
 	
 ?>
@@ -33,17 +32,14 @@
 		gui = new GuiTree();
 		gui.setup();
 		
-		
 		// jquery guis
 		$("[name$=start_date\\\]]").datepicker();
 		$("[name$=end_date\\\]]").datepicker();
-		
 		
 		if(location.pathname.indexOf('edit') != -1)
 			hideDateGui();
 		else
 			initDateGui();
-		
 		
 		if(typeof gDate != 'undefined'){
 			$('#Date0StartDate').val(gDate)
@@ -53,17 +49,12 @@
 			$('#additionalDetails').toggle();
 		});
 		
-
 		new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').get(0))
-		
 		new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').get(0))
-		
-		
 		
 		// pre submit validation
 		$('#EntryAddForm').bind('submit', validateForm);
 		$('#EntryEditForm').bind('submit', validateForm);
-		
 		
 	})
 	

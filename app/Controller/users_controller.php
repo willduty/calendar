@@ -102,7 +102,8 @@ class UsersController extends AppController{
 			$this->User->saveField('activated', $date->format('Y-m-d h:i:s'));
 			
 			// log user in
-			//if($this->Auth->login()) {
+			unset($user[0]['User']['password']);
+			$this->Auth->login($user[0]);
 			
 		}
 	}
