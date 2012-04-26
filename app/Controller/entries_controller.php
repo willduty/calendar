@@ -82,8 +82,10 @@ class EntriesController extends AppController{
 		
 		// to list categories for user to filter calendar
 		$this->loadModel('Category');
-		$this->set('categories', $this->Category->findAllByUserId($userId));
+		$cats = $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$userId)));
+		$this->set('categories', $cats);
 		$this->set('userId', $this->Auth->user('id'));
+		
 	}
 	
 	
@@ -115,7 +117,8 @@ class EntriesController extends AppController{
 				
 			
 			// to list categories 
-			$this->set('categories', $this->Entry->Category->findAllByUserId($this->Auth->user('id')));
+			$cats = $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$this->Auth->user('id'))));
+			$this->set('categories', $cats);
 		}
 		
 	}
@@ -138,7 +141,8 @@ class EntriesController extends AppController{
 			}	
 		}
 		
-		$this->set('categories', $this->Entry->Category->findAllByUserId($this->Auth->user('id')));
+		$this->set('categories', $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$this->Auth->user('id')))));
+	
 		$this->loadModel('DateType');
 		$this->set('dateTypes', $this->DateType->find('list'));
 		$this->Entry->recursive = 2;

@@ -50,7 +50,9 @@ class UsersController extends AppController{
 							
 				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
 					'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
-					'X-Mailer: PHP/' . phpversion();
+					'MIME-version: 1.0\n'.
+					'Content-type: text/html; charset= iso-8859-1\n';
+					
 				mail($to, $subject, $message, $headers);
 
 				$this->redirect(array('action'=>'welcome'));
