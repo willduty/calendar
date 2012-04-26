@@ -39,24 +39,31 @@ class UsersController extends AppController{
 	function register(){
 		if(!empty($this->data)){
 			
+			
+			// save new user
 			$this->request->data['User']['user_group_id'] = 2;
 			$this->request->data['User']['password'] = $this->Auth->password($this->data['User']['password1']);
 			
-			if($this->User->save($this->request->data)){
+			$reg_token = 'pg9e8hgp948euh4pg4h4iuhghsgwe';
+			$this->request->data['User']['registration_token'] = $reg_token;
 			
+			
+			// save user and send registration
+			if($this->User->save($this->request->data)){
+				
 				$user = $this->User->read();
-							
-				$to      = $this->request->data['User']['email'];
-				$subject = 'el calendario registration';
+		
+				$to      = $this->request->data['User']['email'];					
+				$subject = 'el calendario registration test 3';
 				$message = 'Hello,	
-							To complete your registration, simply click the link below:\n\n
-							<a href="localhost/users/confirm_registration/'.$user['User']['id'].'" target=_blank>confirm link</a>
-							\n\nThank you for registering. -Webmaster, El Calendario';
+							To complete El Calendario registration, simply click the link below:<br><br>
+							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/'.$reg_token.'" target=_blank>-- El Calendario registration confirmation -- </a>
+							<br><br>Thank you for registering. -Webmaster, El Calendario';
 							
 				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
-					'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
-					'MIME-version: 1.0\n'.
-					'Content-type: text/html; charset= iso-8859-1\n';
+					'Reply-To: webmaster@cakecalendar.com' . "\r\n";
+				$headers .= "MIME-Version: 1.0\r\n";
+				$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";					
 					
 				mail($to, $subject, $message, $headers);
 
@@ -69,8 +76,12 @@ class UsersController extends AppController{
 		
 	}
 	
-	function confirm_registration($id){
+	function confirm_registration($reg_token){
+		$user = $this->User->findUserByRegistrationToken($reg_token);
 		echo 'hello dere';
+		echo $user;
+		echo '------';
+		
 		die();
 	}
 	
