@@ -826,11 +826,12 @@ echo "</table>";
 	<?php 
 		
 		// categories loaded separately in controller
-		foreach($categories as $catId => $cat){
+		foreach($categories as $cat){
+			$catId = $cat['Category']['id'];
 			if(isset($category) && $catId == $category)
-				echo "<span class='selectedInactiveLink'>". $cat . "</span>";
+				echo "<span class='selectedInactiveLink'>". $cat['Category']['name'] . "</span>";
 			else
-				echo $this->Html->link($cat,
+				echo $this->Html->link($cat['Category']['name'],
 									array('controller'=>'entries', 'action'=>'index', 
 										$view, $year, $month, $day, 'categoryId'=>$catId),
 									array('name'=>'categoryLink', 'categoryId'=>$catId));

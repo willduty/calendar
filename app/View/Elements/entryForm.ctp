@@ -246,7 +246,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <?php 
 
 	if($_EDIT):
-	echo '<div style="padding:5px 0px 5px 0px;" id=existingDates ><h2>Dates</h2>'; 
+	echo '<h2>Dates</h2><div style="padding:5px 0px 5px 0px;" id=existingDates class=simpleSectionLight>'; 
 	foreach($this->data['Date'] as $date):
 ?>
 
@@ -415,7 +415,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 
 
-<table style='width:13em;'>
+<table style='width:10em;'>
 
 <?php if($_EDIT): ?>
 
@@ -426,7 +426,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <?php else: ?>
 
 	<tr><td style='vertical-align:middle;'>
-	<?php echo $this->Form->button('save all'); ?>
+	<?php echo $this->Form->button('save'); ?>
 	</td><td style='vertical-align:middle;'>
 	<?php echo $this->Form->button('cancel', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>
 	</td></tr>

@@ -8,7 +8,7 @@ class EntriesController extends AppController{
 	
 	// main calendar page
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
-				// if set explicitly in url, write calendar view type to session
+		// if set explicitly in url, write calendar view type to session
 		if($view){
 			CakeSession::write('UserValues.view', $view);
 		}
@@ -82,7 +82,7 @@ class EntriesController extends AppController{
 		
 		// to list categories for user to filter calendar
 		$this->loadModel('Category');
-		$this->set('categories', $this->Category->find('list'));
+		$this->set('categories', $this->Category->findAllByUserId($userId));
 		$this->set('userId', $this->Auth->user('id'));
 	}
 	
@@ -98,10 +98,6 @@ class EntriesController extends AppController{
 		if(!empty($this->data)){ // form has been submitted
 
 			$this->adjustDataArray($data);
-	
-			//debug($data);
-			//die();
-		
 			$data['Entry']['user_id'] = $this->Auth->user('id');
 			
 			if($this->Entry->saveAll($data)){
@@ -119,7 +115,7 @@ class EntriesController extends AppController{
 				
 			
 			// to list categories 
-			$this->set('categories', $this->Entry->Category->find('list'));
+			$this->set('categories', $this->Entry->Category->findAllByUserId($this->Auth->user('id')));
 		}
 		
 	}
@@ -142,7 +138,7 @@ class EntriesController extends AppController{
 			}	
 		}
 		
-		$this->set('categories', $this->Entry->Category->find('list'));
+		$this->set('categories', $this->Entry->Category->findAllByUserId($this->Auth->user('id')));
 		$this->loadModel('DateType');
 		$this->set('dateTypes', $this->DateType->find('list'));
 		$this->Entry->recursive = 2;
