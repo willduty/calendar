@@ -78,9 +78,12 @@ class UsersController extends AppController{
 	
 	function confirm_registration($reg_token){
 		$user = $this->User->findAllByRegistrationToken($reg_token);
-		
 		$this->set('userFound', count($user));
-		
+		if(count($user) == 1){
+			$date = new DateTime();
+			$this->User->id = $user[0]['User']['id'];
+			$this->User->saveField('activated', $date->format('Y-m-d h:i:s'));
+		}
 	}
 	
 	function view($id){
