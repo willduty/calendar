@@ -39,12 +39,21 @@ class UsersController extends AppController{
 	function register(){
 		if(!empty($this->data)){
 			
-			
 			// save new user
 			$this->request->data['User']['user_group_id'] = 2;
+			
+			
+			// validate password TODO
 			$this->request->data['User']['password'] = $this->Auth->password($this->data['User']['password1']);
 			
-			$reg_token = 'pg9e8hgp948euh4pg4h4iuhghsgwe';
+			// random token
+			$reg_token = '';
+			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			$size = strlen( $chars );
+			for( $i = 0; $i < 25; $i++ ) {
+				$reg_token .= $chars[ rand( 0, $size - 1 ) ];
+			}
+			
 			$this->request->data['User']['registration_token'] = $reg_token;
 			
 			
