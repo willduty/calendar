@@ -12,7 +12,7 @@ class UsersController extends AppController{
 	function login(){
 		
        	if ($this->request->is('post')) {
-			if ($this->Auth->login()) {
+			if($this->Auth->login()) {
 				// clear user session items (todo, make this an option?)
 				CakeSession::delete('UserValues.view');
 				CakeSession::delete('UserValues.categoryId');
@@ -43,8 +43,16 @@ class UsersController extends AppController{
 			$this->request->data['User']['user_group_id'] = 2;
 			
 			
-			// validate password TODO
+			// validate password
 			$this->request->data['User']['password'] = $this->Auth->password($this->data['User']['password1']);
+			
+			$json = $this->validatePasswords($this->data['User']['password1'], $this->data['User']['password2']	);
+			$obj = json_decode($json);
+			if(!$obj->success){
+				$this->Session->setFlash($obj->errMsg, 'flashElem');
+				return;
+			}
+			
 			
 			// random token
 			$reg_token = '';
@@ -92,6 +100,10 @@ class UsersController extends AppController{
 			$date = new DateTime();
 			$this->User->id = $user[0]['User']['id'];
 			$this->User->saveField('activated', $date->format('Y-m-d h:i:s'));
+			
+			// log user in
+			//if($this->Auth->login()) {
+			
 		}
 	}
 	
@@ -174,6 +186,35 @@ class UsersController extends AppController{
 	function delete($id){
 
 	}
+	
+	
+	function validatePasswords($newPwd1, $newPwd2){
+	
+		$regex = '/^[A-Z0-9]*[0-9][A-Z][A-Z0-9]*$|^[A-Z0-9]*[A-Z][0-9][A-Z0-9]*$/i';
+	
+		if(trim($newPwd1) == '' || trim($newPwd2) == '' ){
+			$arr = array('success' => false, 'errMsg' => "Passwords cannot be blank");
+		}
+	
+		// check new passwords match
+		else if($newPwd1 != $newPwd2){
+			$arr = array('success' => false, 'errMsg' => "New passwords do not match");
+		}
+		
+		// validate
+		else if(strlen($newPwd1) < 8 || strlen($newPwd1) > 20
+			|| !preg_match($regex, $newPwd1, $matches)){
+			$arr = array('success' => false, 
+				'errMsg' => "Password must be between 8 and 20 characters and contain at least one number.");
+		}
+		else
+			$arr = array('success' => true);
+		
+		$json = json_encode($arr);
+		return $json;
+
+	}
+	
 	
 }
 

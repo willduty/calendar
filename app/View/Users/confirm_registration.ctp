@@ -4,7 +4,7 @@
 <b>Activation is complete!</b>  Redirecting to calendar...
 
 <script type=text/javascript>
-	setTimeout(f, 10000);
+	setTimeout(f, 5000);
 	function f(){
 		location = '/';
 	}
