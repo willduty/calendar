@@ -18,8 +18,8 @@
 	<table id=mainTable>
 		<tr>
 			<td id="header">				
-				<h3 style="font:bold 24px arial; color:black; text-shadow: 4px 4px 0px white; float:left"> 
-					<a href='/'  style='font-size:17px;'>. . . <span style='font-size:35px;'>C</span>alendar</a>
+				<h3> 
+					<a href='/'  style='font-size:17px;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
 				</h3>
 				<div style='float:right;'>
 				<?php 
@@ -34,14 +34,12 @@
 			
 			</td>
 		</tr>
-		<tr><td>	<span style="font-size:5px;color:white;" >. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . </span>
-			</td></tr>
 		<tr>
 			<td style="width:900px; height:600px;">
-			<div id="content">
-				<?php echo $content_for_layout; ?>
-			</div>
-			
+				<div id="content">
+					<?php echo $content_for_layout; ?>
+				</div>
+			asdf
 			</td>
 		</tr>
 		
@@ -70,8 +68,3 @@
 </html>
 
 
-
-
-
-
-	<?php //echo $this->element('sql_dump'); ?>

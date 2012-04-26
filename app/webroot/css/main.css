@@ -254,11 +254,6 @@ h1 {
 h2 {
 	font: bold 15px arial;
 }
-h3 {
-	font-weight:bold;
-	font-family: 'frutiger linotype','lucida grande', helvetica, arial, sans-serif;
-	font-size: 165%;
-}
 .white{color:white;}
 h4 {
 	color: #993;
@@ -283,34 +278,36 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+
 #header{
-	padding: 10px 20px 5px 5px;
-	#background: -webkit-gradient(linear, left top, left bottom, from(#6a6a6a), to(#444));
-	background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee));
+	padding: 10px 20px 0px 5px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#ccc));
 	background-image: -moz-linear-gradient(top, #ccc, #eee);
 }
-#header h1 {
-	line-height:20px;
-	background: #003d4c url('../img/cake.icon.png') no-repeat left;
-	color: #fff;
-	padding: 0px 30px;
-}
+
 #header a {
 	color: black;
 	text-decoration: none;
 }
 #header a:hover {
 	color: #fff;
-	background: #003d4c;
-	text-decoration: underline;
 }
+
+#header h3{
+	font:bold 24px courier; 
+	color:black; 
+	float:left;
+}
+
 #content{
 	background: #fff;
 	clear: both;
 	color: #333;
-	padding: 10px 20px 40px 20px;
+	padding: 10px 20px 0px 20px;
 	#overflow: auto;
 }
+
 #footer {
 	clear: both;
 	padding: 6px 5px;
@@ -417,12 +414,29 @@ td.calendarHdr{
 	padding-top:2px;
 }
 
+
 td.calendarCell{
 	border: 1px solid #ccc;
 	padding: 0px;
 	width: 120px;
 	height: 70px;
 }
+
+td.todayCell{
+	border-style:solid; 
+	border-width:2px; 
+	border-color:red; 
+	background-color:pink;
+}
+
+td.outOfMonthCell{
+	background-color:lightgray;
+}
+
+td.todayCell{
+
+}
+
 
 td.calendarCell:hover{
 	background: #e5e5f5;

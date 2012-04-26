@@ -307,7 +307,7 @@ $currentDate = new DateTime();
 
 
 // begin calendar table
-echo "<table style='width:100%; '>";
+echo "<table style='width:100%;'>";
 
 
 echo "<tr style=''><td colspan=7 style='background:white; padding: 2px 0px 2px 2px;'>";
@@ -467,7 +467,6 @@ switch($view){
 					$dayCtr = 1;
 					$monthArray = next($monthsArray);
 					$monthCtr = ($monthCtr == 12 ? 1 : $monthCtr + 1);
-					
 				}
 				
 				// set up cell style 
@@ -475,15 +474,14 @@ switch($view){
 				
 				if(date("jnY") ==  $dayCtr . ($monthCtr) . $year){
 					// highlight if day is today
-					$cellStyle .= "border-style:solid; border-width:2px; border-color:red; background-color:pink;";
+					$cellStyle .= " todayCell";
 				}
 
 				if(key($monthsArray) != 1) // gray out days not in month
-					$cellStyle .= "background-color:lightgray;";
-				
+					$cellStyle .= "outOfMonthCell";
 				
 				// finally, draw the calendar day cell
-				echo "<td style='$cellStyle' class='calendarCell' id='$year/$monthCtr/$dayCtr'>";
+				echo "<td class='calendarCell $cellStyle' id='$year/$monthCtr/$dayCtr'>";
 				
 				echo $dayCtr . "<br>"; // date of month numeral
 				
@@ -796,13 +794,12 @@ echo "</table>";
 
 <br>
 <table style='width:100%;'><tr><td>
+
 	<?php
 		echo $this->Session->flash(); 
 	?>
 	</td></tr>
 </table>
-
-
 
 
 </td>
@@ -933,8 +930,3 @@ echo "</table>";
   
 <!-- Individual Entry Details Dialog -->
 <div id=detailsDlg></div>
-
-
-<?php 
-?>
-

@@ -455,35 +455,34 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <ul class=TimePicker id=TimePicker style='display:none;'>
 
 <?php
-	for($i=1; $i<12; $i++){
+	for($i=0; $i<12; $i++){
+		$num = $i == 0 ? 12 : $i;
+			
 		echo "<li>
 				<ul >
-					<li>$i:00 AM </li>
+					<li>$num:00 AM </li>
 					<li class=arrow>&raquo;
 
 						<ul>
-							<li>$i:15 AM</li>
-							<li>$i:30 AM</li>
-							<li>$i:45 AM</li>
+							<li>$num:15 AM</li>
+							<li>$num:30 AM</li>
+							<li>$num:45 AM</li>
 						</ul>
 					</li> 
 
 
-					<li>$i:00 PM </li>
+					<li>$num:00 PM </li>
 					<li class=arrow>&raquo;
 
 						<ul>
-							<li>$i:15 PM</li>
-							<li>$i:30 PM</li>
-							<li>$i:45 PM</li>
+							<li>$num:15 PM</li>
+							<li>$num:30 PM</li>
+							<li>$num:45 PM</li>
 						</ul>
 					</li>
 				</ul>
 			</li>";
-	
-	
 	}
-
 
 ?>
 </ul>
