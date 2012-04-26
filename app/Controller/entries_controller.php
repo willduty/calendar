@@ -15,9 +15,9 @@ class EntriesController extends AppController{
 		$to      = 'willduty@yahoo.com';
 				$subject = 'el calendario registration test 3';
 				$message = 'Hello,	
-							To complete your registration, simply click the link below:\n\n
-							<a href="localhost/users/confirm_registration/5" target=_blank>confirm link</a>
-							\n\nThank you for registering. -Webmaster, El Calendario';
+							To complete El Calendario registration, simply click the link below:<br><br>
+							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/5" target=_blank>-- El Calendario registration confirmation -- </a>
+							<br><br>Thank you for registering. -Webmaster, El Calendario';
 							
 				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
 					'Reply-To: webmaster@cakecalendar.com' . "\r\n";
