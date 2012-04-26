@@ -78,11 +78,9 @@ class UsersController extends AppController{
 	
 	function confirm_registration($reg_token){
 		$user = $this->User->findAllByRegistrationToken($reg_token);
-		echo 'hello dere';
-		echo $user;
-		echo '------';
 		
-		die();
+		$this->set('userFound', count($user));
+		
 	}
 	
 	function view($id){
