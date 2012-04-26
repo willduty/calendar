@@ -12,7 +12,7 @@ class EntriesController extends AppController{
 	
 	
 	
-		$to      = $this->request->data['User']['email'];
+		$to      = 'willduty@yahoo.com';
 				$subject = 'el calendario registration';
 				$message = 'Hello,	
 							To complete your registration, simply click the link below:\n\n
@@ -21,8 +21,8 @@ class EntriesController extends AppController{
 							
 				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
 					'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
-					'MIME-version: 1.0\n'.
-					'Content-type: text/html; charset= iso-8859-1\n';
+					'MIME-version: 1.0\r\n'.
+					'Content-type: text/html; charset= iso-8859-1\r\n';
 					
 				mail($to, $subject, $message, $headers);
 
