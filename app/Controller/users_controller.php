@@ -41,7 +41,7 @@ class UsersController extends AppController{
 			
 				$user = $this->User->read();
 							
-				$to      = $this->request->data['User'];
+				$to      = $this->request->data['User']['email'];
 				$subject = 'el calendario registration';
 				$message = 'Hello,	
 							To complete your registration, simply click the link below:\n\n
