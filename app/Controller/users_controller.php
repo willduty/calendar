@@ -143,40 +143,28 @@ class UsersController extends AppController{
 				echo $json;
 			}
 			else{
+			
 				// check new passwords match
 				$newPwd1 = $this->data['UserResetPwdForm']['newPassword1'];
 				$newPwd2 = $this->data['UserResetPwdForm']['newPassword2'];
-				if($newPwd1 != $newPwd2){
-					$arr = array('success' => false, 'errMsg' => "new passwords do not match");
-					$json = json_encode($arr);
+				$json = $this->validatePasswords($newPwd1, $newPwd2);
+				$obj = json_decode($json);
+				if(!$obj->success){
 					echo $json;
-					die();
+				}else{				
+					// password ok, try to save password
+					$user['User']['password'] = $this->Auth->password($newPwd1);
+					if($this->User->save($user)){
+						$arr = array('success' => true, 'errMsg' => "");
+						$json = json_encode($arr);
+						echo $json;
+					}
+					else{
+						$arr = array('success' => false, 'errMsg' => "could not save password" . nl2br(print_r($user, true)));
+						$json = json_encode($arr);
+						echo $json;
+					}
 				}
-				
-				// validate
-				$regex = '/^[A-Z0-9]*[0-9][A-Z][A-Z0-9]*$|^[A-Z0-9]*[A-Z][0-9][A-Z0-9]*$/i';
-				if(strlen($newPwd1) < 8 || strlen($newPwd1) > 20
-					|| !preg_match($regex, $newPwd1, $matches)){
-					$arr = array('success' => false, 
-						'errMsg' => "Password must be between 8 and 20 characters and contain at least one number.");
-					$json = json_encode($arr);
-					echo $json;
-					die();
-				}
-				
-				// try to save password
-				$user['User']['password'] = $this->Auth->password($newPwd1);
-				if($this->User->save($user)){
-					$arr = array('success' => true, 'errMsg' => "");
-					$json = json_encode($arr);
-					echo $json;
-				}
-				else{
-					$arr = array('success' => false, 'errMsg' => "could not save password" . nl2br(print_r($user, true)));
-					$json = json_encode($arr);
-					echo $json;
-				}
-			
 			}
 		}
 		die();
