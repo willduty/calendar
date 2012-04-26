@@ -6,12 +6,12 @@ class UsersController extends AppController{
 
 	function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('register');
+		$this->Auth->allow('register', 'welcome');
 	}
 	
 	function login(){
 		
-       		if ($this->request->is('post')) {
+       	if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				return $this->redirect($this->Auth->redirect());
 			} else {
@@ -38,6 +38,21 @@ class UsersController extends AppController{
 			$this->request->data['User']['password'] = $this->Auth->password($this->data['User']['password1']);
 			
 			if($this->User->save($this->request->data)){
+			
+				$user = $this->User->read();
+							
+				$to      = $this->request->data['User'];
+				$subject = 'el calendario registration';
+				$message = 'Hello,	
+							To complete your registration, simply click the link below:\n\n
+							<a href="localhost/users/confirm_registration/'.$user['User']['id'].'" target=_blank>confirm link</a>
+							\n\nThank you for registering. -Webmaster, El Calendario';
+							
+				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
+					'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
+					'X-Mailer: PHP/' . phpversion();
+				mail($to, $subject, $message, $headers);
+
 				$this->redirect(array('action'=>'welcome'));
 			}
 		}
@@ -45,6 +60,11 @@ class UsersController extends AppController{
 	
 	function welcome(){
 		
+	}
+	
+	function confirm_registration($id){
+		echo 'hello dere';
+		die();
 	}
 	
 	function view($id){

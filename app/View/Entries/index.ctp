@@ -1,19 +1,4 @@
 
-<?php
-
-$to      = 'willduty@yahoo.com';
-$subject = 'testing';
-$message = 'hello\nhello\nhello';
-$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
-    'Reply-To: webmaster@cakecalendar.com' . "\r\n" .
-    'X-Mailer: PHP/' . phpversion();
-mail($to, $subject, $message, $headers);
-
-die();
-
-?>
-
-
 <?php 
 	echo $this->Html->script('jquery-1.7.1.min.js'); 
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
