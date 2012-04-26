@@ -6,7 +6,7 @@ class UsersController extends AppController{
 
 	function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('register', 'welcome');
+		$this->Auth->allow('register', 'welcome', 'confirm_registration');
 	}
 	
 	function login(){
@@ -77,7 +77,7 @@ class UsersController extends AppController{
 	}
 	
 	function confirm_registration($reg_token){
-		$user = $this->User->findUserByRegistrationToken($reg_token);
+		$user = $this->User->findAllByRegistrationToken($reg_token);
 		echo 'hello dere';
 		echo $user;
 		echo '------';
