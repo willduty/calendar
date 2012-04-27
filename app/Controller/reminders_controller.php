@@ -1,5 +1,6 @@
 <?php
 	
+
 	class RemindersController extends AppController{
 		
 		var $uses = array('Entry', 'Reminder');
@@ -30,10 +31,11 @@
 			
 		}
 		
-		require("IronWorker.class.php");
-
+		
 		
 		function test_uploadIronWorkerJob(){
+			require("IronWorker.class.php");
+
 			echo 'test_uploadIronWorkerJob:<br>';
 				
 			$name = "HelloWorker-php";
@@ -79,7 +81,8 @@
 		
 		
 		function test_checkIronWorkerJob(){
-						
+			require("IronWorker.class.php");
+
 			echo 'check:<br>';
 			$opts = getopt("", array("task:"));
 
