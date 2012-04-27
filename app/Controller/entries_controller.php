@@ -156,7 +156,7 @@ class EntriesController extends AppController{
 		$this->Entry->recursive = 0;
 		$b = $this->Entry->save($this->request->data);
 		
-		echo '{"success":'. $b .'}';
+		echo '{"success":'. ($b ? 'true' : 'false') .'}';
 		
 		die();
 	}
