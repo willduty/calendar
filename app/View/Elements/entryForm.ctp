@@ -345,7 +345,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						array('every_week' => 'Every Week'),
 						array('value' => 'every_week', 'tool'=>'', 'defaultChecked' => true)
 						);
-						
 				?>
 				<br>
 				
@@ -379,12 +378,32 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				
 					<?php
 					
-					    echo $this->Form->input('Date.0.weeks_of_month', array(
-						    'multiple' => 'checkbox',
-						    'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th',
-								'5' => '5th')	
-						    )
+					    echo $this->Form->input('Date.0.weeks_of_month', 
+							array('multiple' => 'checkbox',
+								'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th', '5' => '5th'))
 						    );
+					
+					?>
+					
+				</div>
+				
+				
+				<?php
+					echo $this->Form->radio('Date.0.weeks_pattern', 
+							array('months_of_year' => 'Month(s) of year:'),
+							array('value' => false, 'tool'=>'tool_months_of_year')
+						);
+				?>
+				<br>
+				<div id='tool_months_of_year' style='display:none;'>
+				
+					<?php
+					
+					    echo $this->Form->input('Date.0.months_of_year', array(
+						    'multiple' => 'checkbox',
+						    'options' => array('1' => 'Jan', '2' => 'Feb', '3' => 'Mar', '4' => 'Apr', '5' => 'May', '6' => 'Jun', 
+								'7' => 'Jul', '8' => 'Aug', '9' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec')	
+						    ));
 					
 					?>
 					

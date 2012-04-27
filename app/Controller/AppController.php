@@ -63,6 +63,10 @@ class AppController extends Controller {
 		if(isset($dateArr['weeks_of_month']) && is_array($dateArr['weeks_of_month']))
 			$dateArr['weeks_of_month'] = implode($dateArr['weeks_of_month'], ",");
 		
+		if(isset($dateArr['months_of_year']) && is_array($dateArr['months_of_year']))
+			$dateArr['months_of_year'] = implode($dateArr['months_of_year'], ",");
+		
+		
 		if(empty($dateArr['days_of_week']))
 			unset($dateArr['days_of_week']);
 		
