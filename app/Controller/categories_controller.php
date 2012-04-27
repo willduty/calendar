@@ -65,11 +65,11 @@
 			
 			echo debug($arr);
 			
-			echo $this->base;
+			echo Configure::read('App.baseUrl');
 			die();
 			
 			foreach($arr as $key => $urlpart){
-				if($this->base == '/'.$urlpart){
+				if(Configure::read('App.baseUrl') == '/'.$urlpart){
 					if($arr[$key+1] != 'categories')
 						$this->redirect(CakeRequest::referer());
 					else	
@@ -77,6 +77,7 @@
 				}
 			}
 			
+			$this->redirect(array('action' => 'index'));
 			
 			
 		}
