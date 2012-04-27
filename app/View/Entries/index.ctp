@@ -49,6 +49,12 @@
 		}
 		?>
 	
+		
+		getEntryNameById : function(id){
+			var entry = this[id].Entry;
+			return entry.name;
+		},
+	
 		getEntryDisplayById : function(id){
 			var entry = this[id].Entry;
 			var str = '';
@@ -202,7 +208,9 @@
 						//location = basePath + "/reminders/add/" + t.getAttribute("entryId");
 					},
 					'Delete': function(t) {
-						if(confirm("are you sure you want to delete this calendar entry?"))
+						
+						var name = entriesArr.getEntryNameById(t.getAttribute("entryId"));
+						if(confirm("are you sure you want to delete calendar entry \"" + name + "\"?"))
 							location = path + "/delete/" + t.getAttribute("entryId");
 					}
 				  }
@@ -273,9 +281,16 @@
 				$.post(basePath + "/categories/add",
 					$(this).serialize(),
 					function newCatCallback(ajaxResp){
-						alert(ajaxResp)
-						var obj = ajaxResp;
-						location = location;
+						try{
+							var obj = $.parseJSON(ajaxResp);
+							if(obj.success){
+								alert('Category added')
+								location = location;
+							}
+							else
+								alert('add category failed.')
+						}catch(e){alert('response error;')}
+						
 					}
 				)
 				return false;
@@ -286,8 +301,24 @@
 			$('a[name=categoryLink]').contextMenu('categoryCtxMenu', {
 				  bindings: {
 					'Delete': function(t) {
-						if(confirm("are you sure you want to delete this category?"))
-							location = basePath + "/categories/delete/" + t.getAttribute("categoryId");
+					
+						// check for entries before deleting category
+						$.get(basePath + '/entries/entriesByCategory/' + t.getAttribute("categoryId"),
+							function(resp){
+								var json = $.parseJSON(resp);
+								
+								// if no entries just delete category, else prompt first
+								if(json.entries.length == 0 || 
+												confirm("This category contains one or more entries. "+
+												"Are you sure you want to delete this category?\n"+
+												"(Entries will not be deleted but will not longer belong to this category.)"))
+										location = basePath + "/categories/delete/" + t.getAttribute("categoryId");
+									
+							})
+						
+							
+						return false;
+						
 					}
 				  }
 			  });
@@ -838,6 +869,11 @@ echo "</table>";
 	<?php 
 		
 		// categories loaded separately in controller
+		echo $this->Html->link('[show all entries]', 
+								array('controller'=>'entries', 'action'=>'index', 
+									$view, $year, $month, 'categoryId'=>0),
+								array('style'=>'color:#669;'));
+		echo "<br>";
 		foreach($categories as $catId => $cat){
 			if(isset($category) && $catId == $category)
 				echo "<span class='selectedInactiveLink'>". $cat . "</span>";
@@ -849,10 +885,7 @@ echo "</table>";
 			
 			echo "<br>";
 		}
-		echo $this->Html->link('[show all entries]', 
-								array('controller'=>'entries', 'action'=>'index', 
-									$view, $year, $month, 'categoryId'=>0));
-		echo "<br>";
+		
 		echo $this->Html->link('add new&raquo;', 
 						array('controller'=>'categories', 'action'=>'add', $year, $month), 
 						array('id'=>'newCategory', 'escape'=>false));

@@ -46,11 +46,11 @@
 			echo 'here0 - <br>';	
 			
 			$workername = "HelloWorker-php";
-try{
+		try{
 			$iw = new IronWorker('config.ini');
 			//$iw = new IronWorker(array('token' => 'TlTWqXFbGqU_UatTqlBtXk89BcA', 
 				//						'project_id' => '4f9abbfdf0b19932d200b41a'));
-	}catch(Exception $e){
+			}catch(Exception $e){
 					echo 'exception:'.$e; 
 					die();}		
 			

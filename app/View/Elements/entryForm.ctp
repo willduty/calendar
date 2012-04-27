@@ -105,9 +105,7 @@
 	
 
 	function initDateGui(){
-		
 		$('[name=dateType]').first().trigger('click');
-			
 	}
 	
 	
@@ -116,7 +114,7 @@
 			$('form').serialize(), 
 			function(resp){
 				var result = $.parseJSON(resp).result;
-				alert((result == 'ok') ? 'update succeeded.' : 'could not update.')
+				alert((result == 'ok') ? 'Update succeeded.' : 'Could not update.')
 			})
 	}
 	
@@ -221,6 +219,8 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 		echo $this->Form->input('city', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('state', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('zip_code', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('category_id', array('label'=>array('class'=>'neatForm70')));
+	
 	?>
 	
 </div>

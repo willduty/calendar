@@ -3,6 +3,7 @@
 	class CategoriesController extends AppController{
 		
 		var $helpers = array('Html', 'Form');
+		var $uses = array('Entry', 'Category');
 		var $name = "Categories";
 		
 		function index(){
@@ -52,8 +53,14 @@
 		
 		
 		function delete($id){
-	
+			
 			$this->Category->delete($id);	
+			$entries = $this->Entry->findAllByCategoryId($id);
+			foreach($entries as $entry){
+				$this->Entry->id = $entry['Entry']['id'];
+				$this->Entry->saveField('category_id', NULL);
+			}
+			
 			$arr = explode('/', CakeRequest::referer());
 			
 			foreach($arr as $key => $urlpart){

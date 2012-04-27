@@ -205,6 +205,23 @@ class EntriesController extends AppController{
 		$this->render('search', 'ajax');
 	}
 	
+	
+	
+	// search for entries (via ajax)
+	function entriesByCategory($catId){
+	
+		$entries = $this->Entry->findAllByCategoryId($catId);
+		$entries = array('entries'=>$entries);
+		echo json_encode($entries);
+		
+		die();
+		
+	}
+	
+	
+	
+	
+	
 	function highlightDay($view, $year, $month, $day){
 		$this->redirect(array('action'=>'index', $view, $year, $month));
 	}
