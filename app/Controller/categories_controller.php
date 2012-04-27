@@ -57,14 +57,7 @@
 			
 			$arr = explode('/', CakeRequest::referer());
 			
-			echo '|'.Configure::read('App.baseUrl') . '|';
-			echo debug($arr);
-			echo debug($this);
-			
-			die();
-			
-			
-			
+						
 			$this->Category->delete($id);	
 			$entries = $this->Entry->findAllByCategoryId($id);
 			foreach($entries as $entry){
@@ -72,15 +65,11 @@
 				$this->Entry->saveField('category_id', NULL);
 			}
 			
-			foreach($arr as $key => $urlpart){
-				if(Configure::read('App.baseUrl') == '/'.$urlpart){
-					if($arr[$key+1] != 'categories')
-						$this->redirect(CakeRequest::referer());
-					else	
-						$this->redirect(array('action' => 'index'));
-				}
-			}
-			
+			if($arr[3] != 'categories')
+				$this->redirect(CakeRequest::referer());
+			else	
+				$this->redirect(array('action' => 'index'));
+	
 			$this->redirect(array('action' => 'index'));
 			
 			
