@@ -16,9 +16,6 @@ class DatesController extends AppController{
 		// adjust date data and save
 		$data = $this->request->data;
 		$this->adjustDataArray($data);
-		//echo debug($data);
-		//die();
-		
 		
 		$data['Date'][0]['entry_id'] = $entryId;
 		if(!$this->Date->save($data['Date'][0])){

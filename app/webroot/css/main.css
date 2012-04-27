@@ -403,6 +403,11 @@ table .altrow td {
 #	background: #f5f5f5;
 }
 
+
+.entryLink {font:bold 10px arial;}
+
+
+
 table.calendarHdr{
 	background: #000;
 	vertical-align: top;

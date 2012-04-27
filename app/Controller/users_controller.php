@@ -188,12 +188,13 @@ class UsersController extends AppController{
 		// delete the user...
 		$this->User->delete($userId, true);
 		
+		// the end
 	}
 	
 	
 	function validatePasswords($newPwd1, $newPwd2){
 	
-		// only alphanumeric & at least one num & one letter
+		// regex: alphanumeric only & at least one num & one letter
 		$regex = '/^[A-Z0-9]*[0-9][A-Z][A-Z0-9]*$|^[A-Z0-9]*[A-Z][0-9][A-Z0-9]*$/i';
 	
 		if(trim($newPwd1) == '' || trim($newPwd2) == '' ){

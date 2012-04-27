@@ -2,5 +2,6 @@
 
 echo 'Your account has been deleted.';
 
+// goodbye..
 
 ?>

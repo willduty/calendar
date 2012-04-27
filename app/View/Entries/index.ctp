@@ -188,6 +188,13 @@
 					'Edit': function(t) {
 					  location = path + "/edit/" + t.getAttribute("entryId");
 					},
+					'Reminder': function(t) {
+						$.get(basePath + "/reminders/add/" + t.getAttribute("entryId"),
+							function(resp){
+								alert(resp)
+						})
+						//location = basePath + "/reminders/add/" + t.getAttribute("entryId");
+					},
 					'Delete': function(t) {
 						if(confirm("are you sure you want to delete this calendar entry?"))
 							location = path + "/delete/" + t.getAttribute("entryId");
@@ -908,6 +915,7 @@ echo "</table>";
 <div class="contextMenu" id="entryCtxMenu">
 	<ul>
 		<li id="Edit"> Edit This Calendar Entry</li>
+		<li id="Reminder"> Add Reminder</li>
 		<li id="Delete"> Delete This Entry</li>
 		
 	</ul>

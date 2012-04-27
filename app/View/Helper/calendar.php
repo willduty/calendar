@@ -224,7 +224,7 @@ class CalendarHelper extends AppHelper{
 
 	// returns a properly formatted calendar date entry link for use in various views
 	function makeCalendarDateEntryLink($entry, $class = null){
-		return "<a href='/calendar/entries/view/".$entry['Entry']['id']."' entryId=".$entry['Entry']['id']." name=entry>".$entry['Entry']['name']."</a>";
+		return "<a href='/calendar/entries/view/".$entry['Entry']['id']."' class=entryLink entryId=".$entry['Entry']['id']." name=entry>".$entry['Entry']['name']."</a>";
 		
 		$options = array('name' => 'entry',
 				'popUpText' => $entry['Entry']['name'],
