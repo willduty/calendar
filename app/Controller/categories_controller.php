@@ -63,6 +63,9 @@
 			
 			$arr = explode('/', CakeRequest::referer());
 			
+			echo print_r($arr);
+			die();
+			
 			foreach($arr as $key => $urlpart){
 				if($this->base == '/'.$urlpart){
 					if($arr[$key+1] != 'categories')
@@ -71,9 +74,8 @@
 						$this->redirect(array('action' => 'index'));
 				}
 			}
-			if($this->RequestHandler->isAjax()){
-				die();
-			}	
+			
+			
 			
 		}
 	
