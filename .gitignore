@@ -1,6 +1,7 @@
 .DS_Store
 tags
 /app/tmp
+/app/Config/database.php
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors

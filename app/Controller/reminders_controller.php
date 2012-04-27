@@ -44,9 +44,9 @@
 				
 			$name = "HelloWorker-php";
 
-			//$iw = new IronWorker('config.ini');
-			$iw = new IronWorker(array('token' => 'TlTWqXFbGqU_UatTqlBtXk89BcA', 
-										'project_id' => '4f9abbfdf0b19932d200b41a'));
+			$iw = new IronWorker('config.ini');
+			//$iw = new IronWorker(array('token' => 'TlTWqXFbGqU_UatTqlBtXk89BcA', 
+				//						'project_id' => '4f9abbfdf0b19932d200b41a'));
 			
 			
 			echo 'here1';
