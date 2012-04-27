@@ -8,7 +8,7 @@
 		var $name = "Reminders";
 		
 		function index(){
-		
+			echo 'ok';
 			
 			die();
 		}
