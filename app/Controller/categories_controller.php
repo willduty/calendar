@@ -63,7 +63,9 @@
 			
 			$arr = explode('/', CakeRequest::referer());
 			
-			echo print_r($arr);
+			echo debug($arr);
+			
+			echo $this->base;
 			die();
 			
 			foreach($arr as $key => $urlpart){
