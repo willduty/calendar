@@ -9,10 +9,13 @@
 		
 		function index(){
 		
+			
+			die();
 		}
 		
 		function edit($id){
 		
+			die();
 		}
 		
 		function add($entryId){
@@ -29,6 +32,7 @@
 		
 		function delete($id){
 			
+			die();
 		}
 		
 		
@@ -77,6 +81,7 @@
 			$schedule_id = $iw->postScheduleAdvanced($name, $payload, $start_at, 2*60, null, 10);
 			echo "schedule_id: $schedule_id\n";
 
+			die();
 		}
 		
 		
@@ -101,6 +106,7 @@
 				echo $e;
 			}
 
+			die();
 		}
 		
 		
