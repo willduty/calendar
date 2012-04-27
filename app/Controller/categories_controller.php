@@ -54,19 +54,23 @@
 		
 		function delete($id){
 			
+			
+			$arr = explode('/', CakeRequest::referer());
+			
+			echo '|'.Configure::read('App.baseUrl') . '|';
+			echo debug($arr);
+			echo debug($this);
+			
+			die();
+			
+			
+			
 			$this->Category->delete($id);	
 			$entries = $this->Entry->findAllByCategoryId($id);
 			foreach($entries as $entry){
 				$this->Entry->id = $entry['Entry']['id'];
 				$this->Entry->saveField('category_id', NULL);
 			}
-			
-			$arr = explode('/', CakeRequest::referer());
-			
-			echo '|'.Configure::read('App.baseUrl') . '|';
-			echo debug($arr);
-			
-			die();
 			
 			foreach($arr as $key => $urlpart){
 				if(Configure::read('App.baseUrl') == '/'.$urlpart){
