@@ -43,23 +43,25 @@
 			echo 'test_uploadIronWorkerJob:<br>';
 				
 			
-			echo 'here0<br>';	
+			echo 'here0 - <br>';	
 			
-			$name = "HelloWorker-php";
+			$workername = "HelloWorker-php";
 try{
 			$iw = new IronWorker('config.ini');
 			//$iw = new IronWorker(array('token' => 'TlTWqXFbGqU_UatTqlBtXk89BcA', 
 				//						'project_id' => '4f9abbfdf0b19932d200b41a'));
-	}catch(Exception $e){echo 'exception:'.$e; die();}		
+	}catch(Exception $e){
+					echo 'exception:'.$e; 
+					die();}		
 			
 			echo 'here1<br>';
 			
 			# Creating zip package.
-			$zipName = "$name.zip";
+			$zipName = "$workername.zip";
 			IronWorker::createZip("", array('hello_worker.php'), $zipName, true);
 
 			# Posting package.
-			$res = $iw->postCode('hello_worker.php', $zipName, $name);
+			$res = $iw->postCode('hello_worker.php', $zipName, $workername);
 
 			echo 'here2<br>';
 			echo $res;
@@ -70,7 +72,7 @@ try{
 				'key_two' => 2
 			);
 			# Adding a new task.
-			$task_id = $iw->postTask($name, $payload);
+			$task_id = $iw->postTask($workername, $payload);
 			echo "task_id = $task_id \n";
 
 			sleep(10);
