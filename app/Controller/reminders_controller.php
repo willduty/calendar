@@ -47,7 +47,9 @@
 			//$iw = new IronWorker('config.ini');
 			$iw = new IronWorker(array('token' => 'TlTWqXFbGqU_UatTqlBtXk89BcA', 
 										'project_id' => '4f9abbfdf0b19932d200b41a'));
-
+			
+			
+			echo 'here1';
 			
 			# Creating zip package.
 			$zipName = "$name.zip";
@@ -56,6 +58,9 @@
 			# Posting package.
 			$res = $iw->postCode('hello_worker.php', $zipName, $name);
 
+			echo 'here2';
+			echo $res;
+			
 			# Pass any data you want to a worker task.
 			$payload = array(
 				'key_one' => 'Payload',
@@ -67,8 +72,12 @@
 
 			sleep(10);
 
+			
+			echo 'here3';
+			
+			
 			$details = $iw->getTaskDetails($task_id);
-			print_r($details);
+			echo print_r($details);
 			if ($details->status != 'queued'){
 				$log = $iw->getLog($task_id);
 				print_r($log);
@@ -108,6 +117,7 @@
 				echo 'asfd';
 				echo $e;
 			}
+
 
 			die();
 		}
