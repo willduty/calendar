@@ -71,6 +71,9 @@
 						$this->redirect(array('action' => 'index'));
 				}
 			}
+			if($this->RequestHandler->isAjax()){
+				die();
+			}	
 			
 		}
 	
