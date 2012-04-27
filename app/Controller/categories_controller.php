@@ -63,9 +63,9 @@
 			
 			$arr = explode('/', CakeRequest::referer());
 			
+			echo '|'.Configure::read('App.baseUrl') . '|';
 			echo debug($arr);
 			
-			echo Configure::read('App.baseUrl');
 			die();
 			
 			foreach($arr as $key => $urlpart){
