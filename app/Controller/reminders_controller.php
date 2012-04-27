@@ -42,6 +42,9 @@
 
 			echo 'test_uploadIronWorkerJob:<br>';
 				
+			
+			echo 'here0<br>';	
+			
 			$name = "HelloWorker-php";
 
 			$iw = new IronWorker('config.ini');
@@ -49,7 +52,7 @@
 				//						'project_id' => '4f9abbfdf0b19932d200b41a'));
 			
 			
-			echo 'here1';
+			echo 'here1<br>';
 			
 			# Creating zip package.
 			$zipName = "$name.zip";
@@ -58,7 +61,7 @@
 			# Posting package.
 			$res = $iw->postCode('hello_worker.php', $zipName, $name);
 
-			echo 'here2';
+			echo 'here2<br>';
 			echo $res;
 			
 			# Pass any data you want to a worker task.
