@@ -165,7 +165,13 @@
 	
 	$(document).ready(
 		function(){
-	
+		
+			// highlight today cell (if present)
+			var d = new Date()
+			var idstr = d.getFullYear() + '\\\/' + (parseInt(d.getMonth()) + 1) + '\\\/' + d.getDate();
+			$('#'+idstr).addClass('todayCell');
+			
+		
 			// context menu for calendar day
 			$('td.calendarCell').contextMenu('dateCtxMenu', {
 				  bindings: {
@@ -476,12 +482,12 @@ switch($view){
 				
 				// set up cell style 
 				$cellStyle = "";
-				
+				/*
 				if(date("jnY") ==  $dayCtr . ($monthCtr) . $year){
 					// highlight if day is today
 					$cellStyle .= " todayCell";
 				}
-
+*/
 				if(key($monthsArray) != 1) // gray out days not in month
 					$cellStyle .= "outOfMonthCell";
 				
