@@ -113,8 +113,8 @@
 		$.post('/entries/updateEntryDetails/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
-				var result = $.parseJSON(resp).result;
-				alert((result == 'ok') ? 'Update succeeded.' : 'Could not update.')
+				var result = $.parseJSON(resp);
+				alert(result.success ? 'Update succeeded.' : 'Could not update.')
 			})
 	}
 	
@@ -130,9 +130,9 @@
 		
 		var id = btn.value;
 		$.get('/dates/delete/' + id + '/' + 0, function(resp){
-			var result = $.parseJSON(resp).result;
-			alert((result == 'ok') ? 'delete succeeded' : 'could not delete date')
-			if(result == 'ok'){
+			var result = $.parseJSON(resp);
+			alert(result.success ? 'delete succeeded' : 'could not delete date')
+			if(result.success){
 			
 				$('div[name=existingDate][value='+id+']').remove();
 			}
@@ -152,14 +152,9 @@
 			function(resp){
 				try{
 				
-				
-				//alert(resp)
-				//return false;
-				
-				
 				var result = $.parseJSON(resp)
 				
-				if(result.result != 'ok') {
+				if(result.success == false) {
 					alert('save failed.')
 				}
 				else{

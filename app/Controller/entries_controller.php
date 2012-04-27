@@ -20,7 +20,6 @@ class EntriesController extends AppController{
 			
 		$this->set('view', $view);
 		
-		
 		$today = new DateTime();
 		if($month == null)
 			$month = $today->format('n');
@@ -157,7 +156,7 @@ class EntriesController extends AppController{
 		$this->Entry->recursive = 0;
 		$b = $this->Entry->save($this->request->data);
 		
-		echo '{"result":'. ($b ? '"ok"' : '"failed"') .'}';
+		echo '{"success":'. $b .'}';
 		
 		die();
 	}
@@ -219,9 +218,7 @@ class EntriesController extends AppController{
 	}
 	
 	
-	
-	
-	
+
 	function highlightDay($view, $year, $month, $day){
 		$this->redirect(array('action'=>'index', $view, $year, $month));
 	}

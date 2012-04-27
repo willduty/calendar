@@ -19,7 +19,7 @@ class DatesController extends AppController{
 		
 		$data['Date'][0]['entry_id'] = $entryId;
 		if(!$this->Date->save($data['Date'][0])){
-			echo '{"result":"failed"}';
+			echo '{"success":false}';
 			die();	
 		}
 		
@@ -40,7 +40,7 @@ class DatesController extends AppController{
 		$this->Date->id = $dateId;
 		$b = $this->Date->delete($dateId, false);
 		
-		echo $b ? '{"result":"ok"}' : '{"result":"failed"}' ;	
+		echo $b ? '{"success":true}' : '{"success":false}' ;	
 		die();
 	
 	}
