@@ -124,6 +124,9 @@ class IronWorker{
      *
      */
     function __construct($config_file_or_options = null){
+	
+		
+		die();
         $this->getConfigData($config_file_or_options);
         $this->url = "{$this->protocol}://{$this->host}:{$this->port}/{$this->api_version}/";
     }
