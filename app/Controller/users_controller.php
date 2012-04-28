@@ -209,9 +209,9 @@ class UsersController extends AppController{
 				
 					// new pwd ok
 					// save new password to pending new pwd
-					$hash = $this->Auth->password($newPwd1);
+					$encrypted_password = $this->Auth->password($newPwd1);
 					$this->User->id = $userId;
-					if($this->User->saveField('pending_password', $hash)){
+					if($this->User->saveField('pending_password', 'test')){
 						
 						$reg_token = $this->makeRegToken();				
 						$this->User->saveField('registration_token', $reg_token);
