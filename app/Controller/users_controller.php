@@ -211,14 +211,10 @@ class UsersController extends AppController{
 					// save new password to pending new pwd
 					$encrypted_password = $this->Auth->password($newPwd1);
 					$this->User->id = $userId;
-					if($this->User->saveField('pending_password', 'test')){
+					if($this->User->saveField('pending_password', $encrypted_password)){
 						
 						$reg_token = $this->makeRegToken();				
 						$this->User->saveField('registration_token', $reg_token);
-						
-					//	echo $hash;
-					//	echo '<br>';
-					//	echo $userId;
 						
 						// SEND EMAIL
 						//
