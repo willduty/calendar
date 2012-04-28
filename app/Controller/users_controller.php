@@ -53,14 +53,7 @@ class UsersController extends AppController{
 				return;
 			}
 			
-			
-			// random token
-			$reg_token = '';
-			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$size = strlen( $chars );
-			for( $i = 0; $i < 25; $i++ ) {
-				$reg_token .= $chars[ rand( 0, $size - 1 ) ];
-			}
+			$reg_token = $this->makeRegToken();
 			
 			$this->request->data['User']['registration_token'] = $reg_token;
 			
@@ -74,7 +67,8 @@ class UsersController extends AppController{
 				$subject = 'El Calendario Registration';
 				$message = 'Hello,	
 							To complete El Calendario registration, simply click the link below:<br><br>
-							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/'.$reg_token.'" target=_blank>-- El Calendario registration confirmation -- </a>
+							<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/'.$reg_token.
+							'" target=_blank>-- El Calendario registration confirmation -- </a>
 							<br><br>Thank you for registering. -Webmaster, El Calendario';
 							
 				$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
@@ -186,6 +180,9 @@ class UsersController extends AppController{
 				$this->Session->setFlash('User not found', 'flashElem');
 			}
 			else{
+			
+				$userId = $user['User']['id'];
+			
 				// validate new pwd
 				$newPwd1 = $this->data['User']['newPassword1'];
 				$newPwd2 = $this->data['User']['newPassword2'];
@@ -194,13 +191,42 @@ class UsersController extends AppController{
 				if(!$obj->success){	
 					$this->Session->setFlash($obj->errMsg, 'flashElem');
 				}else{				
+				
+					// new pwd ok
+					// save new password to pending new pwd
+					$hash = $this->Auth->password($newPwd1);
+					$this->User->id = $userId;
+					if($this->User->saveField('pending_password', $hash)){
+						
+						$reg_token = $this->makeRegToken();
+						
+						$this->User->saveField('registration_token', $reg_token);
+						
+					//	echo $hash;
+					//	echo '<br>';
+					//	echo $userId;
+						
+						// SEND EMAIL
+						//
+						$user = $this->User->read();
+				
+						$to      = $data['User']['email'];					
+						$subject = 'El Calendario Password Reset';
+						$message = 'Hello,	
+									To complete your El Calendario reset, click the link below:<br><br>
+									<a href="http://cakecalendar.phpfogapp.com/users/confirm_registration/'.$reg_token.
+									'" target=_blank>-- El Calendario Password Reset-- </a>
+									<br><br>-Webmaster, El Calendario';
+									
+						$headers = 'From: webmaster@cakecalendar.com' . "\r\n" .
+							'Reply-To: webmaster@cakecalendar.com' . "\r\n";
+						$headers .= "MIME-Version: 1.0\r\n";
+						$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";					
+							
+						mail($to, $subject, $message, $headers);
 					
-					
-					// save new password to user pending pwd
-					
-					// SEND EMAIL
-					
-					$this->set('new_password_created', true);
+						$this->set('new_password_created', true);
+					}
 				}
 			}
 		}
@@ -254,6 +280,17 @@ class UsersController extends AppController{
 
 	}
 	
+	
+	function makeRegToken(){
+		// random token
+		$reg_token = '';
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$size = strlen( $chars );
+		for( $i = 0; $i < 25; $i++ ) {
+			$reg_token .= $chars[ rand( 0, $size - 1 ) ];
+		}
+		return $reg_token;
+	}
 	
 }
 

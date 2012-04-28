@@ -13,8 +13,8 @@
 
 
 
-	Enter your email and a new password below. An email will be sent to you with a link to activate the new password.
-
+	Enter your email and new password below. An email will be sent to you to activate your new password.
+	<br><br>
 	<?php
 			echo $this->Form->create('User', array('url' => '/users/forgot_pwd/', 'class'=>'neatForm'));
 			echo $this->Form->input('email', array('id'=>'newPassword1', 'label'=>'Email'));
