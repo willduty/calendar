@@ -44,7 +44,6 @@ class UsersController extends AppController{
 			
 			
 			// validate password
-			$this->request->data['User']['password'] = $this->Auth->password($this->data['User']['password1']);
 			
 			$json = $this->validatePasswords($this->data['User']['password1'], $this->data['User']['password2']	);
 			$obj = json_decode($json);
@@ -53,8 +52,11 @@ class UsersController extends AppController{
 				return;
 			}
 			
+			// set the password in the pending column and an activation token
+			// later when the user responds to the activation email, the token will be deleted
+			// and pending_password will be moved to password so it will be visible to login mechanism
+			$this->request->data['User']['pending_password'] = $this->Auth->password($this->data['User']['password1']);
 			$reg_token = $this->makeRegToken();
-			
 			$this->request->data['User']['registration_token'] = $reg_token;
 			
 			
@@ -94,6 +96,7 @@ class UsersController extends AppController{
 			$date = new DateTime();
 			$this->User->id = $user[0]['User']['id'];
 			$this->User->saveField('activated', $date->format('Y-m-d h:i:s'));
+			$this->User->saveField('registration_token', NULL); // blank out "used" reg token
 			
 			// log user in
 			unset($user[0]['User']['password']);
