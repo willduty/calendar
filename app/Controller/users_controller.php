@@ -55,7 +55,8 @@ class UsersController extends AppController{
 			// set the password in the pending column and an activation token
 			// later when the user responds to the activation email, the token will be deleted
 			// and pending_password will be moved to password so it will be visible to login mechanism
-			$this->request->data['User']['pending_password'] = $this->Auth->password($this->data['User']['password1']);
+			$encrypted_password = $this->Auth->password($this->data['User']['password1']);
+			$this->request->data['User']['pending_password'] = $encrypted_password;
 			$reg_token = $this->makeRegToken();
 			$this->request->data['User']['registration_token'] = $reg_token;
 			
@@ -90,20 +91,31 @@ class UsersController extends AppController{
 	}
 	
 	function confirm_registration($reg_token){
-		$user = $this->User->findAllByRegistrationToken($reg_token);
-		$this->set('userFound', count($user));
-		if(count($user) == 1){
+		$user = $this->User->findByRegistrationToken($reg_token);
+		$userFound = $user || FALSE;
+		$this->set('userFound', $userFound);
+		if($userFound){
+			$user = array('User'=>$user['User']);
 			$date = new DateTime();
-			$this->User->id = $user[0]['User']['id'];
-			$this->User->saveField('activated', $date->format('Y-m-d h:i:s'));
-			$this->User->saveField('registration_token', NULL); // blank out "used" reg token
+			$this->User->id = $user['User']['id'];
+			
+			// make pending password official (move to password). 
+			// delete activate token and set activated date
+			$user['User']['password'] = $user['User']['pending_password'];
+			$user['User']['pending_password'] = NULL;
+			$user['User']['activated'] = $date->format('Y-m-d h:i:s');
+			$user['User']['registration_token'] = NULL;
+			
+			$this->User->save($user);
 			
 			// log user in
-			unset($user[0]['User']['password']);
-			$this->Auth->login($user[0]);
+			unset($user['User']['password']);
+			$this->Auth->login($user);
 			
 		}
+
 	}
+
 	
 	function view($id){
 	}
@@ -201,8 +213,7 @@ class UsersController extends AppController{
 					$this->User->id = $userId;
 					if($this->User->saveField('pending_password', $hash)){
 						
-						$reg_token = $this->makeRegToken();
-						
+						$reg_token = $this->makeRegToken();				
 						$this->User->saveField('registration_token', $reg_token);
 						
 					//	echo $hash;
