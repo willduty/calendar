@@ -85,20 +85,23 @@
 				str += "<br>";
 			
 			str += "<b>Dates:</b><ul style='list-style:none;'>";
-			
+			try{
 			for(var i in this[id].Date){
 				str += "<li>" + formatDateObj(this[id].Date[i]) + '</li>';
 			}
-			
+			}catch(a){alert(a)}
 			str+= "</ul>";
 			
 			function formatDateObj(date){
 				var str = '';
 				if(date.days_of_week){
-					var arr = date.weeks_of_month.split(',');
-					if(date.weeks_of_month == 'every_week')
+					if(date.weeks_pattern == 'every_week')
 						str += 'Every ';
-					else{
+					if(date.weeks_pattern == 'nth_week')
+						str += 'Every Other ';
+						
+					else if(date.weeks_pattern == 'nth_weekdays_of_month'){
+						var arr = date.weeks_of_month.split(',');
 						for(var i in arr)
 							arr[i] = ordinal(arr[i]);
 						if(arr.length == 1)
@@ -326,7 +329,7 @@
 			
 			// ajax, search for terms
 			$("#searchForm").submit(function(){
-				$.get("/calendar/entries/search",
+				$.get(basePath+"/entries/search",
 						$(this).serialize(),
 						searchCallback);
 				return false;
@@ -473,6 +476,8 @@ switch($view){
 		// calendar body
 		$monthCtr = $month;
 		$monthsArray = $this->Calendar->getMonthViewArray($entries, $year, $month);
+		// debug($monthsArray);
+		// die();
 		reset($monthsArray);
 		
 		$firstDayOfMonth = $today->format('w');

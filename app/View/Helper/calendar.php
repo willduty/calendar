@@ -34,7 +34,7 @@ class CalendarHelper extends AppHelper{
 				case 2: $this->initializeMonthArray($nextYearNum, $nextMonthNum, $monthArray); break;
 			}
 				
-			// iterate all entries and place in monthArrays
+			// iterate all entries and put them in monthArrays
 			foreach($entries as $entry){
 
 				switch($view){
@@ -59,51 +59,47 @@ class CalendarHelper extends AppHelper{
 							case 'weekly':
 							
 								if($entryDate['weeks_pattern'] == 'nth_week'){
-									//echo $entryDate['start_date'];
+								
 									$date = new DateTime($entryDate['start_date']);
+							//		echo 'start_date:' .$entryDate['start_date'];
 									
-									// is start date after current month?
-										//break;
-									
+									// start at start date, or scroll to next available date
 									$weekdays = explode(",", $entryDate['days_of_week']);
-									$d = -1;
-									$adjWd = $date->format('w');
+									$ctr = 0;	
+									while(!in_array($this->adjWeekday($date->format('w')), $weekdays)){
+										$date->add(new DateInterval('P1D'));
+										$ctr++; if($ctr > 8) break;
+									}
 									
-									foreach($weekdays as $wd){
-										if($wd == $adjWd){
-											$d = $adjWd;
-											break;
-										}
-									}
-									// is date one of weekdays?
-									if($d == -1){
-										// set to beginning of week 
-										//$date = new DateTime();
-									}
-									else {
-										//scroll to weekday
-									}
 									
 									$ctr = 0;
 									while(true){
 										// if in range of this month add to month array
-										if($date->format('n') == $month)
+										
+										// echo '<br>year.month:'.$year .','. $month.'<br>';
+										// echo 'date:'.$date->format('Y m d') . '<br>';
+										
+										if($date->format('n') == $month && $date->format('Y') == $year){
 											array_push($monthArray[$date->format('j')], $entry);
-
-										// select day and other days if exist 
-										// ...
+											//echo 'YES';
+										}
+										// else
+											// echo 'no';
 										
 										// scroll to next nth week
 										$date->add(new DateInterval('P14D'));
-										
+											
 										// if beyond range break
-										if($date->format('n') > $nextMonthNum){
+										if($date->format('Y') > $year){
 											break;
 										}
 										
 										$ctr++;
-										if($ctr > 1000) 
+										if($ctr > 1000){ 
+											echo 'ERROR SAFETY CATCH';
+											die();
 											break;
+										}
 									}		
 								} else{
 									if($entryDate['weeks_pattern'] == 'every_week')
@@ -418,6 +414,9 @@ class CalendarHelper extends AppHelper{
 	}
 	
 	
+	function adjWeekday($dayOfWeek){
+		return ($dayOfWeek == 7) ? 1 : ($dayOfWeek + 1);
+	}
 }
 
 
