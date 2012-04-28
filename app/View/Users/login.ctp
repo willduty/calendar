@@ -28,7 +28,7 @@ echo $this->Html->script('jquery-ui-1.8.16.custom.min.js');
     echo $this->Form->end('Login');
 	
 	echo "<br>";
-	echo $this->Html->link('Forget password?', array('action'=>'passwordLookUp'));
+	echo $this->Html->link('Forget password?', array('action'=>'forgot_pwd'));
 	echo " | ";
 	echo $this->Html->link('Create Account &raquo;', array('action'=>'register'), array('escape'=>false));
 	

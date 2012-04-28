@@ -6,7 +6,7 @@ class UsersController extends AppController{
 
 	function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('register', 'welcome', 'confirm_registration');
+		$this->Auth->allow('register', 'welcome', 'confirm_registration', 'forgot_pwd');
 	}
 	
 	function login(){
@@ -170,6 +170,40 @@ class UsersController extends AppController{
 			}
 		}
 		die();
+	}
+	
+	function forgot_pwd(){
+	
+		$this->set('new_password_created', false);
+	
+		if(!empty($this->request->data)){
+			$data = $this->request->data;
+			
+			// find if user exists
+			$user = $this->User->findByEmail($data['User']['email']);
+		
+			if(!is_array($user) || count($user) < 1){
+				$this->Session->setFlash('User not found', 'flashElem');
+			}
+			else{
+				// validate new pwd
+				$newPwd1 = $this->data['User']['newPassword1'];
+				$newPwd2 = $this->data['User']['newPassword2'];
+				$json = $this->validatePasswords($newPwd1, $newPwd2);
+				$obj = json_decode($json);
+				if(!$obj->success){	
+					$this->Session->setFlash($obj->errMsg, 'flashElem');
+				}else{				
+					
+					
+					// save new password to user pending pwd
+					
+					// SEND EMAIL
+					
+					$this->set('new_password_created', true);
+				}
+			}
+		}
 	}
 	
 	

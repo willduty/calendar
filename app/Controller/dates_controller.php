@@ -20,7 +20,7 @@ class DatesController extends AppController{
 		$data['Date'][0]['entry_id'] = $entryId;
 		if(!$this->Date->save($data['Date'][0])){
 			echo '{"success":false}';
-			die();	
+			die();
 		}
 		
 		// return a json object, if success including the new date obj itself

@@ -1,5 +1,4 @@
 
-
 <?php
 	echo $this->Form->create("UserResetPwdForm", array('url' => '/users/reset_pwd/'.$user['User']['id'], 'id' => 'UserResetPwdForm', 'class'=>'neatForm'));
 	echo $this->Form->input("oldPassword", array('type' => 'password', 'id'=>'oldPassword', 'label'=>'Old Password:'));
