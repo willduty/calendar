@@ -58,7 +58,7 @@ class CalendarHelper extends AppHelper{
 								
 							case 'weekly':
 							
-								if($entryDate['weeks_of_month'] == 'nth_week'){
+								if($entryDate['weeks_pattern'] == 'nth_week'){
 									//echo $entryDate['start_date'];
 									$date = new DateTime($entryDate['start_date']);
 									
@@ -106,7 +106,7 @@ class CalendarHelper extends AppHelper{
 											break;
 									}		
 								} else{
-									if($entryDate['weeks_of_month'] == 'every_week')
+									if($entryDate['weeks_pattern'] == 'every_week')
 										$weeksOfMonth = '1,2,3,4,5';
 									else 
 										$weeksOfMonth = $entryDate['weeks_of_month'];
@@ -262,7 +262,7 @@ class CalendarHelper extends AppHelper{
 
 
 	function getDateType($entryDate){
-		if(isset($entryDate['days_of_week']))
+		if(isset($entryDate['weeks_pattern']))
 			$dateType = 'weekly';
 		else{
 			$dateType = 'onetime';

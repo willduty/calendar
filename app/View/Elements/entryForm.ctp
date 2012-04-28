@@ -28,13 +28,19 @@
 
 		
 	$(document).ready(function(){
-		
+
 		gui = new GuiTree();
 		gui.setup();
 		
 		// jquery guis
 		$("[name$=start_date\\\]]").datepicker();
 		$("[name$=end_date\\\]]").datepicker();
+		
+		try{
+			new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').get(0))
+			new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').get(0))
+		}catch(e){alert(e)}
+		
 		
 		if(location.pathname.indexOf('edit') != -1)
 			hideDateGui();
@@ -49,9 +55,6 @@
 			$('#additionalDetails').toggle();
 		});
 		
-		new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').get(0))
-		new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').get(0))
-		
 		// pre submit validation
 		$('#EntryForm').bind('submit', validateForm);
 		
@@ -59,7 +62,6 @@
 	
 	
 	function validateForm(){
-		
 		
 		var form = $('#EntryForm');
 		
@@ -77,11 +79,19 @@
 				return false;
 			}
 		}
-		
+		/*
 		if(wp.val() == 'every_week'){
 			form.find('[name$=weeks_of_month\\\]\\\[\\\]]').attr('checked', true);
 		}
 		
+		
+		if(wp.val() == 'nth_week'){
+			var name = form.find('[name$=weeks_of_month\\\]\\\[\\\]]');
+			alert(name.length)
+			return false;
+			//form.append(name)
+			//form.find('[name$=weeks_of_month\\\]\\\[\\\]]').attr('checked', true);
+		}*/
 		return true;
 	}
 	
@@ -354,10 +364,17 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				<br>
 				<div id="tool_nth_week" style='display:none;'>
 					<!-- TODO -->
-					&nbsp;&nbsp;&nbsp;starting on:
-					<input type=text class=dateBox name='jjjjjjjjjjj' 
-						<?php if(isset($year)) echo "value='$year-$month-$day'"; ?> clearOnCancel />
-					<br>
+					<?php if(isset($year)) echo "value='$year-$month-$day'"; ?>
+					
+					<?php echo $this->Form->input('Date.0.start_date', 
+						array('type'=>'text', 'label'=>array('text'=>'Start date', 'class'=>'neatFormNormal'))); ?>
+					
+					<?php echo $this->Form->input('Date.0.start_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+					
+					<?php echo $this->Form->input('Date.0.end_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						
 				</div>
 				
 				
@@ -379,6 +396,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						    );
 					
 					?>
+					
 					
 				</div>
 				
@@ -403,7 +421,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 					?>
 					
 				</div>
-				
+	
 			</div>
 		</div>
 

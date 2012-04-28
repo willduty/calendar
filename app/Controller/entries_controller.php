@@ -101,6 +101,11 @@ class EntriesController extends AppController{
 
 			$this->adjustDataArray($data);
 			$data['Entry']['user_id'] = $this->Auth->user('id');
+			
+			
+			// debug($data);
+			// die();
+		
 		
 			if($this->Entry->saveAll($data)){
 			

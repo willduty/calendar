@@ -118,7 +118,7 @@ class AppController extends Controller {
 	function toCakeDateFormat(&$arrayField){
 
 		$d = new DateTime($arrayField);
-		$arrayField = array('month'=>$d->format('m'),
+		$arrayField = array('month'=>$d->format('n'),
 					'day'=>$d->format('j'),
 					'year'=>$d->format('Y'));
 
