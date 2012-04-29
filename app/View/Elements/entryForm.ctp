@@ -71,6 +71,9 @@
 			return false;
 		}
 		
+		
+		// ensure week pattern entries have required 
+		// additional stuff
 		var wp = form.find('[name$=weeks_pattern\\\]]:checked')
 		
 		if(wp.val() == 'nth_weekdays_of_month'){
@@ -79,19 +82,13 @@
 				return false;
 			}
 		}
-		/*
-		if(wp.val() == 'every_week'){
-			form.find('[name$=weeks_of_month\\\]\\\[\\\]]').attr('checked', true);
-		}
-		
-		
+
 		if(wp.val() == 'nth_week'){
-			var name = form.find('[name$=weeks_of_month\\\]\\\[\\\]]');
-			alert(name.length)
-			return false;
-			//form.append(name)
-			//form.find('[name$=weeks_of_month\\\]\\\[\\\]]').attr('checked', true);
-		}*/
+			if(form.find('[name$=start_date\\\]]').val() == ''){
+				alert('for alternating weeks you must select at a start date')
+				return false;
+			}
+		}
 		return true;
 	}
 	

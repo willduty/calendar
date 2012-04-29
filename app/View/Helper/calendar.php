@@ -27,13 +27,22 @@ class CalendarHelper extends AppHelper{
 		$prevYearNum = $month < 12 ? $year : $year - 1;
 		$nextYearNum = $month < 12 ? $year : $year + 1;
 
+		
 		foreach($monthsArray as $key => $monthArray){
 			switch($key){
-				case 0: $this->initializeMonthArray($prevYearNum, $prevMonthNum, $monthArray); break;
-				case 1: $this->initializeMonthArray($year, $month, $monthArray); break;
-				case 2: $this->initializeMonthArray($nextYearNum, $nextMonthNum, $monthArray); break;
+				case 0: $this->initializeMonthArray($prevYearNum, $prevMonthNum, $monthArray); 
+					$monthIter = $prevMonthNum;
+					break;
+				case 1: $this->initializeMonthArray($year, $month, $monthArray); 
+					$monthIter = $prevMonthNum + 1;
+					break;
+				case 2: $this->initializeMonthArray($nextYearNum, $nextMonthNum, $monthArray);
+					$monthIter = $nextMonthNum;	
+					break;
 			}
 				
+			
+			
 			// iterate all entries and put them in monthArrays
 			foreach($entries as $entry){
 
@@ -76,15 +85,12 @@ class CalendarHelper extends AppHelper{
 									while(true){
 										// if in range of this month add to month array
 										
-										// echo '<br>year.month:'.$year .','. $month.'<br>';
-										// echo 'date:'.$date->format('Y m d') . '<br>';
-										
-										if($date->format('n') == $month && $date->format('Y') == $year){
+										if($date->format('n') == $monthIter && $date->format('Y') == $year){
 											array_push($monthArray[$date->format('j')], $entry);
-											//echo 'YES';
+											
+											
+											
 										}
-										// else
-											// echo 'no';
 										
 										// scroll to next nth week
 										$date->add(new DateInterval('P14D'));
@@ -101,6 +107,7 @@ class CalendarHelper extends AppHelper{
 											break;
 										}
 									}		
+								
 								} else{
 									if($entryDate['weeks_pattern'] == 'every_week')
 										$weeksOfMonth = '1,2,3,4,5';
