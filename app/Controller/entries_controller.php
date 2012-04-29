@@ -62,7 +62,6 @@ class EntriesController extends AppController{
 		if(isset($categoryId)){
 			$this->set('category', $categoryId );
 			$this->Entry->recursive = 2;
-			// $this->set('entries', $this->Entry->findAllByCategoryId($this->params['named']['categoryId']));
 			
 			$this->set('entries', $this->Entry->find('all',
 										array('conditions'=>
@@ -85,7 +84,7 @@ class EntriesController extends AppController{
 		$cats = $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$userId)));
 		$this->set('categories', $cats);
 		$this->set('userId', $this->Auth->user('id'));
-		
+				
 	}
 	
 	
@@ -99,15 +98,10 @@ class EntriesController extends AppController{
 
 			$this->adjustDataArray($data);
 			$data['Entry']['user_id'] = $this->Auth->user('id');
-			
-			
-			// debug($data);
-			// die();
-		
 		
 			if($this->Entry->saveAll($data)){
 			
-				$this->Session->setFlash("New Calendar Entry Saved", 'flashElem');
+				$this->Session->setFlash('Entry "'.$data['Entry']['name'].'" Saved', 'flashElem');
 				$this->redirect(array('action' => 'index'));
 			}
 		}
@@ -179,7 +173,7 @@ class EntriesController extends AppController{
 		$this->Entry->id = $id;
 		$data = $this->Entry->read();
 		if($this->Entry->delete($id, true))
-			$this->Session->setFlash('Entry ' . $data['entry']['address'] . ' Deleted.', 'flashElem');
+			$this->Session->setFlash('Entry "' . $data['Entry']['name'] . '" Deleted.', 'flashElem');
 		else
 			$this->Session->setFlash('Delete Failed.');
 		

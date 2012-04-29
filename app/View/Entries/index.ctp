@@ -335,6 +335,16 @@
 				return false;
 			});
 			
+			
+			// remove flash after few seconds
+			if($('#flashElem').children().length){
+				$('#flashElem:first-child')
+					.delay(3000)
+					.fadeOut(300)
+					.queue(function(){$(this).remove();})
+			}
+			
+			// END DOCUMENT.READY
 		}
 	);
 </script>
@@ -840,8 +850,7 @@ echo "</table>";
 
 ?>
 
-<br>
-<table style='width:100%;'><tr><td>
+<table style='width:100%;'><tr><td id=flashElem>
 
 	<?php
 		echo $this->Session->flash(); 

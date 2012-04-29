@@ -4,9 +4,9 @@
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
 	echo $this->Html->script('TimePicker.js'); 
-	echo $this->Html->script('wd_FormDropdown.js'); 
+	//echo $this->Html->script('wd_FormDropdown.js'); 
 	echo $this->Html->script('GuiTree.js'); 
-	echo $this->Html->css('wd_FormDropdown');
+	//echo $this->Html->css('wd_FormDropdown');
 	echo $this->Html->css('TimePicker');
 	
 	$_EDIT = $this->action == 'edit' || FALSE;
@@ -57,6 +57,7 @@
 		}
 		
 		$('#additionalDetailsSwitch').click(function(){
+			this.innerHTML = (this.innerHTML.indexOf('more') != -1) ? '&laquo; less options ' : 'more options &raquo;';
 			$('#additionalDetails').toggle();
 		});
 		
@@ -90,7 +91,7 @@
 
 		if(wp.val() == 'nth_week'){
 			if(form.find('[name$=start_date\\\]]').val() == ''){
-				alert('for alternating weeks you must select at a start date')
+				alert('for alternating weeks you must select a start date')
 				return false;
 			}
 		}
@@ -99,19 +100,15 @@
 	
 	
 	function hideDateGui(){
-		
-		$('div[name=dateGuiPlaceholder]').insertAfter('div[name=newDate]');
+		$('#dateGuiContainer').append($('div[name=dateGuiPlaceholder]'));
 		var gui = $('div[name=newDate]').detach();
 		$('#hider').append(gui);
-		
 		return false;
 	}
 	
 	function showDateGui(){
-		var placeholder = $('div[name=dateGuiPlaceholder]');
-		$('div[name=newDate]').detach().insertAfter(placeholder)
-		$('#hider').append(placeholder.detach());
-		
+		$('#dateGuiContainer').append($('div[name=newDate]'))
+		$('#hider').append($('div[name=dateGuiPlaceholder]'));
 		initDateGui();
 	}
 	
@@ -134,10 +131,14 @@
 	
 	// delete a date via ajax
 	function removeDate(btn){
+	
+		
 		var count = $('div[name=existingDate]').length;
-		if(count == 1 && !confirm('This is the only date for this calendar entry. '+
+		if((count == 1 && !confirm('This is the only date for this calendar entry. '+
 					'If you delete it you will no longer see the entry in calendar views. '+
-					'It will still be visible in a list view. \n\nContinue with delete?'))	
+					'It will still be visible in a list view. \n\nContinue with delete?'))
+			||
+			!confirm('Delete date?.'))	
 			return;
 		
 		var id = btn.value;
@@ -218,7 +219,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 
 <div class=switch id=additionalDetailsSwitch style='width:10em;'>more options...</div>
-<div id=additionalDetails style='display:none;'>
+<div id=additionalDetails style='display:none; padding: 10px 0px 0px 20px;'>
 	<?php
 		echo $this->Form->input('url', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('email', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
@@ -226,7 +227,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 		echo $this->Form->input('city', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('state', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
 		echo $this->Form->input('zip_code', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('category_id', array('label'=>array('class'=>'neatForm70')));
+		echo $this->Form->input('category_id', array('label'=>array('class'=>'neatForm70'), 'empty' => '-- choose one -- '));
 	
 	?>
 	
@@ -236,7 +237,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <?php if($_EDIT): 
 	echo $this->Form->input('id'); ?>
-	<button name='save' class='small' type=button onclick='return updateEntry(this);'>save</button>
+	<button name='save' class='small' type=button onclick='return updateEntry(this);'>save entry details</button>
 	<br>
 
 <?php endif; ?>
@@ -260,7 +261,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <?php 
 	endforeach;
-	echo '</div>'; 
+	//echo '</div>'; 
 	endif;
 ?>
 
@@ -272,7 +273,12 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <?php if($_EDIT): ?>
 <br>
-<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
+<div id=dateGuiContainer>
+	<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
+</div>
+
+</div>
+
 <?php else: ?>
 <h2>Date</h2>
 <?php endif; ?>	
@@ -352,6 +358,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						array('value' => 'every_week', 'tool'=>'tool_every_week')
 						);
 				?>
+				<br>
 				
 				
 				<div id=tool_every_week>
@@ -360,21 +367,10 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
-						
-		
-				</div>
-				
-				
-				
-				
-				
-				
-				
-				<br>
-				
-				
-				
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>	
+				</div>			
+	
+	
 				<?php
 					echo $this->Form->radio('Date.0.weeks_pattern', 
 							array('nth_week' => 'Every Other Week'),
@@ -382,14 +378,12 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						);
 				?>
 				<br>
+				
 				<div id="tool_nth_week" style='display:none;'>
-					<!-- TODO -->
 					
-					
-					<?php 
-						
+					<?php 	
+					// todo
 					$valOption = isset($year) ? "$year-$month-$day'" : ''; 
-					
 					
 					echo $this->Form->input('Date.0.start_date', 
 						array('type'=>'text', 'label'=>array('text'=>'Start date', 'class'=>'neatFormNormal', 'value'=>$valOption))); ?>
@@ -411,25 +405,26 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 						);
 				?>
 				<br>
-				<div id='tool_nth_weekdays_of_month' style='display:none;'>
+				<div id='tool_nth_weekdays_of_month' style='display:none; padding:0px 0px 0px 20px;'>
 				
 					<?php
 					
 					    echo $this->Form->input('Date.0.weeks_of_month', 
 							array('multiple' => 'checkbox',
-								'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th', '5' => '5th'))
+								'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th', '5' => '5th'),
+								'label'=>'', 'style'=>'float:left;')
 						    );
 					
 					?>
 					
-				<br>
-								
+					<div style='clear:both;'>
+				
 					<?php echo $this->Form->input('Date.0.start_time', 
 						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
 						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
-						
+					</div>
 		
 				</div>
 				

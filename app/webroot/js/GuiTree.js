@@ -69,7 +69,9 @@ function GuiTree(){
 	
 	// elem = the 'switch' elem not the tool elem
 	this.closeTool = function(elem){
-	
+		
+		// clear all values in descendant
+		this.clearDescendents(elem);
 	
 		// take tool elem out of dom entirely store in holding obj
 		// and replace with placeholder elem with token attr to be 
@@ -85,8 +87,10 @@ function GuiTree(){
 			var p = $('#'+elem.getAttribute('tool')).parent();
 			this.holding[token] = $('#'+elem.getAttribute('tool')).detach();
 		}
-		return;
+		
+	}
 	
+	this.clearDescendents = function(elem){
 		
 		var _this = this;
 		$('#'+elem.getAttribute('tool')).each(function(){
@@ -99,13 +103,12 @@ function GuiTree(){
 						this.value = '';
 				});
 			
-			// recurse
+			// recurse // todo: do without extraneous recursions
 			$(this).find('[tool]').each(function(){
-				_this.closeTool(this)
+				_this.clearDescendents(this)
 			})
 		})
 	}
-	
 
 }
 

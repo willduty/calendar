@@ -56,7 +56,7 @@ a.buttonLink, form a{
 
 form button.small{
 	height: 19px;
-	padding: 0px;
+	padding: 0px 10px 0px 10px;
 }
 
 
@@ -201,10 +201,10 @@ a.prevnext:hover {
 
 
 div.simpleSectionLight {
-	width: 400px;
+	width: 450px;
 	border: solid 1px lightgray;
 	border-radius: 4px;
-	padding:5px;
+	padding: 15px 15px 15px 15px;
 	background:#f9f9f9;
 }
 
