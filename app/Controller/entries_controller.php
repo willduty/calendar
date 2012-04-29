@@ -92,8 +92,6 @@ class EntriesController extends AppController{
 	// add a new calendar entry
 	function add($year = null, $month = null, $day = null){
 	
-		$this->loadModel('DateType');
-		$this->set('dateTypes', $this->DateType->find('list'));
 		
 		$data = $this->request->data;
 		
@@ -148,8 +146,6 @@ class EntriesController extends AppController{
 		
 		$this->set('categories', $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$this->Auth->user('id')))));
 	
-		$this->loadModel('DateType');
-		$this->set('dateTypes', $this->DateType->find('list'));
 		$this->Entry->recursive = 2;
 		$this->data = $this->Entry->read();
 		

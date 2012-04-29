@@ -8,10 +8,7 @@ class Date extends AppModel{
              // 'className' => 'Entry', 
              // 'foreignKey' => 'entry_id'
          // ), 
-         'DateType' => array( 
-             'className' => 'DateType', 
-             'foreignKey' => 'date_type_id' 
-         ));	
+        );	
 		 
 }
 

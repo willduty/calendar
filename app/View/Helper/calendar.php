@@ -34,7 +34,7 @@ class CalendarHelper extends AppHelper{
 					$monthIter = $prevMonthNum;
 					break;
 				case 1: $this->initializeMonthArray($year, $month, $monthArray); 
-					$monthIter = $prevMonthNum + 1;
+					$monthIter =$month;
 					break;
 				case 2: $this->initializeMonthArray($nextYearNum, $nextMonthNum, $monthArray);
 					$monthIter = $nextMonthNum;	
@@ -68,9 +68,7 @@ class CalendarHelper extends AppHelper{
 							case 'weekly':
 							
 								if($entryDate['weeks_pattern'] == 'nth_week'){
-								
 									$date = new DateTime($entryDate['start_date']);
-							//		echo 'start_date:' .$entryDate['start_date'];
 									
 									// start at start date, or scroll to next available date
 									$weekdays = explode(",", $entryDate['days_of_week']);
@@ -80,16 +78,17 @@ class CalendarHelper extends AppHelper{
 										$ctr++; if($ctr > 8) break;
 									}
 									
+									//echo "<br><br>";
 									
 									$ctr = 0;
 									while(true){
+									
+										//echo $date->format('n') .','.$monthIter.', '.$date->format('Y').','.$year.'<br>';
 										// if in range of this month add to month array
-										
 										if($date->format('n') == $monthIter && $date->format('Y') == $year){
+											//echo $entry['Entry']['name'].$date->format('j') . ',';
+											
 											array_push($monthArray[$date->format('j')], $entry);
-											
-											
-											
 										}
 										
 										// scroll to next nth week
@@ -100,12 +99,8 @@ class CalendarHelper extends AppHelper{
 											break;
 										}
 										
-										$ctr++;
-										if($ctr > 1000){ 
-											echo 'ERROR SAFETY CATCH';
-											die();
-											break;
-										}
+										$ctr++; if($ctr > 10000) break;
+										
 									}		
 								
 								} else{
@@ -194,7 +189,7 @@ class CalendarHelper extends AppHelper{
 					else switch($dateType){	
 						case 'weekly':
 							
-							$weeksOfMonth = ($entryDate['weeks_of_month'] == 'every_week') ?
+							$weeksOfMonth = ($entryDate['weeks_pattern'] == 'every_week') ?
 								'1,2,3,4,5' : $entryDate['weeks_of_month'];
 							$weeksOfMonth = explode(",", $weeksOfMonth);
 							foreach($weeksOfMonth as $weekOfMonth){

@@ -37,8 +37,13 @@
 		$("[name$=end_date\\\]]").datepicker();
 		
 		try{
-			new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').get(0))
-			new TimePicker($('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').get(0))
+			$('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').each(function(){
+				new TimePicker(this);
+			})
+			$('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').each(function(){
+				new TimePicker(this);
+			})
+			
 		}catch(e){alert(e)}
 		
 		
@@ -284,7 +289,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 	
 	<div name=dateGui>
 		<!-- TODO -->
-		<?php echo $this->Form->hidden('Date.0.date_type_id', array('value'=>'1')); ?>
 		
 		<div name=tool_byDate id=tool_byDate style='display:none;'>
 		
@@ -345,9 +349,28 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				<?php
 					echo $this->Form->radio('Date.0.weeks_pattern', 
 						array('every_week' => 'Every Week'),
-						array('value' => 'every_week', 'tool'=>'', 'defaultChecked' => true)
+						array('value' => 'every_week', 'tool'=>'tool_every_week')
 						);
 				?>
+				
+				
+				<div id=tool_every_week>
+							
+					<?php echo $this->Form->input('Date.0.start_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+					
+					<?php echo $this->Form->input('Date.0.end_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						
+		
+				</div>
+				
+				
+				
+				
+				
+				
+				
 				<br>
 				
 				
@@ -361,10 +384,15 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				<br>
 				<div id="tool_nth_week" style='display:none;'>
 					<!-- TODO -->
-					<?php if(isset($year)) echo "value='$year-$month-$day'"; ?>
 					
-					<?php echo $this->Form->input('Date.0.start_date', 
-						array('type'=>'text', 'label'=>array('text'=>'Start date', 'class'=>'neatFormNormal'))); ?>
+					
+					<?php 
+						
+					$valOption = isset($year) ? "$year-$month-$day'" : ''; 
+					
+					
+					echo $this->Form->input('Date.0.start_date', 
+						array('type'=>'text', 'label'=>array('text'=>'Start date', 'class'=>'neatFormNormal', 'value'=>$valOption))); ?>
 					
 					<?php echo $this->Form->input('Date.0.start_time', 
 						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
@@ -394,9 +422,19 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 					
 					?>
 					
+				<br>
+								
+					<?php echo $this->Form->input('Date.0.start_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
 					
+					<?php echo $this->Form->input('Date.0.end_time', 
+						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						
+		
 				</div>
 				
+				<br>
+				<!--
 				
 				<?php
 					echo $this->Form->radio('Date.0.weeks_pattern', 
@@ -404,7 +442,11 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 							array('value' => false, 'tool'=>'tool_months_of_year')
 						);
 				?>
+				
+				
+				
 				<br>
+				
 				<div id='tool_months_of_year' style='display:none;'>
 				
 					<?php
@@ -418,7 +460,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 					?>
 					
 				</div>
-	
+				-->
 			</div>
 		</div>
 

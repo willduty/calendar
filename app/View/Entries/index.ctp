@@ -475,8 +475,9 @@ switch($view){
 
 		// calendar body
 		$monthCtr = $month;
+		
 		$monthsArray = $this->Calendar->getMonthViewArray($entries, $year, $month);
-		// debug($monthsArray);
+		// debug($monthsArray[1]);
 		// die();
 		reset($monthsArray);
 		
@@ -534,9 +535,9 @@ switch($view){
 				
 				// entries for day
 				echo "<div class='noOverflowDiv' style='width:100px; height:70px;'>";
+				
 				if(is_array($monthArray[$dayCtr])){
 					foreach($monthArray[$dayCtr] as $entry){
-						
 						// show calendar date entry
 						echo $this->Calendar->makeCalendarDateEntryLink($entry);
 						echo "<br>";
