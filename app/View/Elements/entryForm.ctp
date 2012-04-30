@@ -3,7 +3,7 @@
 	echo $this->Html->script('jquery-1.6.2.min.js'); 
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
-	echo $this->Html->script('TimePicker.js'); 
+	echo $this->Html->script('DropDown.js'); 
 	echo $this->Html->script('GuiTree.js'); 
 	echo $this->Html->css('TimePicker');
 	
@@ -36,10 +36,10 @@
 		
 		try{
 			$('[name=data\\\[Date\\\]\\\[0\\\]\\\[start_time\\\]]').each(function(){
-				new TimePicker(this);
+				new DropDown(this, 'TimePicker');
 			})
 			$('[name=data\\\[Date\\\]\\\[0\\\]\\\[end_time\\\]]').each(function(){
-				new TimePicker(this);
+				new DropDown(this, 'TimePicker');
 			})
 			
 		}catch(e){alert(e)}
@@ -216,7 +216,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 ?>
 
 
-<div class=switch id=additionalDetailsSwitch style='width:10em;'>more options...</div>
+<div class=switch id=additionalDetailsSwitch style='width:10em;'>more options &raquo;</div>
 <div id=additionalDetails style='display:none; padding: 10px 0px 0px 20px;'>
 	<?php
 		echo $this->Form->input('url', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
