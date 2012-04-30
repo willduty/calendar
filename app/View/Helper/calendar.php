@@ -126,7 +126,7 @@ class CalendarHelper extends AppHelper{
 					
 			}
 			
-			return $monthArray; // todo: why doesn't it work without this?
+			return $monthArray; 
 	
 	}
 	
