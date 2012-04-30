@@ -59,6 +59,10 @@
 			var entry = this[id].Entry;
 			var str = '';
 			
+			if(this[id].Category.id){
+				str += "<b>Category:</b> <span style='color:#303'>" +this[id].Category.name + "</span><br><br>";
+			}
+			
 			if(entry.address)
 				str += entry.address + "<br>";
 				
@@ -152,8 +156,8 @@
 				return str;
 			}
 		
-			str += "<a href='"+path+"/edit/"+entry.id+"'> edit</a>" + " | " + 
-					"<a href='"+path+"/delete/"+entry.id+"' onclick='return confirm(\"entry will be deleted are you sure?\")'> delete</a>";
+			str += "<br><a href='"+path+"/edit/"+entry.id+"'> edit</a>" + " | " + 
+					"<a href='"+path+"/delete/"+entry.id+"' onclick='return confirm(\"Entry will be deleted. Are you sure?\")'> delete</a>";
 				
 			return str;
 		}
@@ -247,7 +251,10 @@
 						name: 'light',
 						padding: '7px 13px',
 						border:{width:1, color:'#333'},
-						tip: true
+						tip: true, 
+						font:'normal 12px verdana',
+						title:{color:'#630'}
+						
 					}
 				})
 			 });
@@ -484,11 +491,10 @@ switch($view){
 
 
 		// calendar body
+		
 		$monthCtr = $month;
 		
-		$monthsArray = $this->Calendar->getMonthViewArray($entries, $year, $month);
-		// debug($monthsArray[1]);
-		// die();
+		$monthsArray = $this->Calendar->getMonthViewArrays($entries, $year, $month);
 		reset($monthsArray);
 		
 		$firstDayOfMonth = $today->format('w');

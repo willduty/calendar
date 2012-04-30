@@ -4,9 +4,7 @@
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery-ui-1.8.16.custom.min.js'); 
 	echo $this->Html->script('TimePicker.js'); 
-	//echo $this->Html->script('wd_FormDropdown.js'); 
 	echo $this->Html->script('GuiTree.js'); 
-	//echo $this->Html->css('wd_FormDropdown');
 	echo $this->Html->css('TimePicker');
 	
 	$_EDIT = $this->action == 'edit' || FALSE;
@@ -138,7 +136,7 @@
 					'If you delete it you will no longer see the entry in calendar views. '+
 					'It will still be visible in a list view. \n\nContinue with delete?'))
 			||
-			!confirm('Delete date?.'))	
+			!confirm('Delete date?'))	
 			return;
 		
 		var id = btn.value;
@@ -429,7 +427,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				</div>
 				
 				<br>
-				<!--
 				
 				<?php
 					echo $this->Form->radio('Date.0.weeks_pattern', 
@@ -437,25 +434,38 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 							array('value' => false, 'tool'=>'tool_months_of_year')
 						);
 				?>
-				
-				
-				
 				<br>
 				
-				<div id='tool_months_of_year' style='display:none;'>
-				
-					<?php
+				<div id='tool_months_of_year'>
 					
-					    echo $this->Form->input('Date.0.months_of_year', array(
-						    'multiple' => 'checkbox',
-						    'options' => array('1' => 'Jan', '2' => 'Feb', '3' => 'Mar', '4' => 'Apr', '5' => 'May', '6' => 'Jun', 
-								'7' => 'Jul', '8' => 'Aug', '9' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec')	
-						    ));
+					<div style='clear:both;'>
+					<?php
+						// TODO make radio
+					    echo $this->Form->radio('Date.0.months_of_year',
+						    array('1' => 'Jan', '2' => 'Feb', '3' => 'Mar', '4' => 'Apr', '5' => 'May', '6' => 'Jun', 
+								'7' => 'Jul', '8' => 'Aug', '9' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'),
+							array('label'=>'')	
+						);
 					
 					?>
+					</div>
+					<div style='clear:both;'>
+					<?php
+					
+					    echo $this->Form->input('Date.0.weeks_of_month', 
+							array('multiple' => 'checkbox',
+								'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th', '5' => '5th'),
+								'label'=>'', 'style'=>'float:left;')
+						    );
+					
+					?>
+					</div>
+					
 					
 				</div>
-				-->
+				
+
+				
 			</div>
 		</div>
 

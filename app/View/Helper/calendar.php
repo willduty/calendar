@@ -7,148 +7,133 @@ class CalendarHelper extends AppHelper{
 	// returns an array of month arrays (previous, current, and following month) 
 	// where each month-array's keys correspond to month days and contain
 	// either an array of entries or false
-	function getMonthViewArray($entries, $year, $month){
+	function getMonthViewArrays($entries, $year, $month){
 	
 		$view = "month";
 
-		// arrays 
-		$prevMonthNthDayMap = $this->getNthWeekdayOfMonthMap($month > 1 ? $year : $year - 1, $month > 1 ? $month - 1 : 12);
-		$thisMonthNthDayMap = $this->getNthWeekdayOfMonthMap($year, $month);
-		$nextMonthNthDayMap = $this->getNthWeekdayOfMonthMap($month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1);
-		$monthMapsArray = array($prevMonthNthDayMap, $thisMonthNthDayMap, $nextMonthNthDayMap);
-		$monthsArray = array(0=>array(), 1=>array(), 2=>array());
-
-		$dayHoursArray = array();
-
-
 		// iterate current and also previous/subsquent months to fill overlap days
-		$prevMonthNum = $month > 1 ? $month - 1 : 12;
-		$nextMonthNum = $month < 12 ? $month + 1 : 1;
-		$prevYearNum = $month < 12 ? $year : $year - 1;
-		$nextYearNum = $month < 12 ? $year : $year + 1;
-
 		
-		foreach($monthsArray as $key => $monthArray){
-			switch($key){
-				case 0: $this->initializeMonthArray($prevYearNum, $prevMonthNum, $monthArray); 
-					$monthIter = $prevMonthNum;
-					break;
-				case 1: $this->initializeMonthArray($year, $month, $monthArray); 
-					$monthIter =$month;
-					break;
-				case 2: $this->initializeMonthArray($nextYearNum, $nextMonthNum, $monthArray);
-					$monthIter = $nextMonthNum;	
-					break;
-			}
-				
-			
+		// array with the three arrays with actual dates
+		$monthsArray = array(
+			$this->getMonthViewArray($entries, $month < 12 ? $year : $year - 1, $month > 1 ? $month - 1 : 12),
+			$this->getMonthViewArray($entries, $year, $month),
+			$this->getMonthViewArray($entries, $month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1)
+		
+		);
+
+		return $monthsArray;
+
+	}
+
+	
+	// get array of days of month as arrays of dates 
+	function getMonthViewArray($entries, $year, $monthIter){
+	
+			$monthArray = array();
+			$this->initializeMonthArray($year, $monthIter, $monthArray);
+			$monthNthDayMap = $this->getNthWeekdayOfMonthMap($year, $monthIter);
 			
 			// iterate all entries and put them in monthArrays
 			foreach($entries as $entry){
-
-				switch($view){
-					case "month":
-					foreach($entry['Date'] as $entryDate){
+				
+				foreach($entry['Date'] as $entryDate){
+				
+					$dateType = $this->getDateType($entryDate);
 					
-						// distinguish different date types
-						
-						$dateType = $this->getDateType($entryDate);
-						
-						
-						switch($dateType){			
-							case 'yearly':
-								$monthNum = ($key == 1) ? $month : ($key == 0 ? $prevMonthNum : $nextMonthNum); // month we're currently iterating
-								$arr = explode("-", $entryDate['start_date']); // break date into parts
-								if($monthNum == $arr[1]){
-									$dayNum = intval($arr[2]);
-									array_push($monthArray[$dayNum], $entry);
-								}
-								break;
-								
-							case 'weekly':
+					switch($dateType){			
+						case 'onetime':
+							$arr = explode("-", $entryDate['start_date']); 
+							if($monthIter == $arr[1] // if in current month, show
+								&& ($entryDate['repeating'] ? true : ($arr[0] == $year)) // if repeating sh-ow, else only if this year
+								){
+								$dayNum = intval($arr[2]);
+								array_push($monthArray[$dayNum], $entry);
+							}
+							break;
 							
-								if($entryDate['weeks_pattern'] == 'nth_week'){
-									$date = new DateTime($entryDate['start_date']);
-									
-									// start at start date, or scroll to next available date
-									$weekdays = explode(",", $entryDate['days_of_week']);
-									$ctr = 0;	
-									while(!in_array($this->adjWeekday($date->format('w')), $weekdays)){
-										$date->add(new DateInterval('P1D'));
-										$ctr++; if($ctr > 8) break;
+						case 'weekly':
+						
+							if($entryDate['weeks_pattern'] == 'nth_week'){
+								$date = new DateTime($entryDate['start_date']);
+								
+								// start at start date, or scroll to next available date
+								$weekdays = explode(",", $entryDate['days_of_week']);
+								$ctr = 0;	
+								while(!in_array($this->adjWeekday($date->format('w')), $weekdays)){
+									$date->add(new DateInterval('P1D'));
+									$ctr++; if($ctr > 8) break;
+								}
+								
+								$ctr = 0;
+								while(true){
+									// if in range of this month add to month array
+									if($date->format('n') == $monthIter && $date->format('Y') == $year){										
+										array_push($monthArray[$date->format('j')], $entry);
 									}
 									
-									//echo "<br><br>";
-									
-									$ctr = 0;
-									while(true){
-									
-										//echo $date->format('n') .','.$monthIter.', '.$date->format('Y').','.$year.'<br>';
-										// if in range of this month add to month array
-										if($date->format('n') == $monthIter && $date->format('Y') == $year){
-											//echo $entry['Entry']['name'].$date->format('j') . ',';
-											
-											array_push($monthArray[$date->format('j')], $entry);
-										}
+									// scroll to next nth week
+									$date->add(new DateInterval('P14D'));
 										
-										// scroll to next nth week
-										$date->add(new DateInterval('P14D'));
-											
-										// if beyond range break
-										if($date->format('Y') > $year){
-											break;
-										}
-										
-										$ctr++; if($ctr > 10000) break;
-										
-									}		
+									// if beyond range break
+									if($date->format('Y') > $year){
+										break;
+									}				
+									$ctr++; if($ctr > 10000) break;	
+								}		
+							
+							}else{
 								
-								} else{
+								if($entryDate['weeks_pattern'] == 'months_of_year'){
+									$daysOfWeek = explode(',', $entryDate['days_of_week']);
+									$weeks = explode(',', $entryDate['weeks_of_month']);
+									$months = explode(',', $entryDate['months_of_year']);
+									
+									
+									foreach($months as $m){
+										if($m == $monthIter){
+											foreach($daysOfWeek as $dayOfWeek){
+												foreach($weeks as $weekOfMonth){
+													$dayNum = $monthNthDayMap[$dayOfWeek][$weekOfMonth];
+													array_push($monthArray[$dayNum], $entry);
+												}
+											}
+										}
+									}
+								
+								}
+								else{
+									
 									if($entryDate['weeks_pattern'] == 'every_week')
 										$weeksOfMonth = '1,2,3,4,5';
-									else 
+									else if ($entryDate['weeks_pattern'] == 'nth_weekdays_of_month')
 										$weeksOfMonth = $entryDate['weeks_of_month'];
 									
 									$weeksOfMonth = explode(",", $weeksOfMonth);
 									foreach($weeksOfMonth as $weekOfMonth){
 										$daysOfWeek = explode(",", $entryDate['days_of_week']);
 										foreach($daysOfWeek as $dayOfWeek){
-											if(isset($monthMapsArray[$key][$dayOfWeek][$weekOfMonth])){ // some 5th weekdays don't exist
-												$dayNum = $monthMapsArray[$key][$dayOfWeek][$weekOfMonth];
+											if(isset($monthNthDayMap[$dayOfWeek][$weekOfMonth])){ // some 5th weekdays don't exist
+												$dayNum = $monthNthDayMap[$dayOfWeek][$weekOfMonth];
 												array_push($monthArray[$dayNum], $entry);
 											}
 										}					
 									}
 								}
-								break;
-							
-							case 'onetime':
-								$monthNum = ($key == 1) ? $month : ($key == 0 ? $prevMonthNum : $nextMonthNum); // month we're currently iterating
-								$arr = explode("-", $entryDate['start_date']); // break date into parts
-								if($monthNum == $arr[1]){
-									$dayNum = intval($arr[2]);
-									array_push($monthArray[$dayNum], $entry);
-								}
-								break;
-								}
 							}
-						break;
 						
-					case "year":
-						
-						break;
-				}
+						}
+					}
+					
 			}
 			
-			$monthsArray[$key] = $monthArray; // todo: why doesn't it work without this?
-		}
-		return $monthsArray;
-
+			return $monthArray; // todo: why doesn't it work without this?
+	
 	}
-
+	
+	
+	
 	
 	// get array of hours of day:  array(hour=>array of entries)
-
 	function getDayViewArray($entries, $year, $month, $day){
 		
 		$dayHoursArray = array();
@@ -262,13 +247,9 @@ class CalendarHelper extends AppHelper{
 	function getDateType($entryDate){
 		if(isset($entryDate['weeks_pattern']))
 			$dateType = 'weekly';
-		else{
+		else
 			$dateType = 'onetime';
 		
-			if(isset($entryDate['repeating']))
-				$dateType = 'yearly';
-		
-		}
 		return $dateType;
 	}
 
