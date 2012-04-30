@@ -4,6 +4,12 @@
 	padding:0;
 }
 
+
+.guiTreeOn{color:black;}
+.guiTreeGrayed{color:gray;}
+
+
+
 .hand { cursor: pointer; }
 
 .data {font:normal 12px courier;}

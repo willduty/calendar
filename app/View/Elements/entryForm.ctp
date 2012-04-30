@@ -430,7 +430,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				
 				<?php
 					echo $this->Form->radio('Date.0.weeks_pattern', 
-							array('months_of_year' => 'Month(s) of year:'),
+							array('months_of_year' => 'Specific month only:'),
 							array('value' => false, 'tool'=>'tool_months_of_year')
 						);
 				?>

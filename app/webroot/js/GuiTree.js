@@ -3,8 +3,16 @@
 	author wduty
 	version 0.1
 */
-function GuiTree(){
+function GuiTree(options){
 	
+	this.onClass = 'guiTreeOn';
+	this.grayedClass = 'guiTreeGrayed';
+	
+	if(typeof options != 'undefined'){
+		this.onClass = options.onClass || this.onClass;
+		this.grayedClass = options.grayedClass || this.grayedClass;
+	}
+		
 	this.setup = function(){
 
 		var _this = this;
@@ -41,14 +49,17 @@ function GuiTree(){
 					}
 					
 					tool.show();
-					
+						
 					var _toolSwitch = this;
 			
 					//close others if grouped with other switches
 					if(this.getAttribute('type') == 'radio'){
+						this.nextSibling.className = _this.onClass;
 						var name = this.getAttribute('name').replace(/\[/g, '\\\[').replace(/\]/g, '\\\]')
-						$('[name='+name+']').each(function(){		
+						$('[name='+name+']').each(function(){
+							
 							if(this.getAttribute('tool') != _toolSwitch.getAttribute('tool')){
+								this.nextSibling.className = _this.grayedClass
 								_this.closeTool(this);
 							}
 						})
@@ -79,9 +90,9 @@ function GuiTree(){
 		
 		if(!elem.hasAttribute('tool_token'))
 		{
-			var token = Math.random().toString().split(".")[1];
+			var token = Math.random().toString().split(".")[1]; 
 			var ph = document.createElement('placeholder');
-			ph.id = token ;
+			ph.id = token;
 			elem.setAttribute('tool_token', token);
 			$(ph).insertAfter(document.getElementById(elem.getAttribute('tool')));
 			var p = $('#'+elem.getAttribute('tool')).parent();
