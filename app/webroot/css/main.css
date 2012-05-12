@@ -444,6 +444,7 @@ td.calendarCell{
 	padding: 0px;
 	width: 120px;
 	height: 70px;
+	background:pink;
 }
 
 td.todayCell{
