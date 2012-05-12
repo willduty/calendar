@@ -4,29 +4,7 @@
 class CalendarHelper extends AppHelper{
 
 	
-	// returns an array of month arrays (previous, current, and following month) 
-	// where each month-array's keys correspond to month days and contain
-	// either an array of entries or false
-	function getMonthViewArrays($entries, $year, $month){
-	
-		$view = "month";
-
-		// iterate current and also previous/subsquent months to fill overlap days
-		
-		// array with the three arrays with actual dates
-		$monthsArray = array(
-			$this->getMonthViewArray($entries, $month < 12 ? $year : $year - 1, $month > 1 ? $month - 1 : 12),
-			$this->getMonthViewArray($entries, $year, $month),
-			$this->getMonthViewArray($entries, $month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1)
-		
-		);
-
-		return $monthsArray;
-
-	}
-
-	
-	// get array of days of month as arrays of dates 
+	// get array of days of month. each day is an array of dates 
 	function getMonthViewArray($entries, $year, $monthIter){
 	
 			$monthArray = array();
@@ -129,7 +107,6 @@ class CalendarHelper extends AppHelper{
 			return $monthArray; 
 	
 	}
-	
 	
 	
 	
@@ -303,7 +280,6 @@ class CalendarHelper extends AppHelper{
 			
 			return $str;
 		}
-		
 	
 	}
 	
@@ -313,8 +289,6 @@ class CalendarHelper extends AppHelper{
 	// creates a reverse lookup map for which date of month the "nth weekday" falls on (eg 3rd wednesday) 
 	// $nthWeekdayOfMonthMap[weekdayNumber][nthWeekdayOfMonth]
 	// $nthWeekdayOfMonthMap[1][3] is the date of the 3rd sunday of the month (which in january of 2012 is the 15th)
-	// $nthWeekdayOfMonthMap[2][1] holds the date of the 1st monday, the 1st
-	// etc
 	
 	function getNthWeekdayOfMonthMap($year, $month){
 

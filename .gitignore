@@ -4,4 +4,4 @@ tags
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors
-
+/app/Config/database.php

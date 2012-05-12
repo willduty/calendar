@@ -494,7 +494,16 @@ switch($view){
 		
 		$monthCtr = $month;
 		
-		$monthsArray = $this->Calendar->getMonthViewArrays($entries, $year, $month);
+		
+		// iterate current and also previous/subsquent months to fill overlap days		
+		// array with the three arrays with actual dates
+		$monthsArray = array(
+			$this->Calendar->getMonthViewArray($entries, $month < 12 ? $year : $year - 1, $month > 1 ? $month - 1 : 12),
+			$this->Calendar->getMonthViewArray($entries, $year, $month),
+			$this->Calendar->getMonthViewArray($entries, $month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1)		
+		);
+
+
 		reset($monthsArray);
 		
 		$firstDayOfMonth = $today->format('w');

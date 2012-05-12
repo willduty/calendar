@@ -282,6 +282,7 @@ h4 {
 }
 
 body {
+	background:lightgray;
 	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#ddd));
 	background-image: -moz-linear-gradient(top, #eeeeee, #dddddd);
 	#background: #003d4c;
@@ -297,9 +298,11 @@ body {
 
 
 #header{
+	background:gray;
 	padding: 10px 20px 0px 5px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#ccc));
 	background-image: -moz-linear-gradient(top, #ccc, #eee);
+	
 }
 
 #header a {
