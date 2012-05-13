@@ -444,8 +444,16 @@ td.calendarCell{
 	padding: 0px;
 	width: 120px;
 	height: 70px;
-	background:pink;
+	background:white;
 }
+
+td.calendarCell div.monthCellHdr{
+}
+
+td.calendarCell div.monthCellHdr:hover{
+	background:#f5f5f5;
+}
+
 
 td.todayCell{
 	border-style:solid; 

@@ -253,7 +253,7 @@
 						border:{width:1, color:'#333'},
 						tip: true, 
 						font:'normal 12px verdana',
-						title:{color:'#630'}
+						title:{color:'black'}
 						
 					}
 				})
@@ -364,7 +364,6 @@
 
 // some utility vars used in views
 $monthName = $today->format('F'); // month name for display in month and day nav bars
-$dayList = array(1 => 'Sun', 2 => 'Mon', 3 => 'Tue', 4 => 'Wed', 5 => 'Thu', 6 => 'Fri', 7 => 'Sat'); 
 $currentDate = new DateTime();
 
 
@@ -375,16 +374,32 @@ echo "<table style='width:100%;'>";
 echo "<tr style=''><td colspan=7 style='background:white; padding: 2px 0px 2px 2px;'>";
 
 
-echo $this->Html->link("today", array('controller'=>'entries', 'day', $currentDate->format('Y'), $currentDate->format('n'), $currentDate->format('d')), array('class'=>'buttonLink'));
+echo $this->Html->link("today", 
+						array('controller'=>'entries', 'day', 
+							$currentDate->format('Y'), 
+							$currentDate->format('n'), 
+							$currentDate->format('d')), 
+						array('class'=>'buttonLink'));
 echo "&nbsp;"; 
-echo $this->Html->link("this month", array('controller'=>'entries', 'month', $currentDate->format('Y'), $currentDate->format('n')), array('class'=>'buttonLink'));
+echo $this->Html->link("this month", 
+						array('controller'=>'entries', 'month', 
+							$currentDate->format('Y'), 
+							$currentDate->format('n')), 
+						array('class'=>'buttonLink'));
 echo "&nbsp;"; 
-echo $this->Html->link("this week", array('controller'=>'entries', 'week', $currentDate->format('Y'), $currentDate->format('n'), $currentDate->format('d')), array('class'=>'buttonLink'));
+echo $this->Html->link("this week", 
+						array('controller'=>'entries', 'week', 
+							$currentDate->format('Y'), 
+							$currentDate->format('n'), 
+							$currentDate->format('d')), 
+						array('class'=>'buttonLink'));
 
 
 echo "&nbsp; | "; 
 echo "&nbsp;"; 
-echo $this->Html->link('New Entry...', array('controller' => 'entries', 'action' => 'add'), array('class'=>'buttonLink'));
+echo $this->Html->link('New Entry...', 
+						array('controller' => 'entries', 'action' => 'add'), 
+						array('class'=>'buttonLink'));
 
 
 echo "</td></tr>";
@@ -399,310 +414,22 @@ switch($view){
 
 	case 'list':
 		// all entries as a list, not calendar layout
-		?>
-		<tr>
-			<td colspan=7 style='background-color:black; color:white; align:center;'>
-				<table class='calendarHdr'><tr>	
-					<td>All Calendar Entries</td>
-				</tr></table>
-			</td>
-		</tr>
-		<tr><td colspan=7  style='height:500px;'>
-			<table style='width:100%;'>
-			
-			<tr>
-				<td class=inactiveLink style="color:white; background:gray; width:30%">Name</td>
-				<td class=inactiveLink style="color:white; background:gray; width:55%">Date</td>
-				<td class=inactiveLink style="color:white; background:gray; width:15%">Category</td>
-			</tr>
+		echo $this->element("list_view");
 		
-		<?php
-		foreach($entries as $entry){
-			echo '<tr>';
-			
-			echo '<td style="width:30%">';
-			echo $this->Calendar->makeCalendarDateEntryLink($entry);
-			echo '</td>';
-			
-			echo '<td style="width:55%" class=inactiveLink>';
-			$dateStrings = array();
-			foreach($entry['Date'] as $date){
-				array_push($dateStrings, $this->Calendar->dateAsString($date));
-			}
-			echo implode(', ', $dateStrings);
-			echo '</td>';
-			
-			echo '<td style="width:15%">';
-			if(isset($entry['Entry']['category_id']))
-				echo '<div class=inactiveLink>'.$categories[$entry['Entry']['category_id']].'</div>';
-			echo '</td>';
-			
-			echo '</tr>';
-		}
-		echo '</table></td></tr>';
 		break;
 
 		
 	case "month":
 
-		// calendar header
-		$nextMonth = $month + 1 < 13 ? $month + 1 : 1;
-		$prevMonth = $month - 1 > 0 ? $month - 1 : 12;
+		echo $this->element("month_view");
 
-		$prevLink = $this->Html->link('<< prev', 
-										array('controller'=>'entries', 
-										'action'=>'index', 
-										$view,
-										($prevMonth == 12) ? $year - 1 : $year, 
-										$prevMonth), 
-										array('class'=>'prevnext'));
-		$nextLink = $this->Html->link('next >>', 
-										array('controller'=>'entries', 
-										'action'=>'index', 
-										$view,
-										($nextMonth == 1) ? $year + 1 : $year, 
-										$nextMonth), 
-										array('class'=>'prevnext'));
-
-		?>
-
-			<!-- calendar header/nav -->
-			<tr>
-				<td colspan=7>
-					<table class='calendarHdr'>
-						<tr>	
-							<td class='calendarHdr' style='background:black;'> <?php echo $prevLink; ?> </td>
-							<td class='calendarHdr' style="color:white; font-weight:bold; background:black"> <?php echo $monthName . " " . $year; ?> </td>
-							<td class='calendarHdr' style='background:black;'> <?php echo $nextLink; ?> </td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-
-			<!-- week day names -->
-			<tr>
-				<?php foreach($dayList as $weekDay){ ?>
-				<td style='width:100px' class='calendarSubHdr'><?php echo $weekDay; ?></td>
-				<?php } ?>
-			</tr>
-
-		<?php 
-
-
-
-		// calendar body
-		
-		$monthCtr = $month;
-		
-		
-		// iterate current and also previous/subsquent months to fill overlap days		
-		// array with the three arrays with actual dates
-		$monthsArray = array(
-			$this->Calendar->getMonthViewArray($entries, $month < 12 ? $year : $year - 1, $month > 1 ? $month - 1 : 12),
-			$this->Calendar->getMonthViewArray($entries, $year, $month),
-			$this->Calendar->getMonthViewArray($entries, $month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1)		
-		);
-
-
-		reset($monthsArray);
-		
-		$firstDayOfMonth = $today->format('w');
-		$firstDayOfMonth++;
-		if($firstDayOfMonth == 8)
-			$firstDayOfMonth = 1;
-		
-		// do we need to show a bit of last month?
-		// if $firstDayOfMonth is sunday then no: set $monthArray to current month. else to prev month 	
-		if($firstDayOfMonth == 1){
-			$monthArray = next($monthsArray); 
-			$dayCtr = 1;
-		}
-		else{
-			$monthCtr = $prevMonth;
-			$monthNthDayMap = $this->Calendar->getNthWeekdayOfMonthMap(($prevMonth == 12) ? $year - 1 : $year, $prevMonth);
-			$dayCtr = end($monthNthDayMap[1]); // last sunday of previous month
-			$monthArray = current($monthsArray); 
-		}
-
-		$continueFlag = true;
-		
-		// loop over and over to make row for each week starting with week 
-		// containing first day of month to week containing last day of month.
-		while(true){
-			
-			// make row of days of week 
-			echo "<tr>";
-			
-			foreach($dayList as $key => $weekDay){
-				
-				// if we're out of days for the month, switch to following month
-				if(!isset($monthArray[$dayCtr])){
-					$dayCtr = 1;
-					$monthArray = next($monthsArray);
-					$monthCtr = ($monthCtr == 12 ? 1 : $monthCtr + 1);
-				}
-				
-				// set up cell style 
-				$cellStyle = "";
-				/*
-				if(date("jnY") ==  $dayCtr . ($monthCtr) . $year){
-					// highlight if day is today
-					$cellStyle .= " todayCell";
-				}
-*/
-				if(key($monthsArray) != 1) // gray out days not in month
-					$cellStyle .= "outOfMonthCell";
-				
-				// finally, draw the calendar day cell
-				echo "<td class='calendarCell $cellStyle' id='$year/$monthCtr/$dayCtr'>";
-				
-				echo $dayCtr . "<br>"; // date of month numeral
-				
-				// entries for day
-				echo "<div class='noOverflowDiv' style='width:100px; height:70px;'>";
-				
-				if(is_array($monthArray[$dayCtr])){
-					foreach($monthArray[$dayCtr] as $entry){
-						// show calendar date entry
-						echo $this->Calendar->makeCalendarDateEntryLink($entry);
-						echo "<br>";
-					}
-				}
-				echo "</div></td>";
-				
-				// break weeks loop if day is saturday (7) and it's either the last day of current month or we are in nextmonth
-				if($key == 7){
-					if(!isset($monthArray[$dayCtr + 1]) || key($monthsArray) == 2)
-						$continueFlag = false;
-				}
-				
-				$dayCtr++; // increment day of month counter
-			}
-			
-			// make row of days of week
-			echo "</tr>";
-			
-			if(!$continueFlag)
-				break;			
-		}
+	
 		break;
 		
 		
 
 	case 'day':
-
-		$dayHoursArray = $this->Calendar->getDayViewArray($entries, $year, $month, $day);
-			
-		$nextMonth = $month;
-		$prevMonth = $month;
-		
-		$numDays = $this->Calendar->getNumDaysInMonth($year, $month);
-		$nextDay = $day+1;
-		if($nextDay > $numDays){
-			$nextDay = 1;
-			$nextMonth = $month + 1 < 13 ? $month + 1 : 1;
-		}
-		$prevDay = $day - 1;
-		if($prevDay < 1){
-			$prevMonth = $month - 1 > 0 ? $month - 1 : 12;
-			$prevDay = $this->Calendar->getNumDaysInMonth($year, $prevMonth);;
-		}
-
-		$prevLink = $this->Html->link('<< prev', 
-										array('controller'=>'entries', 
-										'action'=>'index', 
-										$view,
-										($prevMonth == 12) ? $year - 1 : $year, 
-										$prevMonth,
-										$prevDay), 
-										array('class'=>'prevnext'));
-		$nextLink = $this->Html->link('next >>', 
-										array('controller'=>'entries', 
-										'action'=>'index', 
-										$view,
-										($month == 12 && $day == 31) ? $year + 1 : $year, 
-										$nextMonth,
-										$nextDay), 
-										array('class'=>'prevnext'));
-		
-		?>
-		<tr>
-			<td colspan=5>
-				<table class='calendarHdr'><tr>	
-					<td class='calendarHdr' style='background:black;'> <?php echo $prevLink; ?> </td>
-					<td class='calendarHdr' style="color:white; font-weight:bold; background:black"> <?php echo $monthName . " " . $day . ", " . $year . ' ('.$today->format('l').')'; ?> </td>
-					<td class='calendarHdr' style='background:black;'> <?php echo $nextLink; ?> </td>
-				</tr></table>
-			</td>
-		</tr>
-
-		<?php
-		// all day events...
-		if(@count($dayHoursArray['allday'])):
-		?>
-			<tr>
-				<td colspan=4 style='background-color:white; align:left;'>
-					<div class=subHdr>All Day Entries:</div>
-					<?php 
-						
-						foreach($dayHoursArray['allday'] as $dayEntry){
-							echo $this->Calendar->makeCalendarDateEntryLink($dayEntry);
-							echo "<br>";
-						}
-					?>
-				</td>
-			</tr>
-
-		
-		<?php
-			endif;
-		?>
-		
-		<!-- am/pm -->
-		
-			<?php
-				// echo count($dayHoursArray);
-				for($i=0; $i<12; $i++){ 
-					$hour = ($i == 0) ? 12 : $i;
-					
-					echo "<tr>";
-					echo "<td style='width:10%' class=hourCellHdr>$hour:00 AM</td>";
-					$id = $today->format('Y/n/j/') . $hour . "/AM";
-					echo "<td style='width:40%' class=hourCell id=$id>";
-					if(isset($dayHoursArray[$hour])){
-						foreach($dayHoursArray[$hour] as $entry){
-							echo $this->Calendar->makeCalendarDateEntryLink($entry);
-						}
-					}
-					echo "</td>";
-					
-					if($i==0)
-						echo "<td rowspan=12 class=spacerCellDayView></td>";
-					
-					echo "<td style='width:10%' class=hourCellHdr>$hour:00 PM</td>";
-					$id = $today->format('Y/n/j/') . $hour . "/PM";
-					echo "<td style='width:40%' class=hourCell id=$id>";
-					
-					if(isset($dayHoursArray[$hour + 12])){
-						foreach($dayHoursArray[$hour + 12] as $entry){
-							
-							// calendar date entry
-							echo $this->Calendar->makeCalendarDateEntryLink($entry);
-							echo "<br>";
-				
-						}
-					}
-					
-					echo "</td>";
-					echo "</tr>";	
-				}
-				
-				?>
-		
-
-		
-		<?php
-
+		echo $this->element('day_view');
 		break;
 		
 	case "year":
@@ -710,140 +437,8 @@ switch($view){
 		break;
 		
 	case "week":
-	
-		echo "<tr><td style='background:#eee;'>";
+		echo $this->element('week_view');
 		
-			// begin week view table
-			
-			echo "<table style='height:500px; width:100%;' class=weektable >";
-			
-			// get first day of week relative to $today
-			$dayOfWeek = $this->Calendar->getFirstDayOfWeek($today);
-			
-			
-			// column headers for days of week
-			$prevLink = $this->Calendar->getFirstDayOfPrevWeek($today);
-				
-			$prevLink = $this->Html->link('<< prev', 
-											array('controller'=>'entries', 
-											'week',
-											$prevLink->format('Y'), 
-											$prevLink->format('n'), 
-											$prevLink->format('j')), 
-											array('class'=>'prevnext'));
-
-			$nextLink = $this->Calendar->getFirstDayOfNextWeek($today);
-			$nextLink = $this->Html->link('next >>', 
-											array('controller'=>'entries', 
-											'week',
-											$nextLink->format('Y'), 
-											$nextLink->format('n'), 
-											$nextLink->format('j')), 
-											array('class'=>'prevnext'));
-			
-			// week view calender nav bar
-			echo 
-			"<tr>
-				<td colspan=20 style='height:20px;'>
-					<table class='calendarHdr' border=1>
-						<tr>	
-							<td class='calendarHdr' style='background:black;'> $prevLink </td>
-							<td class='calendarHdr' style='color:white; font-weight:bold; background:black'>
-								Week of ".$dayOfWeek->format('M j Y')." </td>
-							<td class='calendarHdr' style='background:black;'> $nextLink </td>
-						</tr>
-					</table>
-				</td>
-			</tr>";
-			
-			
-			
-			// week view calender day column headers
-			
-			echo "<tr>";
-			
-			$hdrArr = array();
-			$daysArr = array();
-			
-			for($n=1; $n<8; $n++){
-				$weekDay = $dayOfWeek;
-			
-				array_push($hdrArr, "<td class=calendarSubHdr style='height:20px;' colspan=2>".
-					$weekDay->Format('D, M j')."</td>");
-				
-				// for each day of week get hours array. index for each hour may be empty or contain entries
-				$dayHoursArray = $this->Calendar->getDayViewArray($entries, $weekDay->format('Y'), 
-					$weekDay->format('n'), $weekDay->format('j'));
-				array_push($daysArr, $dayHoursArray);
-				
-				$weekDay->add(new DateInterval("P1D"));
-				
-			}
-			echo implode("<td class=spacerCellWeekView></td>", $hdrArr); 
-			
-			echo "</tr>";
-			
-			
-			
-			// all-day events row
-			$tds = array();
-			$boolAllDay = false;
-			foreach($daysArr as $d){
-					$str = "<td colspan=2 class='hourCellWeekView' >
-							<div>All Day Entries:</div>";
-								
-				if(@count($d['allday'])){
-					foreach($d['allday'] as $dayEntry){
-						$str .= "<div class=noOverflowDiv style='width:120px'>" . 
-							$this->Calendar->makeCalendarDateEntryLink($dayEntry);
-						$str .=  "</div>";
-					}
-				}
-				$str .= "</td>";
-				array_push($tds, $str);
-			}
-			echo "<tr>".implode("<td class=spacerCellWeekView></td>", $tds)."</tr>";
-				
-			
-		
-			// week view calender hour columns
-			echo "<tr>";
-
-			$rows = array();		
-			for($hr=0; $hr<13; $hr++){
-				echo "<tr>";
-				$tds = array();
-				$dayOfWeek = $this->Calendar->getFirstDayOfWeek($today);
-			
-				foreach($daysArr as $d){
-				
-					$hour = $hr == 0 ? 12 : $hr;
-					$id = $dayOfWeek->format('Y/n/j/') . $hour . "/AM";
-					$str = "<td class='hourCellWeekView' id=$id><div class=noOverflowDiv  style='width:61px'>$hour:00 AM<br>";
-					foreach($d[$hr] as $entry){
-						$str .= $this->Calendar->makeCalendarDateEntryLink($entry) . "<br>";
-					}
-					$id = $dayOfWeek->format('Y/n/j/') . $hour . "/PM";
-					$str .= "</div></td><td class=hourCellWeekView id=$id><div class=noOverflowDiv style='width:61px'>$hour:00 PM<br>";
-					foreach($d[$hr+12] as $entry){
-						$str .= $this->Calendar->makeCalendarDateEntryLink($entry). "<br>";
-					}
-					$str .= "</div></td>";
-					array_push($tds, $str);
-					
-					$dayOfWeek->add(new DateInterval('P1D'));
-				}
-				echo implode("<td class=spacerCellWeekView></td>", $tds);
-				echo "</tr>";
-			}
-			
-			
-			echo "</tr>";
-		
-			echo "</table>";
-			// end week view table 
-			
-		echo "</td></tr>";
 		break;
 		
 		
