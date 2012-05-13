@@ -115,9 +115,14 @@
 					$cellStyle .= "outOfMonthCell";
 				
 				// finally, draw the calendar day cell
-				echo "<td class='calendarCell $cellStyle' id='$year/$monthCtr/$dayCtr'>";
+				echo "<td class='calendarCell $cellStyle' id='$year/$monthCtr/$dayCtr' name=calendarCell>";
 				
-				echo "<div class='monthCellHdr'>" . $dayCtr . "</div>"; // date of month numeral
+				echo "<div class='monthCellHdr'>
+					<table style='width:100%;'>
+						<tr><td style='width:90%;'>" . $dayCtr . "</td>
+						<td style='width:10%;'><span class=arrow>&raquo;</span></td></tr>
+					</table>
+					</div>"; // date of month numeral
 				
 				// entries for day
 				echo "<div class='noOverflowDiv' style='width:100px; height:70px;'>";

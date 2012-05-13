@@ -150,12 +150,9 @@ class EntriesController extends AppController{
 		$this->Entry->id = $id;
 		$this->Entry->recursive = 0;
 		$b = $this->Entry->save($this->request->data);
-		
 		echo '{"success":'. ($b ? 'true' : 'false') .'}';
-		
 		die();
 	}
-	
 	
 	
 	// view details of a specific calendar entry
@@ -165,6 +162,24 @@ class EntriesController extends AppController{
 		if($this->RequestHandler->isAjax()){
 			$this->render('viewajax', 'ajax');
 		}
+	}
+	
+	
+	function getCalendarOnly($view, $y, $m, $d){
+		
+		$this->Entry->recursive = 2;
+		$this->set('entries', $this->Entry->findAllByUserId($this->Auth->user('id')));		
+		$this->set('year', $y);		
+		$this->set('month', $m);		
+		$this->set('day', $d);			
+		$this->set('view', $view);			
+		$this->set('cssScheme', 'dlg');
+		$this->set("today", new DateTime($y .'-'. $m .'-'.$d));
+		$this->set("showHdr", false);
+		
+		
+		echo $this->render('/elements/day_view');
+		die();
 	}
 	
 	
@@ -179,7 +194,6 @@ class EntriesController extends AppController{
 		
 		$this->redirect(array('action' => 'index'));
 	}
-	
 	
 	
 	

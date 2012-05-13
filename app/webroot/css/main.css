@@ -448,11 +448,25 @@ td.calendarCell{
 }
 
 td.calendarCell div.monthCellHdr{
+
 }
 
 td.calendarCell div.monthCellHdr:hover{
 	background:#f5f5f5;
 }
+
+div.monthCellHdr .arrow{
+	display:none;
+}
+
+div.monthCellHdr:hover .arrow{
+	display:inline;
+}
+
+div.monthCellHdr  .arrow:hover{
+	cursor:pointer;
+}
+
 
 
 td.todayCell{
@@ -521,7 +535,7 @@ td.hourCellWeekView+td.hourCellWeekView{
 
 
 td.hourCell, .hourCellHdr{
-	border: 2px;
+	border: 1px;
 	border-style:solid;
 	border-color:gray;
 	border-color:#eeeeee;
@@ -531,10 +545,33 @@ td.hourCell, .hourCellHdr{
 	background:white;
 }
 
+td.dlg_hourCell, .dlg_hourCellHdr{
+	border: 1px;
+	border-style:solid;
+	border-color:gray;
+	border-color:#eeeeee;
+	padding: 0px;
+	width: 50px;
+	height: 10px;
+	background:white;
+}
+
+.dlg_hourCellHdr{
+	font: normal 10px arial;
+}
+
 
 td.hourCell:hover{
 	background: #e5e5f5;
 }
+
+
+table.dlg_hoursTableClass{
+	width:200px;
+}
+
+
+
 
 
 
@@ -542,7 +579,7 @@ td.hourCell:hover{
 table tr:nth-child(even) td.hourCell,
 table tr:nth-child(even) td.hourCellHdr
  {
-	background: #fea;
+	#background: #fea;
 }
 
 

@@ -109,8 +109,26 @@
 					'highlightDay': function(t) {
 					  location = path + "/highlightDay/<?php echo $view; ?>/" + t.getAttribute("id");
 					},
-					'openDayView': function(t) {
-					  location = path + "/index/day/" + t.getAttribute("id");
+					'viewDay': function(t) {		
+						
+						$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
+							function(resp){
+								var left = t.offsetWidth + t.offsetLeft;
+								$(t).parents().each(function(){left+=this.offsetLeft})
+								var top = t.offsetTop;
+								// $(t).parents().each(function(){top+=this.offsetTop})
+								
+								$('#detailsDlg').show()
+									.css({'top': top, 'left': left, 'background':'#f96', 'padding':5})
+									.html(resp);
+									
+								$(document).bind('mousedown', function(e){
+									$('#detailsDlg').hide();
+									$(document).unbind('mousedown', arguments.callee);
+								})
+							
+						})
+						//location = path + "/index/day/" + t.getAttribute("id");
 					}
 				  }
 			  });
@@ -123,6 +141,7 @@
 					  location = path + "/edit/" + t.getAttribute("entryId");
 					},
 					'Reminder': function(t) {
+						var _t = t;
 						$.get(basePath + "/reminders/add/" + t.getAttribute("entryId"),
 							function(resp){
 								alert(resp)
@@ -200,6 +219,7 @@
 			
 			
 			
+			
 			// new category add form and callback
 			
 			$('#newCatForm').submit(function(){
@@ -266,6 +286,32 @@
 					.queue(function(){$(this).remove();})
 			}
 			
+			
+			$('[class=arrow]').each(function(){	
+				var t = $(this).parents('[name=calendarCell]').get(0);
+				//alert(t)
+				$(this).bind('click', showDayDlg)
+				function showDayDlg(){
+					$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
+						function(resp){
+							var left = t.offsetWidth + t.offsetLeft;
+							$(t).parents().each(function(){left+=this.offsetLeft})
+							var top = t.offsetTop;
+							// $(t).parents().each(function(){top+=this.offsetTop})
+							
+							$('#detailsDlg').show()
+								.css({'top': top, 'left': left, 'background':'#f96', 'padding':5})
+								.html(resp);
+								
+							$(document).bind('mousedown', function(e){
+								$('#detailsDlg').hide();
+								$(document).unbind('mousedown', arguments.callee);
+							})
+						
+					})
+				}
+			})
+			
 			// END DOCUMENT.READY
 		}
 	);
@@ -316,12 +362,7 @@ echo $this->Html->link('New Entry...',
 						array('controller' => 'entries', 'action' => 'add'), 
 						array('class'=>'buttonLink'));
 
-
-echo "</td></tr>";
-
-
-
-
+echo "</td></tr><tr><td>";
 
 
 // draw the calendar depending on view (year, month or day)
@@ -330,43 +371,30 @@ switch($view){
 	case 'list':
 		// all entries as a list, not calendar layout
 		echo $this->element("list_view");
-		
 		break;
 
-		
 	case "month":
-
 		echo $this->element("month_view");
-
-	
 		break;
-		
-		
 
 	case 'day':
 		echo $this->element('day_view');
 		break;
 		
 	case "year":
-		echo "year view";
+		echo "todo: year view";
 		break;
 		
 	case "week":
-		echo $this->element('week_view');
-		
+		echo $this->element('week_view');	
 		break;
-		
-		
+	
 		
 }
 
-
-
 echo "\r\n";
 
-
-
-echo "</table>";
+echo "</td></tr></table>";
 
 // end draw calendar
 
@@ -478,7 +506,7 @@ echo "</table>";
 <div class="contextMenu" id="dateCtxMenu">
 	<ul>
 		<li id="addSingleDateEntry"> Add Entry For this Day</li>
-		<li id="openDayView"> View Day</li>
+		<li id="viewDay"> View Day</li>
 		<li id="highlightDay"> Highlight This Day</li>
 		
 	</ul>
@@ -510,8 +538,7 @@ echo "</table>";
 
 
 
-
 </span>
   
 <!-- Individual Entry Details Dialog -->
-<div id=detailsDlg></div>
+<div id=detailsDlg style='position:absolute;'></div>
