@@ -166,7 +166,7 @@ class EntriesController extends AppController{
 	
 	
 	function getCalendarOnly($view, $y, $m, $d){
-		
+		try{
 		$this->Entry->recursive = 2;
 		$this->set('entries', $this->Entry->findAllByUserId($this->Auth->user('id')));		
 		$this->set('year', $y);		
@@ -177,8 +177,11 @@ class EntriesController extends AppController{
 		$this->set("today", new DateTime($y .'-'. $m .'-'.$d));
 		$this->set("showHdr", false);
 		
-		
 		echo $this->render('/elements/day_view');
+		}catch(Exception $e){
+			echo $e;
+		}
+		
 		die();
 	}
 	
