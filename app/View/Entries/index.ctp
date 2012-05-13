@@ -289,15 +289,13 @@
 			
 			$('[class=arrow]').each(function(){	
 				var t = $(this).parents('[name=calendarCell]').get(0);
-				//alert(t)
 				$(this).bind('click', showDayDlg)
 				function showDayDlg(){
-					$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
+					$.get('/entries/getCalendarOnly/day/' + t.getAttribute("id"),
 						function(resp){
 							var left = t.offsetWidth + t.offsetLeft;
 							$(t).parents().each(function(){left+=this.offsetLeft})
 							var top = t.offsetTop;
-							// $(t).parents().each(function(){top+=this.offsetTop})
 							
 							$('#detailsDlg').show()
 								.css({'top': top, 'left': left, 'background':'#f96', 'padding':5})
