@@ -177,7 +177,7 @@ class EntriesController extends AppController{
 		$this->set("today", new DateTime($y .'-'. $m .'-'.$d));
 		$this->set("showHdr", false);
 		
-		echo $this->render('/elements/day_view');
+		echo $this->render('/Elements/day_view');
 		}catch(Exception $e){
 			echo $e;
 		}
