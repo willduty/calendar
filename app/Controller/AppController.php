@@ -109,7 +109,7 @@ class AppController extends Controller {
 	function toCakeTimeFormat(&$arrayField){
 		$time = explode(' ', trim($arrayField));
 		$arrayField = array();
-		$arrayField['meridian'] = $time[1];
+		$arrayField['meridian'] = strtolower($time[1]);
 		$time = explode(':', $time[0]);
 		$arrayField['hour'] = $time[0];
 		$arrayField['min'] = $time[1];

@@ -66,7 +66,6 @@ class CalendarHelper extends AppHelper{
 									$weeks = explode(',', $entryDate['weeks_of_month']);
 									$months = explode(',', $entryDate['months_of_year']);
 									
-									
 									foreach($months as $m){
 										if($m == $monthIter){
 											foreach($daysOfWeek as $dayOfWeek){
@@ -262,8 +261,10 @@ class CalendarHelper extends AppHelper{
 			
 			$str = "";
 			$arr = explode(',', $date['weeks_of_month']);
-			if(count($arr) == 5)
+			if($date['weeks_pattern'] == 'every_week')
 				$str .= "Every ";
+			elseif($date['weeks_pattern'] == 'nth_week')
+				$str .= "Every Other ";
 			else{
 				foreach($arr as $key=>$daynum)
 					$arr[$key] = $this->ordinal($daynum);
@@ -278,11 +279,53 @@ class CalendarHelper extends AppHelper{
 			}
 			$str .= implode($arr2, ", ");
 			
+			$t = new DateTime($date['start_time']);
+			if($t)
+				$str .= ', '.$t->format('g').':'.$t->format('i').$t->format('a');
+			$t = new DateTime($date['end_time']);
+			if($t)
+				$str .= '-'.$t->format('g').':'.$t->format('i').$t->format('a');
+			
+			
+			
 			return $str;
 		}
 	
 	}
 	
+	
+	function getEntryDisplayString($entry){
+		$str = '';
+		
+		if(isset($entry['Category']) && !empty($entry['Category']['id'])){
+			$str .= "<b>Category:</b> <span style='color:#303'>" . $entry['Category']['name'] . "</span><br><br>";
+		}
+		
+		$addr = array();
+		if(strlen($entry['Entry']['address']))
+			array_push($addr, $entry['Entry']['address']);
+		if(strlen($entry['Entry']['city']) || strlen($entry['Entry']['state']) || strlen($entry['Entry']['country'])){
+			array_push($addr, $entry['Entry']['city'] . ", " . $entry['Entry']['state'] . " " . $entry['Entry']['country']);
+		}
+		if(count($addr)){
+			$str .= implode('<br>', $addr) . "<br><br>";
+		}
+		
+		$str .= "<b>Dates:</b><ul style='list-style:none;'>";
+		try{
+			foreach( $entry['Date'] as $date){
+				$str .= "<li>" . $this->dateAsString($date) . '</li>';
+			}
+		}catch(Exception $a){
+			echo '//'.$a;
+		}
+		$str.= "</ul>";
+		
+		$str .= "<br><a href='/entries/edit/".$entry['Entry']['id']."'> edit</a>" . " | " . 
+				"<a href='/entries/delete/".$entry['Entry']['id']."' onclick='return confirm(\"Entry will be deleted. Are you sure?\")'> delete</a>";
+			
+		return addslashes($str);
+	}
 	
 
 

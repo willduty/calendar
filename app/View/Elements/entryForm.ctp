@@ -15,8 +15,10 @@
 
 
 <script type=text/javascript>
-
+	var basePath = "<?php echo $this->base ?>";
+	
 	<?php
+	
 		if($_EDIT)
 			echo 'gEntryId = ' . $this->data['Entry']['id'] . ';';
 		
@@ -140,7 +142,7 @@
 			return;
 		
 		var id = btn.value;
-		$.get('/dates/delete/' + id + '/' + 0, function(resp){
+		$.get(basePath + '/dates/delete/' + id + '/' + 0, function(resp){
 			var result = $.parseJSON(resp);
 			alert(result.success ? 'delete succeeded' : 'could not delete date')
 			if(result.success){
@@ -157,8 +159,10 @@
 		if(!validateForm())
 			return;
 			
+		// alert($('form').find('[name$=start_time\\\]]').val())	
+		// return false;
 		
-		$.post('/dates/add/' + gEntryId, 
+		$.post(basePath + '/dates/add/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
 				try{

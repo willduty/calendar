@@ -25,7 +25,7 @@
 				<?php 
 					if($this->action != 'login'){
 						$logout = $this->Html->link('logout', array('controller'=>'users', 'action'=>'logout'));
-						$profile = $this->Html->link('user profile', array('controller'=>'users', 'action'=>'edit'));
+						$profile = $this->Html->link('account', array('controller'=>'users', 'action'=>'edit'));
 						$help = $this->Html->link('help', '/pages/help.html');
 						echo "$logout | $profile | $help";	
 					}

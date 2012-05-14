@@ -5,7 +5,6 @@
 	echo $this->Html->css('smoothness/jquery-ui-1.8.16.custom.css');
 	echo $this->Html->script('jquery.contextmenu.r2.js'); 
 	echo $this->Html->script('jquery.qtip-1.0.0-rc3');
-	echo $this->Html->script('DateFormatting');
 	
 ?>
 
@@ -13,72 +12,16 @@
 	var basePath = "<?php echo $this->base ?>";
 	var path = "<?php echo $this->base . "/" . $this->params['controller']; ?>";
 
-
-	var entriesArr = {
-	
-		<?php
-		$temp = array();
-		foreach($entries as $index => $entry){
-			echo $entry['Entry']['id'] .":" .json_encode($entry) . ",\r\n\r\n";
+	var entryDisplayData = {
+	<?php
+	foreach($entries as $index => $entry){
+			$entryDisplayStr = $this->Calendar->getEntryDisplayString($entry);
+			$name = str_replace("\"", "\\\"", $entry['Entry']['name']);
+			echo $entry['Entry']['id'] . ":{name:\"$name\", displayStr:\"$entryDisplayStr\"},";
 		}
-		?>
-	
-		
-		getEntryNameById : function(id){
-			var entry = this[id].Entry;
-			return entry.name;
-		},
-	
-		getEntryDisplayById : function(id){
-			var entry = this[id].Entry;
-			var str = '';
-			
-			if(this[id].Category.id){
-				str += "<b>Category:</b> <span style='color:#303'>" +this[id].Category.name + "</span><br><br>";
-			}
-			
-			if(entry.address)
-				str += entry.address + "<br>";
-				
-			if(entry.city)
-				str += entry.city;
-			if(entry.state)
-				str += ", " + entry.state;
-			if(entry.country)
-				str += " " + entry.country;
-			
-			if(entry.city || entry.state || entry.country){
-				str += "<br>";
-			}
-			
-			if(entry.address && entry.city && entry.state){
-				str += "<a href='http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q="+
-						escape(entry.address)+",+"+escape(entry.city)+",+"+escape(entry.state)+
-						"&aq=0&oq=&sll=37.0625,-95.677068&sspn=48.287373,107.138672&vpsrc=0&ie=UTF8&hq="+
-						escape(entry.address)+",+"+escape(entry.city)+",+"+escape(entry.state)+"&t=m&z=15' "+
-						"target='_blank'>map</a><br>";
-			}
-			
-			if(str.length)
-				str += "<br>";
-			
-			str += "<b>Dates:</b><ul style='list-style:none;'>";
-			try{
-			for(var i in this[id].Date){
-				str += "<li>" + formatDateObj(this[id].Date[i]) + '</li>';
-			}
-			}catch(a){alert(a)}
-			str+= "</ul>";
-			
-		
-			str += "<br><a href='"+path+"/edit/"+entry.id+"'> edit</a>" + " | " + 
-					"<a href='"+path+"/delete/"+entry.id+"' onclick='return confirm(\"Entry will be deleted. Are you sure?\")'> delete</a>";
-				
-			return str;
-		}
+	?>
 	}
 	
-
 	
 	function searchCallback(ajaxReturnVal){
 		ajaxReturnVal = $.trim(ajaxReturnVal); // todo: this should not be necessary
@@ -149,8 +92,7 @@
 						//location = basePath + "/reminders/add/" + t.getAttribute("entryId");
 					},
 					'Delete': function(t) {
-						
-						var name = entriesArr.getEntryNameById(t.getAttribute("entryId"));
+						var name = entryDisplayData[t.getAttribute("entryId")].name;
 						if(confirm("are you sure you want to delete calendar entry \"" + name + "\"?"))
 							location = path + "/delete/" + t.getAttribute("entryId");
 					}
@@ -176,7 +118,7 @@
 				$(this).qtip({
 					content: {
 						title: text,
-						text: entriesArr.getEntryDisplayById(entryId)
+						text: entryDisplayData[entryId].displayStr 
 					},
 					show: 'click',
 					hide: 'unfocus',
@@ -221,7 +163,6 @@
 			
 			
 			// new category add form and callback
-			
 			$('#newCatForm').submit(function(){
 				$.post(basePath + "/categories/add",
 					$(this).serialize(),
@@ -291,7 +232,7 @@
 				var t = $(this).parents('[name=calendarCell]').get(0);
 				$(this).bind('click', showDayDlg)
 				function showDayDlg(){
-					$.get('/entries/getCalendarOnly/day/' + t.getAttribute("id"),
+					$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
 						function(resp){
 							var left = t.offsetWidth + t.offsetLeft;
 							$(t).parents().each(function(){left+=this.offsetLeft})
