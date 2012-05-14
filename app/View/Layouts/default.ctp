@@ -19,7 +19,7 @@
 		<tr>
 			<td id="header">				
 				<h3> 
-					<a href='/'  style='font-size:17px;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
+					<a href='<?php echo $this->base; ?>'  style='font-size:17px;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
 				</h3>
 				<div style='float:right;'>
 				<?php 

@@ -9,6 +9,8 @@
 	
 	$_EDIT = $this->action == 'edit' || FALSE;
 	
+	$mainPage = $this->base . '/entries';
+	
 ?>
 
 
@@ -159,9 +161,6 @@
 		if(!validateForm())
 			return;
 			
-		// alert($('form').find('[name$=start_time\\\]]').val())	
-		// return false;
-		
 		$.post(basePath + '/dates/add/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
@@ -173,10 +172,14 @@
 					alert('save failed.')
 				}
 				else{
-					$('#existingDates').append($("<div name=existingDate value='"+result.obj.Date.id+"' >"+
+					var newDate = $("<div name=existingDate value='"+result.obj.Date.id+"' >"+
 						"<b>Date: </b>"+ result.dateAsString +" &nbsp;&nbsp;"+
 						"<button type=button onclick='return removeDate(this);' "+
-						"value="+result.obj.Date.id+" class=small>delete</button></div>"));
+						"value="+result.obj.Date.id+" class=small>delete</button></div>");
+					
+					var appendAfter = $('#existingDates').find('[name=existingDate]').last();
+					appendAfter.length ?
+						appendAfter.append(newDate) : $('#existingDates').prepend(newDate)
 					
 					hideDateGui();
 				}
@@ -249,7 +252,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <!-- LIST OF EXISTING DATES -->
 <?php 
-
 	if($_EDIT):
 	echo '<h2>Dates</h2><div style="padding:5px 0px 5px 0px;" id=existingDates class=simpleSectionLight>'; 
 	foreach($this->data['Date'] as $date):
@@ -268,21 +270,17 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 ?>
 
 
-
-
-
 <!-- DATE GUI -->
-
 <?php if($_EDIT): ?>
-<br>
-<div id=dateGuiContainer>
-	<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
-</div>
+	<br>
+	<div id=dateGuiContainer>
+		<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
+	</div>
 
-</div>
+	</div>
 
 <?php else: ?>
-<h2>Date</h2>
+	<h2>Date</h2>
 <?php endif; ?>	
 
 <div name=newDate class=simpleSection>
@@ -465,10 +463,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 					?>
 					</div>
 					
-					
 				</div>
-				
-
 				
 			</div>
 		</div>
@@ -495,7 +490,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <?php if($_EDIT): ?>
 
 	<tr><td style='vertical-align:middle;'>
-	<?php echo $this->Form->button('return to calendar', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>
+	<?php echo $this->Form->button('return to calendar', array('type'=>'button', 'onclick'=>'location=\''.$mainPage.'\';')); ?>
 	</td></tr>
 	
 <?php else: ?>
@@ -503,7 +498,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 	<tr><td style='vertical-align:middle;'>
 	<?php echo $this->Form->button('save'); ?>
 	</td><td style='vertical-align:middle;'>
-	<?php echo $this->Form->button('cancel', array('type'=>'button', 'onclick'=>'location=\'/entries\';')); ?>
+	<?php echo $this->Form->button('cancel', array('type'=>'button', 'onclick'=>'location=\''.$mainPage.'\';')); ?>
 	</td></tr>
 
 <?php endif; ?>	
