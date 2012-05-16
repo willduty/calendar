@@ -5,8 +5,8 @@
 }
 
 
-.guiTreeOn{color:black;}
-.guiTreeGrayed{color:gray;}
+.guiTreeOn{color:black; font-weight:bold;}
+.guiTreeGrayed{color:gray; font-weight:normal;}
 
 
 
@@ -87,6 +87,7 @@ form.neatForm label{
 .neatForm70 label{
 	float:left; width:70px; font-weight:bold;
 }
+
 .neatForm70 input{
 	clear:both;
 }
@@ -95,17 +96,21 @@ form.neatForm label{
 	float:left; width:80px; font-weight:bold;
 }
 
-
-.neatFormNormal label{
-	line-height:25px;
-	padding-left:30px; 
-	float:left; width:70px; font-weight:normal;
+.neatFormNormal label {
+    display: inline;
+    padding-left: 15px;
+    vertical-align: middle;
 }
-
-.neatFormNormal input{
-	
+.neatFormNormal input {
+    width: 100px;
+    height: 15px;
+    padding: 1px;
+    margin:1px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
 }
-
 
 
 
@@ -621,11 +626,6 @@ form {
 	font-size:12px;
 }
 
-label {
-	#display: block;
-	font-weight:bold;
-	margin-bottom:3px;
-}
 
 input, textarea {
 	clear: both;

@@ -87,7 +87,7 @@
 		
 		var name = $('#EntryName').val();
 		if($.trim(name) == ""){
-			alert('invalid title')
+			alert('Invalid Title')
 			return false;
 		}
 		
@@ -224,7 +224,7 @@ echo $this->Form->create('Entry', array('id'=>'EntryForm'));
 
 echo '<div class="simpleSectionLight" style="width:500px;">';
 
-echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
+echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>array('style'=>'font-weight:bold;')));
 
 ?>
 
@@ -302,8 +302,8 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <div editOnly style='display:none; font: bold 14px helvetica;'>Additional Date</div>
 
-<input type=radio name=dateType value=byDate tool=tool_byDate ><label for="radio1">calendar date</label>
-<input type=radio name=dateType value=byDayOfWeek tool=tool_byDayOfWeek ><label for="radio1">day of week</label>
+<input type=radio name=dateType value=byDate tool=tool_byDate ><label for="radio1">Calendar Date</label>
+<input type=radio name=dateType value=byDayOfWeek tool=tool_byDayOfWeek ><label for="radio1">Day of Week</label>
 
 	<br><br>
 	
@@ -375,14 +375,15 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				<br>
 				
 				
-				<div id=tool_every_week>
+				<div id=tool_every_week class=neatFormNormal>
 							
 					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
-					
+						array('type'=>'text')); ?>
+						
 					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>	
-				</div>			
+						array('type'=>'text')); ?>	
+					<br>
+				</div>
 	
 	
 				<?php
@@ -393,21 +394,22 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 				?>
 				<br>
 				
-				<div id="tool_nth_week" style='display:none;'>
+				<div id=tool_nth_week class=neatFormNormal>
 					
 					<?php 	
 					// todo
 					$valOption = isset($year) ? "$year-$month-$day'" : ''; 
 					
 					echo $this->Form->input('Date.0.start_date', 
-						array('type'=>'text', 'label'=>array('text'=>'Start date', 'class'=>'neatFormNormal', 'value'=>$valOption))); ?>
+						array('type'=>'text', 'label'=>array('text'=>'Start date', 'value'=>$valOption))); ?>
 					
 					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						array('type'=>'text')); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						array('type'=>'text')); ?>
 						
+					<br>
 				</div>
 				
 				
@@ -418,26 +420,29 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 							array('value' => false, 'tool'=>'tool_nth_weekdays_of_month')
 						);
 				?>
-				<br>
-				<div id='tool_nth_weekdays_of_month' style='display:none; padding:0px 0px 0px 20px;'>
 				
+				<div id=tool_nth_weekdays_of_month>
+				
+					<div style='margin: 5px 0px 5px 15px; '>
 					<?php
 					
 					    echo $this->Form->input('Date.0.weeks_of_month', 
 							array('multiple' => 'checkbox',
 								'options' => array('1' => '1st', '2' => '2nd', '3' => '3rd', '4' => '4th', '5' => '5th'),
-								'label'=>'', 'style'=>'float:left;')
+								'label'=>'', 'style'=>'float:left;vertical-align:middle;')
 						    );
 					
 					?>
+					</div>
 					
-					<div style='clear:both;' class=neatFormNormal>
+					<div class=neatFormNormal style='clear:both;'>
 				
-					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text')); ?>
-					
-					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text')); ?>
+						<?php echo $this->Form->input('Date.0.start_time', 
+							array('type'=>'text')); ?>
+						
+						<?php echo $this->Form->input('Date.0.end_time', 
+							array('type'=>'text')); ?>
+						
 					</div>
 		
 				</div>

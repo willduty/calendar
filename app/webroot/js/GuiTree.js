@@ -76,10 +76,14 @@ function GuiTree(options){
 				toolSwitch.checked = true;
 				toolSwitch.nextSibling.className = this.onClass;
 				var name = toolSwitch.getAttribute('name').replace(/\[/g, '\\\[').replace(/\]/g, '\\\]')
+				
+				console.log(name +', length:'+$('[name='+name+']').length)
+				
 				$('[name='+name+']').each(function(){
 					
+					//console.log(this.getAttribute('tool') +','+toolSwitch.getAttribute('tool'))
 					if(this.getAttribute('tool') != toolSwitch.getAttribute('tool')){
-						toolSwitch.nextSibling.className = _this.grayedClass
+						this.nextSibling.className = _this.grayedClass
 						_this.closeTool(this);
 					}
 				})
