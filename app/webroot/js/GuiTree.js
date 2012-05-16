@@ -77,14 +77,18 @@ function GuiTree(options){
 				toolSwitch.nextSibling.className = this.onClass;
 				var name = toolSwitch.getAttribute('name').replace(/\[/g, '\\\[').replace(/\]/g, '\\\]')
 				
-				console.log(name +', length:'+$('[name='+name+']').length)
+				// if all radios have same tool don't close on selects
+				var test = $.map($('[name='+name+'][type=radio]'), function(elem, idx){
+					return elem.getAttribute('tool');
+				})
+				var closeOthers = test.getUnique().length == 1 ? false : true;
 				
-				$('[name='+name+']').each(function(){
-					
-					//console.log(this.getAttribute('tool') +','+toolSwitch.getAttribute('tool'))
-					if(this.getAttribute('tool') != toolSwitch.getAttribute('tool')){
+				// go through each toolswitch and close/grayout as appropriate
+				$('[name='+name+'][type=radio]').each(function(){	
+					if(this != toolSwitch){
 						this.nextSibling.className = _this.grayedClass
-						_this.closeTool(this);
+						if(closeOthers)
+							_this.closeTool(this);
 					}
 				})
 		
@@ -154,4 +158,14 @@ function GuiTree(options){
 }
 
 
-
+// from http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(this[i] in u)
+         continue;
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}

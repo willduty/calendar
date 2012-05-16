@@ -92,6 +92,15 @@
 		}
 		
 		
+		if($('#byDateOption:checked').length){
+			var dateInput = $("#singleDateBox").val();
+			var reg = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]/
+			if(!reg.test(dateInput)){
+				alert('Invalid Date');
+				return false;
+			}
+		}
+		
 		// ensure week pattern entries have required 
 		// additional stuff
 		var wp = form.find('[name$=weeks_pattern\\\]]:checked')
@@ -302,10 +311,11 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>a
 
 <div editOnly style='display:none; font: bold 14px helvetica;'>Additional Date</div>
 
-<input type=radio name=dateType value=byDate tool=tool_byDate ><label for="radio1">Calendar Date</label>
+<input type=radio name=dateType value=byDate tool=tool_byDate id=byDateOption><label for="radio1">Calendar Date</label>
 <input type=radio name=dateType value=byDayOfWeek tool=tool_byDayOfWeek ><label for="radio1">Day of Week</label>
 
 	<br><br>
+	
 	
 	<div name=dateGui>
 		<!-- TODO -->
