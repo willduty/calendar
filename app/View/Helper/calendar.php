@@ -244,13 +244,15 @@ class CalendarHelper extends AppHelper{
 			if($date['repeating'])
 				$str = 'Every ';					
 			$str .= $d->format('F') . " " . $d->format('j').$d->format('S');
-			$t = new DateTime($date['start_time']);
-			if($t)
-				$str .= ', '.$t->format('g').':'.$t->format('i').$t->format('a');
-			$t = new DateTime($date['end_time']);
-			if($t)
-				$str .= '-'.$t->format('g').':'.$t->format('i').$t->format('a');
 			
+			if(!empty($date['start_time'])){
+				$t = new DateTime($date['start_time']);
+				$str .= ', '.$t->format('g').':'.$t->format('i').$t->format('a');
+			}
+			if(!empty($date['end_time'])){
+				$t = new DateTime($date['end_time']);
+				$str .= '-'.$t->format('g').':'.$t->format('i').$t->format('a');
+			}	
 			return $str;
 		}
 		
@@ -279,13 +281,14 @@ class CalendarHelper extends AppHelper{
 			}
 			$str .= implode($arr2, ", ");
 			
-			$t = new DateTime($date['start_time']);
-			if($t)
+			if(!empty($date['start_time'])){
+				$t = new DateTime($date['start_time']);
 				$str .= ', '.$t->format('g').':'.$t->format('i').$t->format('a');
-			$t = new DateTime($date['end_time']);
-			if($t)
+			}
+			if(!empty($date['end_time'])){
+				$t = new DateTime($date['end_time']);
 				$str .= '-'.$t->format('g').':'.$t->format('i').$t->format('a');
-			
+			}	
 			
 			
 			return $str;
@@ -297,10 +300,7 @@ class CalendarHelper extends AppHelper{
 	function getEntryDisplayString($entry){
 		$str = '';
 		
-		if(isset($entry['Category']) && !empty($entry['Category']['id'])){
-			$str .= "<b>Category:</b> <span style='color:#303'>" . $entry['Category']['name'] . "</span><br><br>";
-		}
-		
+		// address
 		$addr = array();
 		if(strlen($entry['Entry']['address']))
 			array_push($addr, $entry['Entry']['address']);
@@ -310,10 +310,18 @@ class CalendarHelper extends AppHelper{
 		if(count($addr)){
 			$str .= implode('<br>', $addr) . "<br><br>";
 		}
+
 		
+		// category
+		if(isset($entry['Category']) && !empty($entry['Category']['id'])){
+			$str .= "<b>Category:</b> <span style='color:#303'>" . $entry['Category']['name'] . "</span><br><br>";
+		}
+		
+
+		// date(s)
 		$str .= "<b>Dates:</b><ul style='list-style:none;'>";
 		try{
-			foreach( $entry['Date'] as $date){
+			foreach( $entry['Date'] as $date){	
 				$str .= "<li>" . $this->dateAsString($date) . '</li>';
 			}
 		}catch(Exception $a){

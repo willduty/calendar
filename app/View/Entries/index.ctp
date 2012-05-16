@@ -53,25 +53,7 @@
 					  location = path + "/highlightDay/<?php echo $view; ?>/" + t.getAttribute("id");
 					},
 					'viewDay': function(t) {		
-						
-						$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
-							function(resp){
-								var left = t.offsetWidth + t.offsetLeft;
-								$(t).parents().each(function(){left+=this.offsetLeft})
-								var top = t.offsetTop;
-								// $(t).parents().each(function(){top+=this.offsetTop})
-								
-								$('#detailsDlg').show()
-									.css({'top': top, 'left': left, 'background':'#f96', 'padding':5})
-									.html(resp);
-									
-								$(document).bind('mousedown', function(e){
-									$('#detailsDlg').hide();
-									$(document).unbind('mousedown', arguments.callee);
-								})
-							
-						})
-						//location = path + "/index/day/" + t.getAttribute("id");
+						location = path + "/index/day/" + t.getAttribute("id");
 					}
 				  }
 			  });
@@ -100,7 +82,7 @@
 			  });
 			
 			// context menu for calendar entry
-			$('[class=hourCellWeekView],[class=hourCell]').contextMenu('hourCtxMenu', {
+			$('[class=hourCellWeekView],[name=hourCell]').contextMenu('hourCtxMenu', {
 				  bindings: {
 					'AddEntry': function(t) {	 
 					  location = path + "/add/" + t.getAttribute("id");
@@ -230,20 +212,34 @@
 			
 			$('[class=arrow]').each(function(){	
 				var t = $(this).parents('[name=calendarCell]').get(0);
-				$(this).bind('click', showDayDlg)
+				$(this).bind('click', showDayDlg);
+				
 				function showDayDlg(){
-					$.get(basePath + '/entries/getCalendarOnly/day/' + t.getAttribute("id"),
+					$.get(
+						basePath + '/entries/getCalendar/day/' + t.getAttribute("id"),
 						function(resp){
 							var left = t.offsetWidth + t.offsetLeft;
 							$(t).parents().each(function(){left+=this.offsetLeft})
 							var top = t.offsetTop;
 							
 							$('#detailsDlg').show()
-								.css({'top': top, 'left': left, 'background':'#f96', 'padding':5})
-								.html(resp);
+								.css({'top': top, 'left': left, 'background':'black', 'border':'1px solid black'})
+								.html(resp)
+								.find('[name=hourCell]').contextMenu('hourCtxMenu', {
+									  bindings: {
+										'AddEntry': function(t) {	 
+										  location = path + "/add/" + t.getAttribute("id");
+										}
+									  }
+								  });
+			
 								
 							$(document).bind('mousedown', function(e){
-								$('#detailsDlg').hide();
+								if($(e.target).attr('name') == 'hourCell'){
+									return false;
+								}
+								
+								$('#detailsDlg').empty().hide();
 								$(document).unbind('mousedown', arguments.callee);
 							})
 						
@@ -308,16 +304,15 @@ echo "</td></tr><tr><td>";
 switch($view){
 
 	case 'list':
-		// all entries as a list, not calendar layout
-		echo $this->element("list_view");
+		echo $this->element("calendar_list_view");
 		break;
 
 	case "month":
-		echo $this->element("month_view");
+		echo $this->element("calendar_month_view");
 		break;
 
 	case 'day':
-		echo $this->element('day_view');
+		echo $this->element('calendar_day_view');
 		break;
 		
 	case "year":
@@ -325,7 +320,7 @@ switch($view){
 		break;
 		
 	case "week":
-		echo $this->element('week_view');	
+		echo $this->element('calendar_week_view');	
 		break;
 	
 		
@@ -403,7 +398,8 @@ echo "</td></tr></table>";
 	<?php
 		echo $this->Form->create('Category', array('id'=>'newCatForm'));
 		echo $this->Form->input('name');
-		echo $this->Form->end('submit');
+		echo '<br>';
+		echo $this->Form->end('submit', array('style'=>'background:red; align:right;'));
 	?>	
 	
 	</div>
@@ -445,7 +441,7 @@ echo "</td></tr></table>";
 <div class="contextMenu" id="dateCtxMenu">
 	<ul>
 		<li id="addSingleDateEntry"> Add Entry For this Day</li>
-		<li id="viewDay"> View Day</li>
+		<li id="viewDay"> Go to Day view</li>
 		<li id="highlightDay"> Highlight This Day</li>
 		
 	</ul>

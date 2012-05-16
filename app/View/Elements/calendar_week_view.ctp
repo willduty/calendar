@@ -37,7 +37,7 @@
 					<tr>	
 						<td class='calendarHdr' style='background:black;'> $prevLink </td>
 						<td class='calendarHdr' style='color:white; font-weight:bold; background:black'>
-							Week of ".$dayOfWeek->format('M j Y')." </td>
+							Week of ".$dayOfWeek->format('M j, Y')." </td>
 						<td class='calendarHdr' style='background:black;'> $nextLink </td>
 					</tr>
 				</table>
@@ -99,20 +99,20 @@
 
 		$rows = array();		
 		for($hr=0; $hr<13; $hr++){
-			echo "<tr>";
+			echo "<tr class=hourCellRow>";
 			$tds = array();
 			$dayOfWeek = $this->Calendar->getFirstDayOfWeek($today);
 		
 			foreach($daysArr as $d){
 			
 				$hour = $hr == 0 ? 12 : $hr;
-				$id = $dayOfWeek->format('Y/n/j/') . $hour . "/AM";
-				$str = "<td class='hourCellWeekView' id=$id><div class=noOverflowDiv  style='width:61px'>$hour:00 AM<br>";
+				$id = $dayOfWeek->format('Y/n/j/') . $hour . "/00/am";
+				$str = "<td class='hourCellWeekView' id=$id><div class=noOverflowDiv  style='width:61px'>$hour:00 am<br>";
 				foreach($d[$hr] as $entry){
 					$str .= $this->Calendar->makeCalendarDateEntryLink($entry) . "<br>";
 				}
-				$id = $dayOfWeek->format('Y/n/j/') . $hour . "/PM";
-				$str .= "</div></td><td class=hourCellWeekView id=$id><div class=noOverflowDiv style='width:61px'>$hour:00 PM<br>";
+				$id = $dayOfWeek->format('Y/n/j/') . $hour . "/00/pm";
+				$str .= "</div></td><td class=hourCellWeekView id=$id><div class=noOverflowDiv style='width:61px'>$hour:00 pm<br>";
 				foreach($d[$hr+12] as $entry){
 					$str .= $this->Calendar->makeCalendarDateEntryLink($entry). "<br>";
 				}

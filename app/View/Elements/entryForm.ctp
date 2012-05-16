@@ -7,8 +7,7 @@
 	echo $this->Html->script('GuiTree.js'); 
 	echo $this->Html->css('TimePicker');
 	
-	$_EDIT = $this->action == 'edit' || FALSE;
-	
+	$_EDIT = $this->action == 'edit' || FALSE;	
 	$mainPage = $this->base . '/entries';
 	
 ?>
@@ -26,6 +25,11 @@
 		
 		if(isset($date))
 			echo 'gDate = "' . $date->format('m/d/Y') . '";';
+		
+		if(isset($hour))
+			echo 'gHour = "' . $hour . '";';
+			
+			
 	?>
 
 		
@@ -54,9 +58,17 @@
 		else
 			initDateGui();
 		
+		
 		if(typeof gDate != 'undefined'){
-			$('#Date0StartDate').val(gDate)
+			$('#singleDateBox').val(gDate)
 		}
+		
+		if(typeof gHour != 'undefined'){
+			gui.openTool('singleDateBox');
+			gui.openTool('singleDateTimesOptions');
+			$('#singleDateStartTime').val(gHour)
+		}
+		
 		
 		$('#additionalDetailsSwitch').click(function(){
 			this.innerHTML = (this.innerHTML.indexOf('more') != -1) ? '&laquo; less options ' : 'more options &raquo;';
@@ -121,7 +133,7 @@
 	
 	
 	function updateEntry(elem){
-		$.post('/entries/updateEntryDetails/' + gEntryId, 
+		$.post(basePath + '/entries/updateEntryDetails/' + gEntryId, 
 			$('form').serialize(), 
 			function(resp){
 				var result = $.parseJSON(resp);
@@ -194,12 +206,6 @@
 		
 </script>
 
-<div id=tempdiv></div>
-
-
-
-
-
 
 
 
@@ -216,7 +222,7 @@
 
 echo $this->Form->create('Entry', array('id'=>'EntryForm'));
 
-echo '<div class="simpleSectionLight">';
+echo '<div class="simpleSectionLight" style="width:500px;">';
 
 echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
@@ -225,17 +231,25 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 <div class=switch id=additionalDetailsSwitch style='width:10em;'>more options &raquo;</div>
 <div id=additionalDetails style='display:none; padding: 10px 0px 0px 20px;'>
-	<?php
-		echo $this->Form->input('url', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('email', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('address', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('city', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('state', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('zip_code', array('type'=>'text', 'label'=>array('class'=>'neatForm70')));
-		echo $this->Form->input('category_id', array('label'=>array('class'=>'neatForm70'), 'empty' => '-- choose one -- '));
 	
+	<table class=neatForm70><tr><td>
+	<?php
+		echo $this->Form->input('category_id', array('label'=>array('class'=>'neatForm70'), 'empty' => '-- choose one -- ', 'style'=>'width:145px;'));
+		echo $this->Form->input('url',array('type'=>'text'));
+		echo $this->Form->input('email');
+		echo $this->Form->input('address', array('type'=>'text'));
+		echo $this->Form->input('city');
+		echo $this->Form->input('state');
+		echo $this->Form->input('zip_code');
 	?>
 	
+	</td><td>
+	
+	<?php
+		echo $this->Form->input('comments', array('label'=>array('text'=>'Notes', 'class'=>'neatForm70')));
+	
+	?>
+	</td></tr></table>
 </div>
 <br>
 
@@ -274,7 +288,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 <?php if($_EDIT): ?>
 	<br>
 	<div id=dateGuiContainer>
-		<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates...</div>
+		<div name=dateGuiPlaceholder class=switch onclick='return showDateGui();' style='width:10em;'>add more dates &raquo;</div>
 	</div>
 
 	</div>
@@ -301,7 +315,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 			<table>		
 				<tr><td style='vertical-align:middle;'>
 				<?php echo $this->Form->input('Date.0.start_date', 
-					array('type'=>'text', 'size'=>'14', 'tool'=>'tool_singleDateOptions', 
+					array('type'=>'text', 'size'=>'14', 'tool'=>'tool_singleDateOptions', 'id'=>'singleDateBox',
 						'trigger'=>'change')); ?>
 				</td>
 				<td style='vertical-align:middle;'><?php echo $this->Form->input('Date.0.repeating', 
@@ -311,13 +325,13 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 		
 			<div id=tool_singleDateOptions style='margin-left:20px; display:none;'>
 				<input name=singleDateOptions type=radio checked tool='' defaultChecked><label>all day</label>
-				<input name=singleDateOptions type=radio tool=tool_timesOptions><label>set start/end time & date...</label>
+				<input name=singleDateOptions type=radio tool=tool_timesOptions id=singleDateTimesOptions><label>set start/end time & date &raquo;</label>
 			
 				<div id=tool_timesOptions style='display:none; margin-left:20px;'>
 				
 					<br>
 					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatForm80'))); ?>
+						array('type'=>'text', 'id'=>'singleDateStartTime', 'label'=>array('class'=>'neatForm80'))); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
 						array('type'=>'text', 'label'=>array('class'=>'neatForm80'))); ?>
@@ -417,13 +431,13 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 					
 					?>
 					
-					<div style='clear:both;'>
+					<div style='clear:both;' class=neatFormNormal>
 				
 					<?php echo $this->Form->input('Date.0.start_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						array('type'=>'text')); ?>
 					
 					<?php echo $this->Form->input('Date.0.end_time', 
-						array('type'=>'text', 'label'=>array('class'=>'neatFormNormal'))); ?>
+						array('type'=>'text')); ?>
 					</div>
 		
 				</div>
@@ -516,44 +530,9 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title')));
 
 	
 <!-- TEMP HIDDEN DIV -->
-
 <div id=hider style='display:none;'></div>
 
 
 <!-- TIMEPICKER -->
-
-<ul class=TimePicker id=TimePicker style='display:none;'>
-
-<?php
-	for($i=0; $i<12; $i++){
-		$num = $i == 0 ? 12 : $i;
-			
-		echo "<li>
-				<ul >
-					<li>$num:00 AM </li>
-					<li class=arrow>&raquo;
-
-						<ul>
-							<li>$num:15 AM</li>
-							<li>$num:30 AM</li>
-							<li>$num:45 AM</li>
-						</ul>
-					</li> 
-
-
-					<li>$num:00 PM </li>
-					<li class=arrow>&raquo;
-
-						<ul>
-							<li>$num:15 PM</li>
-							<li>$num:30 PM</li>
-							<li>$num:45 PM</li>
-						</ul>
-					</li>
-				</ul>
-			</li>";
-	}
-
-?>
-</ul>
+<?php echo $this->element('timepicker'); ?>
 

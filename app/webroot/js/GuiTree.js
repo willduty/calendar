@@ -16,62 +16,89 @@ function GuiTree(options){
 	this.setup = function(){
 
 		var _this = this;
+		
 		$('[tool]').each(function(){
 			var toolSwitch = this;
 			var trigger = this.getAttribute('trigger') || 'click';
-			var tool = $('#'+this.getAttribute('tool'));
-			
 			
 			$(this).bind(trigger, function(){
-				// if lone checkbox, switch on/off
-				if(this.getAttribute('type') == 'checkbox' &&
-					(this.getAttribute('name') == null || 
-						$('[name='+this.getAttribute('name')+']').length == 1)){
-					if(this.checked)
-						tool.toggle();
-					else
-						_this.closeTool(this);
-				}
-				// all other types, show tool
-				else{
-				
-					// if tool elem not in dom, retrieve it from 
-					// holding obj and reinsert at placeholder 
-					if(0 == $(tool).parents().length){
-							var token = toolSwitch.getAttribute('tool_token');
-							var placeholder = $('#'+token);
-							$(_this.holding[token]).insertAfter(placeholder);
-					
-							// clear all placeholder stuff
-							toolSwitch.removeAttribute('tool_token');
-							placeholder.remove();
-							delete _this.holding[token];
-					}
-					
-					tool.show();
-						
-					var _toolSwitch = this;
-			
-					//close others if grouped with other switches
-					if(this.getAttribute('type') == 'radio'){
-						this.nextSibling.className = _this.onClass;
-						var name = this.getAttribute('name').replace(/\[/g, '\\\[').replace(/\]/g, '\\\]')
-						$('[name='+name+']').each(function(){
-							
-							if(this.getAttribute('tool') != _toolSwitch.getAttribute('tool')){
-								this.nextSibling.className = _this.grayedClass
-								_this.closeTool(this);
-							}
-						})
-				
-					}
-					
-					tool.find('[defaultChecked]').trigger(this.getAttribute('trigger') || 'click');	
-					
-					
-				}
+					_this.openTool(toolSwitch)
 			})
 		})
+	}
+	
+	
+	this.openTool = function(toolSwitch){
+		if(typeof toolSwitch == 'string'){
+			toolSwitch = $('#'+toolSwitch).get(0)
+			console.log(toolSwitch)
+		}
+		
+		var tool = null;
+		if(toolSwitch.getAttribute('tool_token'))
+			tool = $(this.holding[toolSwitch.getAttribute('tool_token')]);
+		else
+			tool = $('#'+toolSwitch.getAttribute('tool'));
+		
+		
+		// if lone checkbox, switch on/off
+		if(toolSwitch.getAttribute('type') == 'checkbox' &&
+			(toolSwitch.getAttribute('name') == null || 
+				$('[name='+toolSwitch.getAttribute('name')+']').length == 1)){
+			if(toolSwitch.checked)
+				tool.toggle();
+			else
+				this.closeTool(toolSwitch);
+		}
+		// all other types, show tool
+		else{
+		
+			// if tool elem not in dom, retrieve it from 
+			// holding obj and reinsert at placeholder 		
+			if(0 == tool.parents().length){
+					var token = toolSwitch.getAttribute('tool_token');
+					var placeholder = $('#'+token);
+					$(this.holding[token]).insertAfter(placeholder);
+			
+					// clear all placeholder stuff
+					toolSwitch.removeAttribute('tool_token');
+					placeholder.remove();
+					delete this.holding[token];
+			}
+			
+			tool.show();
+		
+			_this = this;
+			
+			//close others if grouped with other switches
+			if(toolSwitch.getAttribute('type') == 'radio'){
+				
+				toolSwitch.checked = true;
+				toolSwitch.nextSibling.className = this.onClass;
+				var name = toolSwitch.getAttribute('name').replace(/\[/g, '\\\[').replace(/\]/g, '\\\]')
+				$('[name='+name+']').each(function(){
+					
+					if(this.getAttribute('tool') != toolSwitch.getAttribute('tool')){
+						toolSwitch.nextSibling.className = _this.grayedClass
+						_this.closeTool(this);
+					}
+				})
+		
+			}
+			
+			tool.find('[defaultChecked]').trigger(toolSwitch.getAttribute('trigger') || 'click');	
+				
+		}
+	
+	}
+	
+	
+	
+	this.openThrough = function(arr){
+		
+		$('#'+toolId)
+		
+		
 	}
 	
 	
@@ -80,14 +107,13 @@ function GuiTree(options){
 	
 	// elem = the 'switch' elem not the tool elem
 	this.closeTool = function(elem){
-		
+		console.log('close')
+			
 		// clear all values in descendant
 		this.clearDescendents(elem);
 	
-		// take tool elem out of dom entirely store in holding obj
-		// and replace with placeholder elem with token attr to be 
-		// able to reinsert later
-		
+		// take tool elem out of dom entirely, store in holding obj
+		// replace with placeholder elem with token attr to be findable later	
 		if(!elem.hasAttribute('tool_token'))
 		{
 			var token = Math.random().toString().split(".")[1]; 

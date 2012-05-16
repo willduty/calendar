@@ -89,9 +89,8 @@ class EntriesController extends AppController{
 	
 	
 	// add a new calendar entry
-	function add($year = null, $month = null, $day = null){
+	function add($year = null, $month = null, $day = null, $hour = null, $min = null, $meridian = null ){
 	
-		
 		$data = $this->request->data;
 		
 		if(!empty($this->data)){ // form has been submitted
@@ -111,6 +110,9 @@ class EntriesController extends AppController{
 			$this->set('day', $day);
 			if(isset($year) &&isset($month) &&isset($day))
 				$this->set('date', new DateTime($year .'-'. $month .'-'.$day));
+				
+			if(isset($hour) && isset($min) && isset($meridian))
+				$this->set('hour', $hour.':'.$min.' '. $meridian);
 				
 			
 			// to list categories 
@@ -165,7 +167,7 @@ class EntriesController extends AppController{
 	}
 	
 	
-	function getCalendarOnly($view, $y, $m, $d){
+	function getCalendar($view, $y, $m, $d){
 		try{
 		$this->Entry->recursive = 2;
 		$this->set('entries', $this->Entry->findAllByUserId($this->Auth->user('id')));		
@@ -173,11 +175,9 @@ class EntriesController extends AppController{
 		$this->set('month', $m);		
 		$this->set('day', $d);			
 		$this->set('view', $view);			
-		$this->set('cssScheme', 'dlg');
 		$this->set("today", new DateTime($y .'-'. $m .'-'.$d));
-		$this->set("showHdr", false);
 		
-		echo $this->render('/Elements/day_view');
+		echo $this->render('/Elements/calendar_day_view_dlg');
 		}catch(Exception $e){
 			echo $e;
 		}
