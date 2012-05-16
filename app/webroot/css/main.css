@@ -394,13 +394,6 @@ table {
 
 
 table.calendarHdr{
-	border:solid 1px white;
-	align:center;
-	width: 100%;
-	height: 15px;
-	color: white; 
-	font-weight:bold; 
-	background:black;
 }
 
 
@@ -525,7 +518,7 @@ td.hourCellWeekView{
 
 
 table.weektable tr.hourCellRow:nth-child(odd) td.hourCellWeekView {
-	background: #fff5bb;
+	background: #fff0b0;
 }
 
 td.hourCellWeekView+td.hourCellWeekView{
@@ -566,53 +559,36 @@ td.hourCell:hover, .dlg_hour_cell:hover {
 
 
 
-	.dlg_day_view_table{background:white; width:250px;}
-	.dlg_day_view_hdr{background:black; color:white; font:bold 11px helvetica; width:100%;}
-	.dlg_hour_cell {background:white; width:30%;
-			border-bottom-width:1px;
-			border-bottom-style:solid;
-			border-bottom-color:lightgray;
-			border-left-width:1px;
-			border-left-style:solid;
-			border-left-color:lightgray;
-			}
-	.dlg_hour_cell_hdr{color:gray; background:#ffc; font:bold 11px helvetica; width:100%; width:20%;
-			border-bottom-width:1px;
-			border-bottom-style:solid;
-			border-bottom-color:lightgray;
-			}
-	.dlg_all_day_cell{
-		font:bold 11px helvetica;
-		background:#f96;}
-	
-	
+.dlg_day_view_table{background:white; width:250px;}
+.dlg_day_view_hdr{background:black; color:white; font:bold 14px helvetica; width:100%; }
+.dlg_day_view_hdr td{padding:5px;}
+.dlg_hour_cell {background:white; width:30%;
+		border-bottom-width:1px;
+		border-bottom-style:solid;
+		border-bottom-color:lightgray;
+		border-left-width:1px;
+		border-left-style:solid;
+		border-left-color:lightgray;
+		}
+.dlg_hour_cell_hdr{color:gray; background:#fff7c2; font:bold 11px helvetica; width:100%; width:20%;
+		border-bottom-width:1px;
+		border-bottom-style:solid;
+		border-bottom-color:lightgray;
+		border-left-width:1px;
+		border-left-style:solid;
+		border-left-color:lightgray;
+		}
+.dlg_all_day_cell{
+	font:bold 11px helvetica;
+	background:#f96;}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-table tr:nth-child(even) td.hourCell,
-table tr:nth-child(even) td.hourCellHdr
- {
-	#background: #fea;
+tr.hourCellRow:nth-child(odd) td.hourCell,
+tr.hourCellRow:nth-child(odd) td.hourCellHdr
+{
+	background: #fff0b0;
 }
-
 
 .noOverflowDiv{
 	white-space: nowrap;

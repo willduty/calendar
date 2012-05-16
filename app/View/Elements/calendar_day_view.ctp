@@ -66,7 +66,7 @@
 	if(@count($dayHoursArray['allday'])):
 	?>
 		<tr>
-			<td colspan=5 style='background-color:white; align:left;'>
+			<td colspan=5 style=' align:left;'>
 				<div class=subHdr>All Day Entries:</div>
 				<?php 
 					
@@ -91,7 +91,7 @@
 	for($i=0; $i<12; $i++){ 
 		$hour = ($i == 0) ? 12 : $i;
 		
-		echo "<tr>";
+		echo "<tr class=hourCellRow>";
 		echo "<td style='width:10%' class=hourCellHdr>$hour:00 am</td>";
 		$id = $today->format('Y/n/j/') . $hour . "/00/am";
 		echo "<td style='width:40%' class=hourCell name=hourCell id=$id>";
