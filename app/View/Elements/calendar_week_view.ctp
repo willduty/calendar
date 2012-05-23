@@ -1,6 +1,7 @@
 <?php
-	echo "<tr><td style='background:#eee;'>";
 	
+	echo "<tr><td style='background:#eee;'>";
+		
 		// begin week view table
 		
 		echo "<table style='height:500px; width:100%;' class=weektable >";

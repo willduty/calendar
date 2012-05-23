@@ -24,6 +24,20 @@
 	#border: 1px solid gray; 
 }
 
+.colorCell {
+	font: normal 9px arial; 
+	width:20px; 
+	height:20px; 
+	border:1px solid black;
+	
+}
+
+.colorCell:hover {
+	border:1px solid white;
+	cursor:pointer;
+}
+
+
 .msgErr {font:bold 12px arial; padding:0px 0px 0px 10px; background:#900; color:white;}
 .msgSuccess {font:bold 12px arial; background:green; color:white;}
 	

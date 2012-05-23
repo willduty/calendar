@@ -11,15 +11,15 @@
 		
 		}
 		
-		function edit($id){
+		function update($id){
 			$this->Category->id = $id;
 			
 			if(empty($this->data))
 				$this->data = $this->Category->read();
 			else{
 				$this->Category->save($this->data);
-				$this->Session->setFlash('changes saved');
-				$this->redirect(array('action' => 'index'));
+				$this->Session->setFlash('changes saved', 'flashElem');
+				$this->redirect(array('controller'=>'entries', 'action' => 'index'));
 			}		
 		}
 		

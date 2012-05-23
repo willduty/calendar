@@ -10,9 +10,8 @@ class EntriesController extends AppController{
 	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
 	
 		// if set explicitly in url, write calendar view type to session
-		if($view){
+		if($view)
 			CakeSession::write('UserValues.view', $view);
-		}
 		elseif(CakeSession::read('UserValues.view'))
 			$view = CakeSession::read('UserValues.view');
 		else 
@@ -23,14 +22,13 @@ class EntriesController extends AppController{
 		$today = new DateTime();
 		if($month == null)
 			$month = $today->format('n');
-			
+		
 		if($year == null)
 			$year = $today->format('Y');
 		
 		if($day == null)
-			$day = 1;
-		$day = intval($day);
-			
+			$day = $today->format('j');
+		
 		$today->setDate($year, $month, $day);
 
 		$this->set('today', $today);
@@ -81,7 +79,7 @@ class EntriesController extends AppController{
 		
 		// to list categories for user to filter calendar
 		$this->loadModel('Category');
-		$cats = $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$userId)));
+		$cats = $this->Entry->Category->find('all', array('conditions'=>array('user_id'=>$userId)));
 		$this->set('categories', $cats);
 		$this->set('userId', $this->Auth->user('id'));
 				

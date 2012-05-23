@@ -187,7 +187,23 @@
 							
 						return false;
 						
+					},
+					'SelectColor' : function(t){
+						$('#selectColor').show().css({'left':$(t).offset().left + $(t).width(),
+															'top':$(t).offset().top});
+						
+						$(document).bind('click', function(e){
+								if(e.target.className='colorCell'){
+									var form = $('<form action="'+basePath + '/categories/update/' + t.getAttribute('categoryId') + '" method=POST>'+
+										'<input type=hidden name=data[Category][color] value="'+e.target.getAttribute('value')+'"/>'+
+										'</form>')
+									form.submit();
+								}
+								$('#selectColor').hide();
+								$(document).unbind('click', arguments.callee);
+							})
 					}
+					
 				  }
 			  });
 			
@@ -204,7 +220,7 @@
 			// remove flash after few seconds
 			if($('#flashElem').children().length){
 				$('#flashElem:first-child')
-					.delay(3000)
+					.delay(2000)
 					.fadeOut(300)
 					.queue(function(){$(this).remove();})
 			}
@@ -376,14 +392,18 @@ echo "</td></tr></table>";
 									$view, $year, $month, 'categoryId'=>0),
 								array('style'=>'color:#669;'));
 		echo "<br>";
-		foreach($categories as $catId => $cat){
-			if(isset($category) && $catId == $category)
-				echo "<span class='selectedInactiveLink'>". $cat . "</span>";
+		
+		foreach($categories as $cat){
+			$cat = $cat['Category'];
+			@$style = 'color:'.$cat['color'].';';
+			
+			if(isset($category) && $cat['id'] == $category)
+				echo "<span class='selectedInactiveLink'>". $cat['name'] . "</span>";
 			else
-				echo $this->Html->link($cat,
+				echo $this->Html->link($cat['name'],
 									array('controller'=>'entries', 'action'=>'index', 
-										$view, $year, $month, $day, 'categoryId'=>$catId),
-									array('name'=>'categoryLink', 'categoryId'=>$catId));
+										$view, $year, $month, $day, 'categoryId'=>$cat['id']),
+									array('name'=>'categoryLink', 'categoryId'=>$cat['id'], 'style'=>$style ));
 			
 			echo "<br>";
 		}
@@ -467,13 +487,43 @@ echo "</td></tr></table>";
 <!-- Context Menu -->
 <div class="contextMenu" id="categoryCtxMenu">
 	<ul>
+		<li id="SelectColor"> Select Color</li>
 		<li id="Delete"> Delete this Category</li>
 	</ul>
 </div>
 
 
 
+
 </span>
+  
+  
+  
+
+<div style='position:absolute; top:100px; left:100px; display:none;' id='selectColor'>
+	<table style='border:1px solid gray;'>
+		<?php
+			$colors = array();
+			for($i=0; $i<15; $i+=3){
+				for($j=0; $j<15; $j+=3){
+					for($k=0; $k<15; $k+=4){
+						array_push($colors, "#".dechex($i).dechex($j).dechex($k));
+					}
+				}
+			}
+			//	echo count($colors);
+			shuffle($colors);
+			for($j = 0; $j < 10; $j++){
+				echo '<tr>';
+				for($i = 0; $i < 10; $i++){
+					$idx = $j*10 + $i;
+					echo '<td class=colorCell style="background: '.$colors[$idx].';" value='.$colors[$idx].'><td>';
+				}
+				echo '</tr>';
+			}
+		?>
+	</table>
+</div>
   
 <!-- Individual Entry Details Dialog -->
 <div id=detailsDlg style='position:absolute;'></div>
