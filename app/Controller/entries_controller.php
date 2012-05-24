@@ -20,14 +20,24 @@ class EntriesController extends AppController{
 		$this->set('view', $view);
 		
 		$today = new DateTime();
-		if($month == null)
-			$month = $today->format('n');
 		
-		if($year == null)
-			$year = $today->format('Y');
+		if($month == null){
+			$month = CakeSession::read('UserValues.month');
+			$month = isset($month) ? $month : $today->format('n');
+		}
+		CakeSession::write('UserValues.month', $month);
 		
-		if($day == null)
-			$day = $today->format('j');
+		if($day == null){
+			$day = CakeSession::read('UserValues.day');
+			$day = isset($day) ? $day : $today->format('j');
+		}
+		CakeSession::write('UserValues.day', $day);
+		
+		if($year == null){
+			$year = CakeSession::read('UserValues.year');
+			$year = isset($year) ? $year : $today->format('Y');
+		}
+		CakeSession::write('UserValues.year', $year);
 		
 		$today->setDate($year, $month, $day);
 
@@ -35,8 +45,7 @@ class EntriesController extends AppController{
 		$this->set('year', $year);
 		$this->set('month', $month);
 		$this->set('day', $day);
-
-					
+	
 		try {
 				$this->Entry->user_id = $this->Auth->user('id');
 		} catch (Exception $e) {
@@ -58,7 +67,8 @@ class EntriesController extends AppController{
 		// if category is set filter by category, else get all
 		$categoryId = CakeSession::read('UserValues.categoryId');	
 		if(isset($categoryId)){
-			$this->set('category', $categoryId );
+			$this->set('category', $this->Entry->Category->findById($categoryId));
+			
 			$this->Entry->recursive = 2;
 			
 			$this->set('entries', $this->Entry->find('all',

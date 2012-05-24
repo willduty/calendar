@@ -1,5 +1,4 @@
 
-
 <?php
 
 	$monthName = $today->format('F'); 
@@ -40,13 +39,12 @@
 	
 	?>
 	
-	
 	<table class=hoursTableClass>
 
 	
 	<?php if (!isset($showHdr) || $showHdr == true): ?>
 	<tr>
-		<td colspan=5>
+		<td colspan=5 style='border:1px solid black;'>
 			<table class='calendarHdr'>
 				<tr>	
 					<td class='calendarHdr' style='background:black;'> <?php echo $prevLink; ?> </td>
@@ -95,9 +93,10 @@
 		echo "<td style='width:10%' class=hourCellHdr>$hour:00 am</td>";
 		$id = $today->format('Y/n/j/') . $hour . "/00/am";
 		echo "<td style='width:40%' class=hourCell name=hourCell id=$id>";
-		if(isset($dayHoursArray[$hour])){
-			foreach($dayHoursArray[$hour] as $entry){
+		if(isset($dayHoursArray[$i])){
+			foreach($dayHoursArray[$i] as $entry){
 				echo $this->Calendar->makeCalendarDateEntryLink($entry);
+				echo "<br>";
 			}
 		}
 		echo "</td>";
@@ -106,11 +105,11 @@
 			echo "<td rowspan=12 class=spacerCellDayView></td>";
 		
 		echo "<td style='width:10%' class=hourCellHdr>$hour:00 pm</td>";
-		$id = $today->format('Y/n/j/') . $hour . "/00/pm";
+		$id = $today->format('Y/n/j/') .  $hour . "/00/pm";
 		echo "<td style='width:40%' class=hourCell name=hourCell id=$id>";
 		
-		if(isset($dayHoursArray[$hour + 12])){
-			foreach($dayHoursArray[$hour + 12] as $entry){
+		if(isset($dayHoursArray[$i + 12])){
+			foreach($dayHoursArray[$i + 12] as $entry){
 				
 				// calendar date entry
 				echo $this->Calendar->makeCalendarDateEntryLink($entry);
@@ -124,3 +123,6 @@
 	}
 ?>
 </table>
+
+
+

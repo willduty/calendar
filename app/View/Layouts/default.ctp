@@ -35,8 +35,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td style="width:900px; height:600px;">
-				<div id="content">
+			<td style="width:900px; height:600px;padding: 20px 10px 2px 25px;">
+				<div id="content" >
 					<?php echo $content_for_layout; ?>
 				</div>
 			</td>

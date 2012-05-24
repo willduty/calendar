@@ -152,7 +152,7 @@
 						try{
 							var obj = $.parseJSON(ajaxResp);
 							if(obj.success){
-								alert('Category added')
+								// alert('Category added')
 								location = location;
 							}
 							else
@@ -220,7 +220,7 @@
 			// remove flash after few seconds
 			if($('#flashElem').children().length){
 				$('#flashElem:first-child')
-					.delay(2000)
+					.delay(1800)
 					.fadeOut(300)
 					.queue(function(){$(this).remove();})
 			}
@@ -268,8 +268,11 @@
 	);
 </script>
 
-<table>
-<tr><td style='width:900px;'>
+
+
+
+<table border=0>
+<tr><td style='width:950px;'>
 
 <?php
 
@@ -280,179 +283,187 @@ $currentDate = new DateTime();
 
 
 // begin calendar table
-echo "<table style='width:100%;'>";
+echo "<table style='width:100%;' border=0>";
 
 
-echo "<tr style=''><td colspan=7 style='background:white; padding: 2px 0px 2px 2px;'>";
+	echo "<tr style=''><td style='padding: 0px 0px 3px 0px;'>";
 
 
-echo $this->Html->link("today", 
-						array('controller'=>'entries', 'day', 
-							$currentDate->format('Y'), 
-							$currentDate->format('n'), 
-							$currentDate->format('d')), 
-						array('class'=>'buttonLink'));
-echo "&nbsp;"; 
-echo $this->Html->link("this month", 
-						array('controller'=>'entries', 'month', 
-							$currentDate->format('Y'), 
-							$currentDate->format('n')), 
-						array('class'=>'buttonLink'));
-echo "&nbsp;"; 
-echo $this->Html->link("this week", 
-						array('controller'=>'entries', 'week', 
-							$currentDate->format('Y'), 
-							$currentDate->format('n'), 
-							$currentDate->format('d')), 
-						array('class'=>'buttonLink'));
-
-
-echo "&nbsp; | "; 
-echo "&nbsp;"; 
-echo $this->Html->link('New Entry...', 
-						array('controller' => 'entries', 'action' => 'add'), 
-						array('class'=>'buttonLink'));
-
-echo "</td></tr><tr><td>";
-
-
-// draw the calendar depending on view (year, month or day)
-switch($view){
-
-	case 'list':
-		echo $this->element("calendar_list_view");
-		break;
-
-	case "month":
-		echo $this->element("calendar_month_view");
-		break;
-
-	case 'day':
-		echo $this->element('calendar_day_view');
-		break;
-		
-	case "year":
-		echo "todo: year view";
-		break;
-		
-	case "week":
-		echo $this->element('calendar_week_view');	
-		break;
+	echo $this->Html->link("this month", 
+							array('controller'=>'entries', 'month', 
+								$currentDate->format('Y'), 
+								$currentDate->format('n')), 
+							array('class'=>'buttonLink'));
+	echo "&nbsp;"; 
+	echo $this->Html->link("this week", 
+							array('controller'=>'entries', 'week', 
+								$currentDate->format('Y'), 
+								$currentDate->format('n'), 
+								$currentDate->format('d')), 
+							array('class'=>'buttonLink'));
+	echo "&nbsp;"; 
+	echo $this->Html->link("today", 
+							array('controller'=>'entries', 'day', 
+								$currentDate->format('Y'), 
+								$currentDate->format('n'), 
+								$currentDate->format('d')), 
+							array('class'=>'buttonLink'));
 	
+
+	echo "&nbsp; | "; 
+	echo "&nbsp;"; 
+	echo $this->Html->link('New Entry...', 
+							array('controller' => 'entries', 'action' => 'add'), 
+							array('class'=>'buttonLink'));
+										
+	if(isset($category)){
+		echo '<div style="float:right; margin:0px 30px 0px 0px; color:#900;">showing only entries in: <b>'.$category['Category']['name'].'</b></div>';
+	}
 		
-}
-
-echo "\r\n";
-
-echo "</td></tr></table>";
-
-// end draw calendar
-
-
-
-
-?>
-
-<table style='width:100%;'><tr><td id=flashElem>
-
-	<?php
-		echo $this->Session->flash(); 
+		
+						
 	?>
-	</td></tr>
-</table>
+		</td></tr>
+		<tr><td >
+	<?php
 
+	// draw the calendar depending on view (year, month or day)
+	switch($view){
 
-</td>
+		case 'list':
+			echo $this->element("calendar_list_view");
+			break;
 
+		case "month":
+			echo $this->element("calendar_month_view");
+			break;
 
-<!-- spacer column -->
-<td style="width:50px; background:white;"></td>
-
-<!-- right hand column -->
-<td style="width:250px; background:white;">
-
-
-	<h2>Search</h2>
-	
-	<form id="searchForm" action="">
-		<input type="text" name="searchTerms"></input>
-		<button type=submit>go</button>
-	<?php echo $this->Form->end(); ?>
-	
-	<br><br>
-	
-	
-	<h2>Categories</h2>
-	
-	<?php 
-		
-		// categories loaded separately in controller
-		echo $this->Html->link('[show all entries]', 
-								array('controller'=>'entries', 'action'=>'index', 
-									$view, $year, $month, 'categoryId'=>0),
-								array('style'=>'color:#669;'));
-		echo "<br>";
-		
-		foreach($categories as $cat){
-			$cat = $cat['Category'];
-			@$style = 'color:'.$cat['color'].';';
+		case 'day':
+			echo $this->element('calendar_day_view');
+			break;
 			
-			if(isset($category) && $cat['id'] == $category)
-				echo "<span class='selectedInactiveLink'>". $cat['name'] . "</span>";
-			else
+		case "year":
+			echo "todo: year view";
+			break;
+			
+		case "week":
+			echo $this->element('calendar_week_view');	
+			break;
+		
+			
+	}
+
+	echo "\r\n";
+
+	echo "</td></tr></table>";
+
+	// end draw calendar
+
+
+
+
+	?>
+
+	<table style='width:100%;'><tr><td id=flashElem>
+
+		<?php
+			echo $this->Session->flash(); 
+		?>
+		</td></tr>
+	</table>
+
+
+	</td>
+
+
+	<!-- spacer column -->
+	<td style="width:20px; background:white;"></td>
+
+	<!-- right hand column -->
+	<td style="width:280px; background:white; padding:0px 40px 0px 0px;">
+
+
+		
+		<br><br>
+		<h2>Categories</h2>
+		
+		<?php 
+			
+			foreach($categories as $cat){
+				$cat = $cat['Category'];
+				@$style = 'color:'.$cat['color'].';';
+				
+				$blt = $cat['id'] == @$category['Category']['id'] ? "&#8226" : '';
+				
+				$class = $cat['id'] == @$category['Category']['id'] ? 'sidebarOptionsSelected' : 'sidebarOptions';
+				
 				echo $this->Html->link($cat['name'],
 									array('controller'=>'entries', 'action'=>'index', 
 										$view, $year, $month, $day, 'categoryId'=>$cat['id']),
-									array('name'=>'categoryLink', 'categoryId'=>$cat['id'], 'style'=>$style ));
+									array('name'=>'categoryLink', 'categoryId'=>$cat['id'], 'style'=>$style, 'class'=>$class ));
+				
+			}
 			
-			echo "<br>";
-		}
+			echo $this->Html->link('show all categories', 
+									array('controller'=>'entries', 'action'=>'index', 
+										$view, $year, $month, 'categoryId'=>0));
+			echo ' | ';
+			echo $this->Html->link('add new&raquo;', 
+							array('controller'=>'categories', 'action'=>'add', $year, $month), 
+							array('id'=>'newCategory', 'escape'=>false));
+			
+		?>
 		
-		echo $this->Html->link('add new&raquo;', 
-						array('controller'=>'categories', 'action'=>'add', $year, $month), 
-						array('id'=>'newCategory', 'escape'=>false));
+		<div id=newCatDlg style='display:none;'>
+		<?php
+			echo $this->Form->create('Category', array('id'=>'newCatForm'));
+			echo $this->Form->input('name');
+			echo '<br>';
+			echo $this->Form->end('submit', array('style'=>'background:red; align:right;'));
+		?>	
 		
-	?>
-	
-	<div id=newCatDlg style='display:none;'>
-	<?php
-		echo $this->Form->create('Category', array('id'=>'newCatForm'));
-		echo $this->Form->input('name');
-		echo '<br>';
-		echo $this->Form->end('submit', array('style'=>'background:red; align:right;'));
-	?>	
-	
-	</div>
-	
-	
-	<br><br><br>
-	
-	<h2>View</h2>
-	<?php
-		//echo $this->Html->link('year', array('action'=>'index', "year", $year, $month)) . "<br>";
-		echo $this->Html->link('month', array('action'=>'index', "month", $year, $month)) . "<br>";
-		echo $this->Html->link('week', array('action'=>'index', "week", $year, $month, $day)) . "<br>";
-		echo $this->Html->link('day', array('action'=>'index', "day", $year, $month, 1)) . "<br>";
-		echo $this->Html->link('list', array('action'=>'index', "list"));
-	?>
-	
-	
-	
-	<br><br><br>
-	
-	<h2>Email</h2>
-	<?php
-		echo $this->Html->link('day', array('action'=>'index', "day", $year, $month, 1)) . "<br>";
-		echo $this->Html->link('list', array('action'=>'index', "list")) . '<br>';
-		echo $this->Html->link('new mailing list', array('action'=>'index', "year", $year, $month)) . "<br>";
-	?>
-	
-	
-	<br><br>
-	
-	
-</td>
-</tr>
+		</div>
+		
+		
+		<br><br><br>
+		
+		<h2>View</h2>
+		<?php
+			//echo $this->Html->link('year', array('action'=>'index', "year", $year, $month));
+			echo $this->Html->link('month', array('action'=>'index', "month", $year, $month), 
+										array('class'=>'sidebarOptions' ));
+			echo $this->Html->link('week', array('action'=>'index', "week", $year, $month, $day), 
+										array('class'=>'sidebarOptions' ));
+			echo $this->Html->link('day', array('action'=>'index', "day", $year, $month, 1), 
+										array('class'=>'sidebarOptions' ));
+			echo $this->Html->link('list', array('action'=>'index', "list"), 
+										array('class'=>'sidebarOptions' ));
+		?>
+		
+		<br>	
+
+		<h2>Search</h2>
+		
+		<form id="searchForm" action="">
+			<input type="text" name="searchTerms"></input>
+			<button type=submit>go</button>
+		<?php echo $this->Form->end(); ?>
+		
+		<br><br>
+		<!--
+		<h2>Email</h2>
+		<?php
+			echo $this->Html->link('day', array('action'=>'index', "day", $year, $month, 1)) . "<br>";
+			echo $this->Html->link('list', array('action'=>'index', "list")) . '<br>';
+			echo $this->Html->link('new mailing list', array('action'=>'index', "year", $year, $month)) . "<br>";
+		?>
+		-->
+		
+		<br><br>
+		
+		
+	</td>
+	</tr>
 </table>
 
 
@@ -493,8 +504,6 @@ echo "</td></tr></table>";
 </div>
 
 
-
-
 </span>
   
   
@@ -512,7 +521,7 @@ echo "</td></tr></table>";
 				}
 			}
 			//	echo count($colors);
-			shuffle($colors);
+		//	shuffle($colors);
 			for($j = 0; $j < 10; $j++){
 				echo '<tr>';
 				for($i = 0; $i < 10; $i++){

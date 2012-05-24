@@ -78,6 +78,8 @@
 		// pre submit validation
 		$('#EntryForm').bind('submit', validateForm);
 		
+		$('#EntryName').focus();
+		
 	})
 	
 	
@@ -216,22 +218,22 @@
 </script>
 
 
-
-
 <!-- BEGIN FORM -->
 
-<?php if($this->action == 'add'): ?>
-	<h2>New Calendar Entry</h2>
-<?php elseif ($_EDIT): ?>	
-	<h2>Entry Details</h2>
+<?php if ($_EDIT): ?>	
+	<h2 style='color:#a60'>Edit Calendar Entry</h2>
+<?php else: ?>
+	<h3 style='color:#a60'><b>New Calendar Entry</b></h3>
 <?php endif; ?>
 
+<br>
+<h2>Entry Details</h2>
 
 <?php
 
 echo $this->Form->create('Entry', array('id'=>'EntryForm'));
 
-echo '<div class="simpleSectionLight" style="width:500px;">';
+echo '<div class="simpleSectionLight">';
 
 echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>array('style'=>'font-weight:bold;')));
 
@@ -250,11 +252,6 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>a
 		echo $this->Form->input('city');
 		echo $this->Form->input('state');
 		echo $this->Form->input('zip_code');
-	?>
-	
-	</td><td>
-	
-	<?php
 		echo $this->Form->input('comments', array('label'=>array('text'=>'Notes', 'class'=>'neatForm70')));
 	
 	?>
@@ -276,7 +273,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>a
 <!-- LIST OF EXISTING DATES -->
 <?php 
 	if($_EDIT):
-	echo '<h2>Dates</h2><div style="padding:5px 0px 5px 0px;" id=existingDates class=simpleSectionLight>'; 
+	echo '<h2>Dates</h2><div id=existingDates class=simpleSectionLight>'; 
 	foreach($this->data['Date'] as $date):
 ?>
 

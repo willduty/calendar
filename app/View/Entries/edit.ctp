@@ -2,6 +2,7 @@
 <!--
 <div style="background:gray; width:700px;"><h2 class="white">Edit Calendar Entry</h2></div>
 -->
+<div style='padding:20px;'>
 
 <?php
 
@@ -9,5 +10,5 @@
 echo $this->element("entryForm", array('formTitle' => 'Edit Calendar Entry'));
 	
 ?>
-
+</div>
 

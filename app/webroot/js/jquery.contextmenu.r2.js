@@ -35,7 +35,8 @@
       cursor: 'default',
       padding: '3px',
       border: '1px solid #fff',
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
+	  font: 'normal 12px arial'
     },
     itemHoverStyle: {
       border: '1px solid #0a246a',

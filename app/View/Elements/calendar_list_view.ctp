@@ -1,11 +1,14 @@
+
+<table style='width:800px;'>
 	<tr>
-			<td colspan=7 style='background-color:black; color:white; align:center;'>
+			<td colspan=7 style='background-color:black; color:white; align:center; border:1px solid black;'>
 				<table class='calendarHdr'><tr>	
-					<td>All Calendar Entries</td>
+					<td>Calendar Entries </td>
 				</tr></table>
 			</td>
 		</tr>
-		<tr><td colspan=7  style='height:500px;'>
+		<tr>
+			<td colspan=7  style='height:500px; border:1px solid lightgray;'>
 			<table style='width:100%;'>
 			
 			<tr>
@@ -31,11 +34,14 @@
 			echo '</td>';
 			
 			echo '<td style="width:15%">';
-			if(isset($entry['Entry']['category_id']))
-				echo '<div class=inactiveLink>'.$categories[$entry['Entry']['category_id']].'</div>';
+			
+			if(isset($entry['Entry']['category_id'])){
+				echo '<div class=inactiveLink>'.$entry['Category']['name'].'</div>';
+			}
 			echo '</td>';
 			
 			echo '</tr>';
 		}
 		echo '</table></td></tr>';
 		?>
+</table>

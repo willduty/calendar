@@ -54,16 +54,19 @@
 		
 		function delete($id){
 			
-			
 			$arr = explode('/', CakeRequest::referer());
 			
-						
+			// Delete the category
 			$this->Category->delete($id);	
+			
+			// Remove the category from calendar entries that belong to it
 			$entries = $this->Entry->findAllByCategoryId($id);
 			foreach($entries as $entry){
 				$this->Entry->id = $entry['Entry']['id'];
 				$this->Entry->saveField('category_id', NULL);
 			}
+			
+			$this->Session->setFlash('category removed', 'flashElem');
 			
 			if($arr[3] != 'categories')
 				$this->redirect(CakeRequest::referer());
@@ -71,7 +74,6 @@
 				$this->redirect(array('action' => 'index'));
 	
 			$this->redirect(array('action' => 'index'));
-			
 			
 		}
 	

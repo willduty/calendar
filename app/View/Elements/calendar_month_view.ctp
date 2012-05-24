@@ -1,3 +1,6 @@
+
+<table>
+
 <?php
 	
 	$monthName = $today->format('F'); 
@@ -27,7 +30,7 @@
 
 			<!-- calendar header/nav -->
 			<tr>
-				<td colspan=7>
+				<td colspan=7 style='border:1px solid black;'>
 					<table class='calendarHdr'>
 						<tr>	
 							<td class='calendarHdr' style='background:black;'> <?php echo $prevLink; ?> </td>
@@ -43,7 +46,7 @@
 			<!-- week day names -->
 			<tr>
 				<?php foreach($dayList as $weekDay){ ?>
-				<td style='width:100px' class='calendarSubHdr'><?php echo $weekDay; ?></td>
+				<td style='width:100px; border:1px solid #555;' class='calendarSubHdr'><?php echo $weekDay; ?></td>
 				<?php } ?>
 			</tr>
 
@@ -68,7 +71,7 @@
 		reset($monthsArray);
 		
 		$firstDayOfMonth = $today->format('w');
-		$firstDayOfMonth++;
+		//$firstDayOfMonth++;
 		if($firstDayOfMonth == 8)
 			$firstDayOfMonth = 1;
 		
@@ -105,12 +108,7 @@
 				
 				// set up cell style 
 				$cellStyle = "";
-				/*
-				if(date("jnY") ==  $dayCtr . ($monthCtr) . $year){
-					// highlight if day is today
-					$cellStyle .= " todayCell";
-				}
-*/
+				
 				if(key($monthsArray) != 1) // gray out days not in month
 					$cellStyle .= "outOfMonthCell";
 				
@@ -138,7 +136,7 @@
 				
 				// break weeks loop if day is saturday (7) and it's either the last day of current month or we are in nextmonth
 				if($key == 7){
-					if(!isset($monthArray[$dayCtr + 1]) || key($monthsArray) == 2)
+					if((!isset($monthArray[$dayCtr + 1]) && key($monthsArray) == 1) || key($monthsArray) == 2)
 						$continueFlag = false;
 				}
 				
@@ -152,3 +150,4 @@
 				break;			
 		}
 		?>
+	</table>

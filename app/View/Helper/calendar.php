@@ -5,11 +5,11 @@ class CalendarHelper extends AppHelper{
 
 	
 	// get array of days of month. each day is an array of dates 
-	function getMonthViewArray($entries, $year, $monthIter){
+	function getMonthViewArray($entries, $year, $month){
 	
 			$monthArray = array();
-			$this->initializeMonthArray($year, $monthIter, $monthArray);
-			$monthNthDayMap = $this->getNthWeekdayOfMonthMap($year, $monthIter);
+			$this->initializeMonthArray($year, $month, $monthArray);
+			$monthNthDayMap = $this->getNthWeekdayOfMonthMap($year, $month);
 			
 			// iterate all entries and put them in monthArrays
 			foreach($entries as $entry){
@@ -20,12 +20,18 @@ class CalendarHelper extends AppHelper{
 					
 					switch($dateType){			
 						case 'onetime':
+							
 							$arr = explode("-", $entryDate['start_date']); 
-							if($monthIter == $arr[1] // if in current month, show
-								&& ($entryDate['repeating'] ? true : ($arr[0] == $year)) // if repeating sh-ow, else only if this year
+							if($month == $arr[1] // if in current month, show
+								&& ($entryDate['repeating'] ? true : ($arr[0] == $year)) // if repeating show, else only if this year
 								){
 								$dayNum = intval($arr[2]);
-								array_push($monthArray[$dayNum], $entry);
+								if($dayNum == 29 && $month == 2 && !isset($monthArray[29])){
+									// LEAP YEAR! todo: show on 28th?
+								}
+								else
+									array_push($monthArray[$dayNum], $entry);
+								
 							}
 							break;
 							
@@ -45,7 +51,7 @@ class CalendarHelper extends AppHelper{
 								$ctr = 0;
 								while(true){
 									// if in range of this month add to month array
-									if($date->format('n') == $monthIter && $date->format('Y') == $year){										
+									if($date->format('n') == $month && $date->format('Y') == $year){										
 										array_push($monthArray[$date->format('j')], $entry);
 									}
 									
@@ -67,7 +73,7 @@ class CalendarHelper extends AppHelper{
 									$months = explode(',', $entryDate['months_of_year']);
 									
 									foreach($months as $m){
-										if($m == $monthIter){
+										if($m == $month){
 											foreach($daysOfWeek as $dayOfWeek){
 												foreach($weeks as $weekOfMonth){
 													$dayNum = $monthNthDayMap[$dayOfWeek][$weekOfMonth];
@@ -331,6 +337,12 @@ class CalendarHelper extends AppHelper{
 			echo '//'.$a;
 		}
 		$str.= "</ul>";
+
+		if(isset($entry['Entry']['comments'])){
+			$comments = str_replace("\n", "<br>", str_replace("\r\n", '<br>', $entry['Entry']['comments']));
+			$str .= "<br><b>Comments:</b> <span style='color:#333'><br>" . $comments . "</span><br><br>";	
+		}
+
 		
 		$str .= "<br><a href='/entries/edit/".$entry['Entry']['id']."'> edit</a>" . " | " . 
 				"<a href='/entries/delete/".$entry['Entry']['id']."' onclick='return confirm(\"Entry will be deleted. Are you sure?\")'> delete</a>";

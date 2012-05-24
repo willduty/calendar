@@ -1,3 +1,4 @@
+<table>
 <?php
 	
 	echo "<tr><td style='background:#eee;'>";
@@ -48,7 +49,6 @@
 		
 		
 		// week view calender day column headers
-		
 		echo "<tr>";
 		
 		$hdrArr = array();
@@ -56,8 +56,12 @@
 		
 		for($n=1; $n<8; $n++){
 			$weekDay = $dayOfWeek;
+			
+			$currentDay = new DateTime();
 		
-			array_push($hdrArr, "<td class=calendarSubHdr style='height:20px;' colspan=2>".
+			$border = $weekDay->format('YMd') == $currentDay->format('YMd') ? 'border:1px solid red;' : '';
+		
+			array_push($hdrArr, "<td class=calendarSubHdr style='height:20px; $border' colspan=2>".
 				$weekDay->Format('D, M j')."</td>");
 			
 			// for each day of week get hours array. index for each hour may be empty or contain entries
@@ -78,8 +82,9 @@
 		$tds = array();
 		$boolAllDay = false;
 		foreach($daysArr as $d){
-				$str = "<td colspan=2 class='hourCellWeekView' >
-						<div>All Day Entries:</div>";
+				
+			$str = "<td colspan=2 class='allDayCellWeekView'>
+					<div>All Day Entries:</div>";
 							
 			if(@count($d['allday'])){
 				foreach($d['allday'] as $dayEntry){
@@ -134,3 +139,7 @@
 		
 	echo "</td></tr>";
 ?>
+</table>
+
+
+

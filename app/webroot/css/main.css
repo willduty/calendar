@@ -237,7 +237,7 @@ a.prevnext:hover {
 
 
 div.simpleSectionLight {
-	width: 450px;
+	width: 400px;
 	border: solid 1px lightgray;
 	border-radius: 4px;
 	padding: 15px 15px 15px 15px;
@@ -327,6 +327,8 @@ body {
 }
 
 
+
+
 #header{
 	background:gray;
 	padding: 10px 20px 0px 5px;
@@ -349,11 +351,12 @@ body {
 	float:left;
 }
 
+
 #content{
 	background: #fff;
 	clear: both;
 	color: #333;
-	padding: 10px 20px 0px 20px;
+	padding: 0px;
 	#overflow: auto;
 }
 
@@ -372,15 +375,6 @@ div.view {
 	width:76%;
 	border-left:1px solid #666;
 	padding:10px 2%;
-}
-div.actions {
-	float:left;
-	width:16%;
-	padding:10px 1.5%;
-}
-div.actions h3 {
-	padding-top:0;
-	color:#777;
 }
 
 
@@ -523,7 +517,7 @@ td.calendarCell:hover{
 	background: lightgray;
 }
 
-td.hourCellWeekView{
+td.hourCellWeekView, td.allDayCellWeekView{
 	font: normal 10px arial;
 	background:white;
 	border-bottom: 1px solid lightgray;
@@ -534,15 +528,16 @@ td.hourCellWeekView{
 	width:50px;
 }
 
-
+td.allDayCellWeekView{
+	background:#eed090;
+}
 
 table.weektable tr.hourCellRow:nth-child(odd) td.hourCellWeekView {
-	background: #fff0b0;
+	
 }
 
 td.hourCellWeekView+td.hourCellWeekView{
 	border-left: 1px solid lightgray;
-
 }
 
 .hourCellWeekView:hover{
@@ -567,7 +562,7 @@ td.hourCell, .hourCellHdr{
 	border-color:#eee;
 	padding: 0px;
 	width: 120px;
-	height: 35px;
+	height: 40px;
 	background:white;
 }
 
@@ -606,8 +601,14 @@ td.hourCell:hover, .dlg_hour_cell:hover {
 tr.hourCellRow:nth-child(odd) td.hourCell,
 tr.hourCellRow:nth-child(odd) td.hourCellHdr
 {
-	background: #fff0b0;
+	background: #fff5b5;
 }
+tr.hourCellRow:nth-child(odd) td.hourCell:hover{
+	background: #ffe0a0;
+}
+
+
+
 
 .noOverflowDiv{
 	white-space: nowrap;
@@ -694,24 +695,55 @@ p.error em {
 }
 
 /**  Actions  **/
+
+
+div.actions {
+	width:50%;
+}
 div.actions ul {
 	margin: 0;
 	padding: 0;
 }
 div.actions li {
-	margin:0 0 0.5em 0;
+	margin:0 0 0 0;
 	list-style-type: none;
 	white-space: nowrap;
 	padding: 0;
-}
-div.actions ul li a {
-	font-weight: normal;
-	display: block;
 	clear: both;
 }
-div.actions ul li a:hover {
-	text-decoration: underline;
+div.actions ul li a, .sidebarOptions, .sidebarOptionsSelected {
+	display: block;
+	font-weight: normal;
+	font-weight:normal;
+	padding: 4px 8px;
+	background:#e6e49f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
+	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
+	color:#333;
+	border:1px solid #aaac62;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	text-decoration:none;
+	text-shadow: #fff 0px 1px 0px;
+	min-width: 0;
+	margin:1px;
 }
+
+.sidebarOptionsSelected{
+	border:2px solid #a60;
+}
+
+
+input[type=submit]:hover,
+div.actions ul li a:hover,
+td.actions a:hover {
+	background: #f0f09a;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
+}
+
+
+
 
 input[type=submit] { display: inline-block; 
 	position: relative; 
@@ -724,27 +756,8 @@ input[type=submit] { display: inline-block;
 	overflow: visible; } /* the overflow property removes extra width in IE */
 
 
-div.actions ul li a, td.actions a {
-	font-weight:normal;
-	padding: 4px 8px;
-	background:#e6e49f;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
-	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
-	color:#333;
-	border:1px solid #aaac62;
-	-webkit-border-radius:8px;
-	-moz-border-radius:8px;
-	border-radius:8px;
-	text-decoration:none;
-	text-shadow: #fff 0px 1px 0px;
-	min-width: 0;
-}
-input[type=submit]:hover,
-div.actions ul li a:hover,
-td.actions a:hover {
-	background: #f0f09a;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
-}
+
+
 
 /** Related **/
 div.related {
