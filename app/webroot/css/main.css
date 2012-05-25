@@ -465,6 +465,10 @@ td.calendarCell{
 	background:white;
 }
 
+td.calendarCell:hover{
+	background: #e5e5f5;
+}
+
 td.calendarCell div.monthCellHdr{
 	margin:1px;
 }
@@ -500,14 +504,7 @@ td.outOfMonthCell{
 	background-color:lightgray;
 }
 
-td.todayCell{
 
-}
-
-
-td.calendarCell:hover{
-	background: #e5e5f5;
-}
 
 
 

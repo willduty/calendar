@@ -3,7 +3,9 @@
 
 <?php
 	
-	$monthName = $today->format('F'); 
+	$firstDayOfMonth = new DateTime("$month/1/$year");
+	
+	$monthName = $firstDayOfMonth->format('F'); 
 
 	$dayList = array(1 => 'Sun', 2 => 'Mon', 3 => 'Tue', 4 => 'Wed', 5 => 'Thu', 6 => 'Fri', 7 => 'Sat'); 
 
@@ -67,17 +69,16 @@
 			$this->Calendar->getMonthViewArray($entries, $month < 12 ? $year : $year + 1, $month < 12 ? $month + 1 : 1)		
 		);
 
-
 		reset($monthsArray);
 		
-		$firstDayOfMonth = $today->format('w');
-		//$firstDayOfMonth++;
-		if($firstDayOfMonth == 8)
-			$firstDayOfMonth = 1;
+		$weekDayOfFirst = $firstDayOfMonth->format('w');
+		$weekDayOfFirst++;
+		if($weekDayOfFirst == 8)
+			$weekDayOfFirst = 1;
 		
-		// do we need to show a bit of last month?
-		// if $firstDayOfMonth is sunday then no: set $monthArray to current month. else to prev month 	
-		if($firstDayOfMonth == 1){
+		// do we need to show part of last month?
+		// if $weekDayOfFirst is sunday then no: set $monthArray to current month. else to prev month 	
+		if($weekDayOfFirst == 1){
 			$monthArray = next($monthsArray); 
 			$dayCtr = 1;
 		}
