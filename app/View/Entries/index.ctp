@@ -193,10 +193,11 @@
 															'top':$(t).offset().top});
 						
 						$(document).bind('click', function(e){
-								if(e.target.className='colorCell'){
+								if(e.target.className == 'colorCell'){
 									var form = $('<form action="'+basePath + '/categories/update/' + t.getAttribute('categoryId') + '" method=POST>'+
 										'<input type=hidden name=data[Category][color] value="'+e.target.getAttribute('value')+'"/>'+
 										'</form>')
+									$(document.body).append(form)
 									form.submit();
 								}
 								$('#selectColor').hide();
