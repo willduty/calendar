@@ -7,9 +7,29 @@
 		var $helpers = array('Html', 'Form');
 		var $name = "Reminders";
 		
+		function beforeFilter(){
+			$this->Auth->allow('cron');
+		}
+		
+		
 		function index(){
-			echo 'ok';
+			echo 'ok';			
+			die();
+		}
+		
+		
+		function cron($token){
 			
+			// if $token valid
+			
+				// find reminders 
+			
+				// for each
+					// if time to send
+						// get entry
+						// set up email
+			mail('willduty@yahoo.com', 'cron test', 'cron test');
+			echo 'cron';
 			die();
 		}
 		
