@@ -105,7 +105,6 @@
 						
 			}
 			
-			//mail('willduty@yahoo.com', 'cron test', 'cron test');
 			die();
 		}
 		

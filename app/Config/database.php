@@ -59,24 +59,13 @@
  */
 class DATABASE_CONFIG {
 
-	
-	public $default = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'mysql-shared-02.phpfog.com',
-		'login' => 'CakePHP-38719',
-		'password' => 'Superman1',
-		'database' => 'cakecalendar_phpfogapp_com',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
 	/*
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
-		'password' => 'superman',
+		'password' => '',
 		'database' => 'cakecalendar',
 		'prefix' => '',
 		//'encoding' => 'utf8',
