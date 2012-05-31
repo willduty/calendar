@@ -83,7 +83,9 @@
 									$dateEvent->format('Y-m-d h:i:s');
 							$user = $this->User->findById($entry['Entry']['user_id']);
 							$email = $user['User']['email'];
-
+							
+							echo '<br>'.$email .'<br>';
+							
 							mail($email,  
 								'Calendar Reminder for: "'.$entry['Entry']['name'].'"', 
 								$message);
@@ -92,6 +94,7 @@
 							
 							
 							// delete reminder
+							echo 'deleting reminder';
 							$this->Reminder->delete($reminder['id']);
 							continue;
 						}
