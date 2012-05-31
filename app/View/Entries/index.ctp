@@ -66,7 +66,34 @@
 					  location = path + "/edit/" + t.getAttribute("entryId");
 					},
 					'Reminder': function(t) {
-						var _t = t;
+						
+						$('#remindersDlg').find('form').attr('action', basePath + '/reminders/add/' + t.getAttribute('entryId'));
+					
+						var tip = $(t).qtip({
+							content: {
+								title: 'Add Reminder',
+								text: $('#remindersDlg')
+							},
+							show: {ready:true},
+							hide: 'unfocus',
+							api:{
+								onHide: function(){
+                						$(t).qtip('destroy');
+                						}
+							},
+							style: {
+								width : {min : 200},
+								name: 'light',
+								padding: '7px 13px',
+								border:{width:1, color:'#333'},
+								tip: true 
+							}
+						})
+						.click(function(){return false;})
+						
+						
+						return false;
+						
 						$.get(basePath + "/reminders/add/" + t.getAttribute("entryId"),
 							function(resp){
 								alert(resp)
@@ -81,7 +108,7 @@
 				  }
 			  });
 			
-			// context menu for calendar entry
+			// context menu for calendar cell in day and week views
 			$('[class=hourCellWeekView],[name=hourCell]').contextMenu('hourCtxMenu', {
 				  bindings: {
 					'AddEntry': function(t) {	 
@@ -110,7 +137,6 @@
 						padding: '7px 13px',
 						border:{width:1, color:'#333'},
 						tip: true, 
-						font:'normal 12px verdana',
 						title:{color:'black'}
 						
 					}
@@ -195,8 +221,8 @@
 						$(document).bind('click', function(e){
 								if(e.target.className == 'colorCell'){
 									var form = $('<form action="'+basePath + '/categories/update/' + t.getAttribute('categoryId') + '" method=POST>'+
-										'<input type=hidden name=data[Category][color] value="'+e.target.getAttribute('value')+'"/>'+
-										'</form>')
+										'<input type=hidden name=data[Category][color] value="'+e.target.getAttribute('value')+'">'+
+										'</form> ')
 									$(document.body).append(form)
 									form.submit();
 								}
@@ -537,3 +563,31 @@ echo "<table style='width:100%;' border=0>";
   
 <!-- Individual Entry Details Dialog -->
 <div id=detailsDlg style='position:absolute;'></div>
+<div id=remindersDlg style='display:none;'>
+	<?php
+		echo $this->Form->create('Reminder', array('id'=>'newReminder'));
+		
+		
+		echo 'Enter days and/or hours before to receive reminder (or just click submit for 1 day in advance)<br>';
+		
+		echo '<table><tr><td>';
+		echo $this->Form->input('days', array('type'=>'select', 'options'=>array(0, 1, 2, 3, 4, 5, 6, 7), 'label'=>'days'));
+		echo '</td><td>';
+		echo $this->Form->input('hours', array('type'=>'select', 
+						'options'=>array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), 
+						'label'=>'hours'));
+		echo '</td></tr></table>';
+		
+		echo '<br>';
+		
+		
+		echo $this->Form->submit('submit', array('label'=>'submit', 'name'=>'submit', 'div'=>false));
+		echo $this->Form->submit('cancel', array('label'=>'submit', 'name'=>'submit', 'div'=>false));
+		
+	?>	
+		
+	
+</div>
+
+
+

@@ -10,7 +10,11 @@ class Entry extends AppModel{
 	var $hasMany = array(
 		"Date" => array(
 			'className' => 'Date',
+			'dependent' => true),
+		"Reminder" => array(
+			'className' => 'Reminder',
 			'dependent' => true)
+			
 		);
 	
 	var $validate = array(

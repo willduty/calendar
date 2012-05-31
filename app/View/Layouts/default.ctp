@@ -27,7 +27,7 @@
 						$logout = $this->Html->link('logout', array('controller'=>'users', 'action'=>'logout'));
 						$profile = $this->Html->link('account', array('controller'=>'users', 'action'=>'edit'));
 						$help = $this->Html->link('help', '/pages/help.html');
-						echo "$logout | $profile | $help";	
+						echo "$logout | $profile | $help";
 					}
 				?>
 				</div>
@@ -35,7 +35,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td style="width:900px; height:600px;padding: 20px 10px 2px 25px;">
+			<td style="width:900px; height:600px; padding: 20px 10px 2px 25px;">
 				<div id="content" >
 					<?php echo $content_for_layout; ?>
 				</div>

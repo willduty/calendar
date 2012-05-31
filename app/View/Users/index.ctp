@@ -1,4 +1,6 @@
 
+<h3 style='color:#a60'><b>Admin</b></h3>
+	
 <h2>Users:</h2>
 <table style = "width:600px;">
 	<tr style="background-color:black; color:white;">
@@ -32,11 +34,65 @@ foreach($users as $user){
 
 <br><br>
 
+
+
+<h2>Cron:</h2>
+<table style = "width:1000px;">
+	<tr style="background-color:black; color:white;">
+		<td style="background-color:black; ">name</td>
+		<td style="background-color:black; ">id</td>
+		<td style="background-color:black; ">status</td>
+		<td style="background-color:black; ">details</td>
+		<td style="background-color:black; ">log</td>
+		<td style="background-color:black; ">created</td>
+		<td style="background-color:black; ">delete</td>
+
+	</tr>
+
 <?php
 
-echo $this->Html->link('new user',
-						array('action' => 'add'));
-echo " | ";
+foreach($ironWorkerTasks as $iwt){
+	$task = $iwt['IronWorkerTask'];
+	$id = $task['id'];
+	$name = $task['name'];
+	$task_id = $task['task_id'];
+	$schedule_id = $task['schedule_id'];
+	$details = $task['details'];
+	$log = $task['log'];
+	$created = $task['created'];
+	
+	echo "<tr>
+		<td>$name</td>
+		<td>$task_id</td>
+		<td>$schedule_id</td>
+		<td>$details</td>
+		<td>$log</td>
+		<td>$created</td>
+		<td>".
+			$this->Html->link('delete', array('controller'=>'iron_worker_tasks', 'action'=>'destroy',  $id))
+		."</td>
+		</tr>";
+}
+
+?>
+
+</table>
+
+<?php
+	echo $this->Html->link('new cron &raquo;', array('controller'=>'iron_worker_tasks', 'action'=>'add', 'reminders_cron' ));
+?>
+
+
+<br><br>
+
+
+
+
+
+
+
+<?php
+
 
 echo $this->Html->link('calendar main page',
 						array('controller' => 'entries',

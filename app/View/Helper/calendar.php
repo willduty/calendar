@@ -3,6 +3,7 @@
 // utility helper object for calendar functionality
 class CalendarHelper extends AppHelper{
 
+	var $helpers = array('Html');
 	
 	// get array of days of month. each day is an array of dates 
 	function getMonthViewArray($entries, $year, $month){
@@ -192,8 +193,19 @@ class CalendarHelper extends AppHelper{
 		
 		@$style = 'style="color:'.$entry['Category']['color'].';"';
 		
+		$bellIcon = ''; 
+		if(count($entry['Reminder'])){
+			
+			$bellIcon = $this->Html->image(
+					'bell.icon.png', 
+					array('alt'=> __('has reminder', true), 'border' => '0','style'=>'padding:0px 2px 0px 2px;'),
+					'http://www.cakephp.org/',
+					array('target' => '_blank', 'escape' => false)
+					);	
+		}			
+		
 		return "<a $style href='/calendar/entries/view/".$entry['Entry']['id']."' class=entryLink entryId=".
-			$entry['Entry']['id']." name=entry>".$entry['Entry']['name']."</a>";
+			$entry['Entry']['id']." name=entry>" . $bellIcon .$entry['Entry']['name']."</a>";
 		
 		$options = array('name' => 'entry',
 				'popUpText' => $entry['Entry']['name'],
@@ -201,7 +213,6 @@ class CalendarHelper extends AppHelper{
 		if(isset($class))
 			$options['class'] = $class;
 		
-		$htmlHelper = new HtmlHelper($this);
 		return $htmlHelper->link($entry['Entry']['name'],
 			array('escape' => false,
 				'controller' => 'entries', 	

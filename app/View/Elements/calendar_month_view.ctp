@@ -129,7 +129,7 @@
 				if(is_array($monthArray[$dayCtr])){
 					foreach($monthArray[$dayCtr] as $entry){
 						// show calendar date entry
-						echo $this->Calendar->makeCalendarDateEntryLink($entry);
+						echo $this->Calendar->makeCalendarDateEntryLink($entry, null);
 						echo "<br>";
 					}
 				}

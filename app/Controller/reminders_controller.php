@@ -3,7 +3,7 @@
 
 	class RemindersController extends AppController{
 		
-		var $uses = array('Entry', 'Reminder');
+		var $uses = array('Entry', 'Reminder', 'User');
 		var $helpers = array('Html', 'Form');
 		var $name = "Reminders";
 		
@@ -13,7 +13,7 @@
 		
 		
 		function index(){
-			echo 'ok';			
+			echo 'ok';		
 			die();
 		}
 		
@@ -22,14 +22,87 @@
 			
 			// if $token valid
 			
-				// find reminders 
+			// find reminders 
+			$reminders = $this->Reminder->find('all');
 			
-				// for each
-					// if time to send
-						// get entry
-						// set up email
-			mail('willduty@yahoo.com', 'cron test', 'cron test');
-			echo 'cron';
+			foreach($reminders as $reminder){
+				echo '------<br>';
+				// get entry
+				
+				$reminder = $reminder['Reminder'];
+				//debug($reminder);
+				$hours_before = $reminder['hours_before'];
+				if(!isset($hours_before)){
+					echo 'bad reminder';
+					// delete reminder
+					
+					$this->Reminder->delete($reminder['id']);
+					continue;
+				}
+						
+				$entry = $this->Entry->findById($reminder['entry_id']);
+				
+				foreach($entry['Date'] as $date){
+						
+					//debug($date);
+					
+					// repeating date
+					if(isset($date['weeks_pattern'])){ 
+					
+						//echo 'is repeating';
+						
+						//echo $hours_before;
+						
+						// if time to send
+							
+							// send email		
+					}
+					else{  // onetime date
+						echo '<br>onetime<br>';
+						
+						$now = new DateTime();
+						
+						$startDate = $date['start_date'];
+						if(isset($date['start_time']))
+							$startDate .= ' ' . $date['start_time'];
+						echo $startDate . '<br>';
+						
+						$dateEvent = new DateTime($startDate);
+						$interval = date_diff($dateEvent, $now);		
+						
+						
+						$hours_left = ($interval->format('%a%') * 24) + 
+								$interval->h;
+						
+						// if time to send
+						if($hours_left < $hours_before){
+							
+							// send email
+							
+							$message = 'You have a calendar entry  "'.$entry['Entry']['name'].'" scheduled for '. 
+									$dateEvent->format('Y-m-d h:i:s');
+							$user = $this->User->findById($entry['Entry']['user_id']);
+							$email = $user['User']['email'];
+
+							mail($email,  
+								'Calendar Reminder for: "'.$entry['Entry']['name'].'"', 
+								$message);
+			
+							// todo if no repeating dates and this is latest date
+							
+							
+							// delete reminder
+							$this->Reminder->delete($reminder['id']);
+							continue;
+						}
+					}
+				}
+				echo '<br><br>';
+							
+						
+			}
+			
+			//mail('willduty@yahoo.com', 'cron test', 'cron test');
 			die();
 		}
 		
@@ -40,13 +113,29 @@
 		
 		function add($entryId){
 	
-			$entry = $this->Entry->read($entryId);
+			$hours = $this->data['Reminder']['days'] * 24 + $this->data['Reminder']['hours'];
 			
-			$b = $this->Reminder->save(array('Reminder'=>array('body'=>'Reminder for calendar date: '. $entry['Entry']['name'], 'entry_id' => $entryId)));
-			$reminder = $this->Reminder->read();
-			$json = '{"success":'.$b.', obj:'.json_encode($reminder).'}';
-			echo $json;
-			die();
+			if($hours == 0)
+				$hours = 24;
+				
+			$entry = $this->Entry->read($entryId);
+			$b = $this->Reminder->save(array(
+							'Reminder'=>array(
+								'body'=>'Reminder for calendar date: '. $entry['Entry']['name'], 
+								'entry_id' => $entryId,
+								'hours_before'=>$hours)
+							));
+			
+			
+			if($this->request->is('ajax')){
+				$reminder = $this->Reminder->read();
+				$json = '{"success":'.$b.', obj:'.json_encode($reminder).'}';
+				echo $json;
+				die();
+			}else{
+				$this->redirect('/entries');
+			}
+			
 			
 		}
 		

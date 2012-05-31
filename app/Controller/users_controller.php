@@ -3,6 +3,7 @@
 class UsersController extends AppController{
 	var $helpers = array('Html', 'Js');
 	var $name = 'Users';
+	var $uses = array('User', 'IronWorkerTask');
 
 	function beforeFilter(){
 		parent::beforeFilter();
@@ -30,10 +31,16 @@ class UsersController extends AppController{
 	}
 	
 	function index(){
-		$this->set('users', $this->User->find('all'));
-	}
 	
-	function add(){
+		$user = $this->User->findById($this->Auth->user('id'));
+		
+		if($user['User']['user_group_id'] != 1){
+			echo 'forbidden';
+			die();
+		}
+	
+		$this->set('users', $this->User->find('all'));
+		$this->set('ironWorkerTasks', $this->IronWorkerTask->find('all')); 
 	}
 	
 	function register(){
