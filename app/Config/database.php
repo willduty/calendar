@@ -59,7 +59,7 @@
  */
 class DATABASE_CONFIG {
 
-	$pwd = getenv('MYSQL_PASSWORD'),;
+	$pwd = getenv('MYSQL_PASSWORD');
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
