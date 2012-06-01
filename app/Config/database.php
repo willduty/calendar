@@ -59,13 +59,13 @@
  */
 class DATABASE_CONFIG {
 
-	
+	$pwd = getenv('MYSQL_PASSWORD'),;
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'mysql-shared-02.phpfog.com',
 		'login' => 'CakePHP-38719',
-		'password' => getenv('MYSQL_PASSWORD'),
+		'password' => $pwd,
 		'database' => 'cakecalendar_phpfogapp_com',
 		'prefix' => '',
 		//'encoding' => 'utf8',
