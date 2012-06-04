@@ -211,7 +211,8 @@ class EntriesController extends AppController{
 	function getCalendar($view, $y, $m, $d){
 		try{
 		$this->Entry->recursive = 2;
-		$this->set('entries', $this->Entry->findAllByUserId($this->Auth->user('id')));		
+		
+		$this->set('entries', $this->Entry->findAllByCalendarId(CakeSession::read('UserValues.calendarId')));		
 		$this->set('year', $y);		
 		$this->set('month', $m);		
 		$this->set('day', $d);			
