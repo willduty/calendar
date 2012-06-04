@@ -29,8 +29,9 @@ class EntriesController extends AppController{
 		if(isset($calendarId)){
 			CakeSession::write('UserValues.calendarId', $calendarId);
 		}
-		elseif(CakeSession::read('UserValues.calendarId'))
-			$calendarId = CakeSession::read('UserValues.calendarId');
+		elseif(CakeSession::read('UserValues.calendarId')){
+			$calendarId = CakeSession::read('UserValues.calendarId');	
+		}
 		else{
 			$this->Calendar->recursive = 0;
 			$calendar = $this->Calendar->find('first',
@@ -112,7 +113,7 @@ class EntriesController extends AppController{
 		
 		// to list categories for user to filter calendar
 		$this->loadModel('Category');
-		$cats = $this->Entry->Category->find('all', array('conditions'=>array('calendar_id'=>$calendarId)));
+		$cats = $this->Entry->Category->find('all', array('conditions'=>array('Category.calendar_id'=>$calendarId)));
 		$this->set('categories', $cats);
 		$this->set('userId', $this->Auth->user('id'));
 		

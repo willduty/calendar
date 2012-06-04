@@ -17,6 +17,7 @@ class UsersController extends AppController{
 				// clear user session items (todo, make this an option?)
 				CakeSession::delete('UserValues.view');
 				CakeSession::delete('UserValues.categoryId');
+				CakeSession::delete('UserValues.calendarId');
 				
 				// main calendar page
 				return $this->redirect($this->Auth->redirect());
