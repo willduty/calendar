@@ -35,7 +35,7 @@
 		echo 
 		"<tr>
 			<td colspan=20 style='height:20px;'>
-				<table class='calendarHdr' border=1>
+				<table class='calendarHdr' border=0>
 					<tr>	
 						<td class='calendarHdr' style='background:black;'> $prevLink </td>
 						<td class='calendarHdr' style='color:white; font-weight:bold; background:black'>
@@ -59,9 +59,10 @@
 			
 			$currentDay = new DateTime();
 		
-			$border = $weekDay->format('YMd') == $currentDay->format('YMd') ? 'border:1px solid red;' : '';
+			$class = $weekDay->format('YMd') == $currentDay->format('YMd') ? 
+				'calendarSubHdrToday' : 'calendarSubHdr';
 		
-			array_push($hdrArr, "<td class=calendarSubHdr style='height:20px; $border' colspan=2>".
+			array_push($hdrArr, "<td class=$class style='height:20px;' colspan=2>".
 				$weekDay->Format('D, M j')."</td>");
 			
 			// for each day of week get hours array. index for each hour may be empty or contain entries

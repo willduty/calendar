@@ -34,6 +34,8 @@
 
 		
 	$(document).ready(function(){
+		
+		$('#formArea').parent().css({'background':'white', 'border':'1px solid lightgray'})
 
 		gui = new GuiTree();
 		gui.setup();
@@ -218,8 +220,10 @@
 </script>
 
 
+
 <!-- BEGIN FORM -->
 
+<div id=formArea style='background:white;'>
 <?php if ($_EDIT): ?>	
 	<h2 style='color:#a60'>Edit Calendar Entry</h2>
 <?php else: ?>
@@ -233,7 +237,7 @@
 
 echo $this->Form->create('Entry', array('id'=>'EntryForm'));
 
-echo '<div class="simpleSectionLight">';
+echo '<div class="simpleSection">';
 
 echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>array('style'=>'font-weight:bold;')));
 
@@ -536,7 +540,7 @@ echo $this->Form->input('name', array('label'=>array('text'=>'Title '), 'div'=>a
 
 
 </form>
-
+</div>
 <!-- FORM END -->
 
 

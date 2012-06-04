@@ -59,28 +59,20 @@
 	<?php endif; ?>
 	
 	
-	<?php
-	// all day events...
-	if(@count($dayHoursArray['allday'])):
-	?>
-		<tr>
-			<td colspan=5 style=' align:left;'>
-				<div class=subHdr>All Day Entries:</div>
-				<?php 
-					
-					foreach($dayHoursArray['allday'] as $dayEntry){
-						echo $this->Calendar->makeCalendarDateEntryLink($dayEntry);
-						echo "<br>";
-					}
-				?>
-			</td>
-		</tr>
+	<tr>
+		<td colspan=5 style=' align:left;' class='allDayCellDayView'>
+			<div class='subHdr '>All Day Entries:</div>
+			<?php 
+				
+				foreach($dayHoursArray['allday'] as $dayEntry){
+					echo $this->Calendar->makeCalendarDateEntryLink($dayEntry);
+					echo "<br>";
+				}
+			?>
+		</td>
+	</tr>
 
-	
-	<?php
-		endif;
-	?>
-	
+
 	
 
 <!-- am/pm -->
@@ -92,7 +84,7 @@
 		echo "<tr class=hourCellRow>";
 		echo "<td style='width:10%' class=hourCellHdr>$hour:00 am</td>";
 		$id = $today->format('Y/n/j/') . $hour . "/00/am";
-		echo "<td style='width:40%' class=hourCell name=hourCell id=$id>";
+		echo "<td style='width:40%' class=hourCellDayView name=hourCellDayView id=$id>";
 		if(isset($dayHoursArray[$i])){
 			foreach($dayHoursArray[$i] as $entry){
 				echo $this->Calendar->makeCalendarDateEntryLink($entry);
@@ -106,7 +98,7 @@
 		
 		echo "<td style='width:10%' class=hourCellHdr>$hour:00 pm</td>";
 		$id = $today->format('Y/n/j/') .  $hour . "/00/pm";
-		echo "<td style='width:40%' class=hourCell name=hourCell id=$id>";
+		echo "<td style='width:40%' class=hourCellDayView name=hourCellDayView id=$id>";
 		
 		if(isset($dayHoursArray[$i + 12])){
 			foreach($dayHoursArray[$i + 12] as $entry){

@@ -9,9 +9,10 @@
 ?>
 
 <script type='text/javascript'>
-	var basePath = "<?php echo $this->base ?>";
-	var path = "<?php echo $this->base . "/" . $this->params['controller']; ?>";
-
+	var gBase = "<?php echo $this->base ?>";
+	var gPath = "<?php echo $this->base . "/" . $this->params['controller']; ?>";
+	var gView = "<?php echo $view; ?>";
+	
 	var entryDisplayData = {
 	<?php
 	foreach($entries as $index => $entry){
@@ -21,8 +22,44 @@
 		}
 	?>
 	}
-	
-	
+</script>
+
+
+<script type='text/javascript'>
+
+// utility obj for page element positioning
+function objPos(elem){
+	this.left = getXCoord(elem);
+	this.top = getYCoord(elem);
+	this.right = this.left + elem.offsetWidth;
+	this.bottom = this.top + elem.offsetHeight;
+	this.width = elem.offsetWidth;
+	this.height = elem.offsetHeight;
+}
+
+
+// get page element coordinates
+function getXCoord(elem){
+	var x = 0;
+	while(elem){
+		x += elem.offsetLeft;
+		elem = elem.offsetParent;
+	}
+	return x;
+}
+
+function getYCoord(elem){
+	var y = 0;
+	while(elem){
+		y += elem.offsetTop;
+		elem = elem.offsetParent;
+	}
+	return y; // todo get height of elem
+}
+
+
+
+
 	function searchCallback(ajaxReturnVal){
 		ajaxReturnVal = $.trim(ajaxReturnVal); // todo: this should not be necessary
 		var matches = ajaxReturnVal.split(',');
@@ -47,13 +84,13 @@
 			$('td.calendarCell').contextMenu('dateCtxMenu', {
 				  bindings: {
 					'addSingleDateEntry': function(t) {
-					  location = path + "/add/" + t.getAttribute("id");
+					  location = gPath + "/add/" + t.getAttribute("id");
 					},
 					'highlightDay': function(t) {
-					  location = path + "/highlightDay/<?php echo $view; ?>/" + t.getAttribute("id");
+					  location = gPath + "/highlightDay/"+gView+"/" + t.getAttribute("id");
 					},
 					'viewDay': function(t) {		
-						location = path + "/index/day/" + t.getAttribute("id");
+						location = gPath + "/index/day/" + t.getAttribute("id");
 					}
 				  }
 			  });
@@ -63,11 +100,11 @@
 			$('a[name=entry]').contextMenu('entryCtxMenu', {
 				  bindings: {
 					'Edit': function(t) {
-					  location = path + "/edit/" + t.getAttribute("entryId");
+					  location = gPath + "/edit/" + t.getAttribute("entryId");
 					},
 					'Reminder': function(t) {
 						
-						$('#remindersDlg').find('form').attr('action', basePath + '/reminders/add/' + t.getAttribute('entryId'));
+						$('#remindersDlg').find('form').attr('action', gBase + '/reminders/add/' + t.getAttribute('entryId'));
 					
 						var tip = $(t).qtip({
 							content: {
@@ -94,25 +131,25 @@
 						
 						return false;
 						
-						$.get(basePath + "/reminders/add/" + t.getAttribute("entryId"),
+						$.get(gBase + "/reminders/add/" + t.getAttribute("entryId"),
 							function(resp){
 								alert(resp)
 						})
-						//location = basePath + "/reminders/add/" + t.getAttribute("entryId");
+						//location = gBase + "/reminders/add/" + t.getAttribute("entryId");
 					},
 					'Delete': function(t) {
 						var name = entryDisplayData[t.getAttribute("entryId")].name;
 						if(confirm("are you sure you want to delete calendar entry \"" + name + "\"?"))
-							location = path + "/delete/" + t.getAttribute("entryId");
+							location = gPath + "/delete/" + t.getAttribute("entryId");
 					}
 				  }
 			  });
 			
 			// context menu for calendar cell in day and week views
-			$('[class=hourCellWeekView],[name=hourCell]').contextMenu('hourCtxMenu', {
+			$('[class=hourCellWeekView],[name=hourCellDayView]').contextMenu('hourCtxMenu', {
 				  bindings: {
 					'AddEntry': function(t) {	 
-					  location = path + "/add/" + t.getAttribute("id");
+					  location = gPath + "/add/" + t.getAttribute("id");
 					}
 				  }
 			  });
@@ -172,7 +209,7 @@
 			
 			// new category add form and callback
 			$('#newCatForm').submit(function(){
-				$.post(basePath + "/categories/add",
+				$.post(gBase + "/categories/add",
 					$(this).serialize(),
 					function newCatCallback(ajaxResp){
 						try{
@@ -197,7 +234,7 @@
 					'Delete': function(t) {
 					
 						// check for entries before deleting category
-						$.get(basePath + '/entries/entriesByCategory/' + t.getAttribute("categoryId"),
+						$.get(gBase + '/entries/entriesByCategory/' + t.getAttribute("categoryId"),
 							function(resp){
 								var json = $.parseJSON(resp);
 								
@@ -206,7 +243,7 @@
 												confirm("This category contains one or more entries. "+
 												"Are you sure you want to delete this category?\n"+
 												"(Entries will not be deleted but will not longer belong to this category.)"))
-										location = basePath + "/categories/delete/" + t.getAttribute("categoryId");
+										location = gBase + "/categories/delete/" + t.getAttribute("categoryId");
 									
 							})
 						
@@ -220,7 +257,7 @@
 						
 						$(document).bind('click', function(e){
 								if(e.target.className == 'colorCell'){
-									var form = $('<form action="'+basePath + '/categories/update/' + t.getAttribute('categoryId') + '" method=POST>'+
+									var form = $('<form action="'+gBase + '/categories/update/' + t.getAttribute('categoryId') + '" method=POST>'+
 										'<input type=hidden name=data[Category][color] value="'+e.target.getAttribute('value')+'">'+
 										'</form> ')
 									$(document.body).append(form)
@@ -235,9 +272,39 @@
 			  });
 			
 			
+						
+			$('#newCalendar').qtip({
+				content: {
+					title: 'New Calendar',
+					text: $('#newCalendarDlg')
+				},
+				show: 'click',
+				hide: 'unfocus',
+				style: {
+					width : {min : 200},
+					name: 'light',
+					padding: '7px 13px',
+					border:{width:1, color:'#333'},
+					tip: true
+				}
+		
+			})
+			.click(function(){return false;})
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			// ajax, search for terms
 			$("#searchForm").submit(function(){
-				$.get(basePath+"/entries/search",
+				$.get(gBase+"/entries/search",
 						$(this).serialize(),
 						searchCallback);
 				return false;
@@ -259,16 +326,17 @@
 				
 				function showDayDlg(){
 					$.get(
-						basePath + '/entries/getCalendar/day/' + t.getAttribute("id"),
+						gBase + '/entries/getCalendar/day/' + t.getAttribute("id"),
 						function(resp){
-							var left = t.offsetWidth + t.offsetLeft;
-							$(t).parents().each(function(){left+=this.offsetLeft})
-							var top = t.offsetTop;
+						
+							pos = new objPos(t)
+							var left = pos.right;
+							var top = pos.top;
 							
 							$('#detailsDlg').show()
 								.css({'top': top, 'left': left, 'background':'black', 'border':'1px solid black'})
 								.html(resp)
-								.find('[name=hourCell]').contextMenu('hourCtxMenu', {
+								.find('[name=hourCellDayView]').contextMenu('hourCtxMenu', {
 									  bindings: {
 										'AddEntry': function(t) {	 
 										  location = path + "/add/" + t.getAttribute("id");
@@ -278,7 +346,7 @@
 			
 								
 							$(document).bind('mousedown', function(e){
-								if($(e.target).attr('name') == 'hourCell'){
+								if($(e.target).attr('name') == 'hourCellDayView'){
 									return false;
 								}
 								
@@ -293,13 +361,17 @@
 			// END DOCUMENT.READY
 		}
 	);
+
 </script>
 
 
 
 
+<!-- content table -->
+
+
 <table border=0>
-<tr><td style='width:950px;'>
+<tr><td style='width:900px;'>
 
 <?php
 
@@ -309,7 +381,7 @@ $monthName = $today->format('F'); // month name for display in month and day nav
 $currentDate = new DateTime();
 
 
-// begin calendar table
+// calendar table
 echo "<table style='width:100%;' border=0>";
 
 
@@ -403,37 +475,63 @@ echo "<table style='width:100%;' border=0>";
 	</td>
 
 
-	<!-- spacer column -->
-	<td style="width:20px; background:white;"></td>
 
 	<!-- right hand column -->
-	<td style="width:280px; background:white; padding:0px 40px 0px 0px;">
+	<td style="width:120px; padding:0px 0px 0px 20px;" class='sidebar'>
 
 
 		
-		<br><br>
+		<br>
+
+
+
+
+		<h2>Calendars</h2>
+		<?php
+			foreach($calendars as $calendar){
+				$calendar = $calendar['Calendar'];
+				echo $this->Html->link($calendar['name'], array('action'=>'index', "month", $year, $month, 
+											'calendarId'=>$calendar['id']), 
+										array('class'=>
+										$calendar['id'] == $calendarId ? 
+										'sidebarOptionsSelected' : 'sidebarOptions'));
+			
+			}
+		
+		echo $this->Html->link('add new calendar&raquo;', 
+					array(), 
+					array('id'=>'newCalendar', 'escape'=>false));	
+		?>
+			
+		<br>	
+		<br>	
+
+
+
+		
 		<h2>Categories</h2>
 		
 		<?php 
 			
-			foreach($categories as $cat){
-				$cat = $cat['Category'];
-				@$style = 'color:'.$cat['color'].';';
+			foreach($categories as $c){
+				$c = $c['Category'];
+				@$style = 'color:'.$c['color'].';';
 				
-				$blt = $cat['id'] == @$category['Category']['id'] ? "&#8226" : '';
+				$blt = $c['id'] == @$category['Category']['id'] ? "&#8226" : '';
 				
-				$class = $cat['id'] == @$category['Category']['id'] ? 'sidebarOptionsSelected' : 'sidebarOptions';
+				$class = $c['id'] == @$category['Category']['id'] ? 'sidebarOptionsSelected' : 'sidebarOptions';
 				
-				echo $this->Html->link($cat['name'],
-									array('controller'=>'entries', 'action'=>'index', 
-										$view, $year, $month, $day, 'categoryId'=>$cat['id']),
-									array('name'=>'categoryLink', 'categoryId'=>$cat['id'], 'style'=>$style, 'class'=>$class ));
-				
+				echo $this->Html->link($c['name'],
+							array('controller'=>'entries', 'action'=>'index', 
+								$view, $year, $month, $day, 'categoryId'=>$c['id']),
+							array('name'=>'categoryLink', 'categoryId'=>$c['id'], 
+								'style'=>$style, 'class'=>$class ));
+
 			}
 			
 			echo $this->Html->link('show all categories', 
-									array('controller'=>'entries', 'action'=>'index', 
-										$view, $year, $month, 'categoryId'=>0));
+							array('controller'=>'entries', 'action'=>'index', 
+								$view, $year, $month, 'categoryId'=>0));
 			echo ' | ';
 			echo $this->Html->link('add new&raquo;', 
 							array('controller'=>'categories', 'action'=>'add', $year, $month), 
@@ -452,28 +550,45 @@ echo "<table style='width:100%;' border=0>";
 		</div>
 		
 		
-		<br><br><br>
+		<div id=newCalendarDlg style='display:none;'>
+		<?php
+			echo $this->Form->create('Calendar', array('controller'=>'calendars', 'action'=>'add', 'id'=>'newCalendarForm'));
+			echo $this->Form->input('name');
+			echo '<br>';
+			echo $this->Form->end('submit', array('style'=>'background:red; align:right;'));
+		?>	
+		
+		</div>
+		
+		
+		
+		<br>
+		<br>
 		
 		<h2>View</h2>
 		<?php
 			//echo $this->Html->link('year', array('action'=>'index', "year", $year, $month));
 			echo $this->Html->link('month', array('action'=>'index', "month", $year, $month), 
-										array('class'=>'sidebarOptions' ));
+										array('class'=>($view == 'month' ? 
+										'sidebarOptionsSelected' : 'sidebarOptions') ));
 			echo $this->Html->link('week', array('action'=>'index', "week", $year, $month, $day), 
-										array('class'=>'sidebarOptions' ));
+										array('class'=>($view == 'week' ? 
+										'sidebarOptionsSelected' : 'sidebarOptions') ));
 			echo $this->Html->link('day', array('action'=>'index', "day", $year, $month, 1), 
-										array('class'=>'sidebarOptions' ));
+										array('class'=>($view == 'day' ? 
+										'sidebarOptionsSelected' : 'sidebarOptions') ));
 			echo $this->Html->link('list', array('action'=>'index', "list"), 
-										array('class'=>'sidebarOptions' ));
+										array('class'=>($view == 'list' ? 
+										'sidebarOptionsSelected' : 'sidebarOptions') ));
 		?>
 		
 		<br>	
+
 
 		<h2>Search</h2>
 		
 		<form id="searchForm" action="">
 			<input type="text" name="searchTerms"></input>
-			<button type=submit>go</button>
 		<?php echo $this->Form->end(); ?>
 		
 		<br><br>

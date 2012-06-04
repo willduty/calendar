@@ -3,11 +3,14 @@
 class EntriesController extends AppController{
 	var $helpers = array('Html', 'Js', 'Calendar');
 	var $name = 'Entries';
-	var $uses = array('Entry', 'Date', 'User');
+	var $uses = array('Entry', 'Date', 'User', 'Calendar');
 	
 	
 	// main calendar page
-	function index($view = null, $year = null, $month = null, $day = null, $search = null){	
+	function index($view = null, $year = null, $month = null, $day = null, $search = null, $calendarId = null){	
+	
+		
+		$userId = $this->Auth->user('id');
 	
 		// if set explicitly in url, write calendar view type to session
 		if($view)
@@ -18,7 +21,27 @@ class EntriesController extends AppController{
 			$view = "month"; // default is month view
 			
 		$this->set('view', $view);
-		
+
+
+
+		// if set explicitly in url, write calendarId to session
+		$calendarId = @$this->params['named']['calendarId'];
+		if(isset($calendarId)){
+			CakeSession::write('UserValues.calendarId', $calendarId);
+		}
+		elseif(CakeSession::read('UserValues.calendarId'))
+			$calendarId = CakeSession::read('UserValues.calendarId');
+		else{
+			$this->Calendar->recursive = 0;
+			$calendar = $this->Calendar->find('first',
+					array('conditions'=>array('Calendar.is_default'=>1, 
+								'Calendar.user_id'=>$userId))
+					);
+			$calendarId = $calendar['Calendar']['id']; 
+			CakeSession::write('UserValues.calendarId', $calendarId);
+		}
+
+
 		$today = new DateTime();
 		
 		if($month == null){
@@ -47,13 +70,12 @@ class EntriesController extends AppController{
 		$this->set('day', $day);
 	
 		try {
-				$this->Entry->user_id = $this->Auth->user('id');
+			$this->Entry->user_id = $this->Auth->user('id');
 		} catch (Exception $e) {
-				echo 'Caught exception: '.  $e->getMessage(). "\n";
+			echo 'Caught exception: '.  $e->getMessage(). "\n";
 		}
 			
 			
-		$userId = $this->Auth->user('id');
 				
 		// set category in user session if set in url
 		// or unset if url param is set to zero
@@ -63,24 +85,25 @@ class EntriesController extends AppController{
 				CakeSession::delete('UserValues.categoryId') :
 				CakeSession::write('UserValues.categoryId', $val);
 		}
+		
+		
 			
 		// if category is set filter by category, else get all
 		$categoryId = CakeSession::read('UserValues.categoryId');	
-		if(isset($categoryId)){
+		
+		if(isset($categoryId)){		
 			$this->set('category', $this->Entry->Category->findById($categoryId));
-			
 			$this->Entry->recursive = 2;
-			
 			$this->set('entries', $this->Entry->find('all',
-										array('conditions'=>
-											array('Entry.user_id'=>$userId,
-												'category_id' => $categoryId 
-												))));
+								array('conditions'=>
+									array('Entry.calendar_id'=>$calendarId,
+										'category_id' => $categoryId 
+										))));
 			
 		}
 		else {
 			$this->Entry->recursive = 2;
-			$this->set('entries', $this->Entry->findAllByUserId($userId));
+			$this->set('entries', $this->Entry->findAllByCalendarId($calendarId));
 		}
 
 		if(isset($search)){
@@ -89,10 +112,16 @@ class EntriesController extends AppController{
 		
 		// to list categories for user to filter calendar
 		$this->loadModel('Category');
-		$cats = $this->Entry->Category->find('all', array('conditions'=>array('user_id'=>$userId)));
+		$cats = $this->Entry->Category->find('all', array('conditions'=>array('calendar_id'=>$calendarId)));
 		$this->set('categories', $cats);
 		$this->set('userId', $this->Auth->user('id'));
-				
+		
+		
+		// calendars and current calendar
+		$this->Calendar->recursive = 0;	
+		$this->set('calendars', $this->Calendar->findAllByUserId($userId));
+		$this->set('calendarId', $calendarId);
+		
 	}
 	
 	
@@ -104,7 +133,8 @@ class EntriesController extends AppController{
 		if(!empty($this->data)){ // form has been submitted
 
 			$this->adjustDataArray($data);
-			$data['Entry']['user_id'] = $this->Auth->user('id');
+			
+			$data['Entry']['calendar_id'] = CakeSession::read('UserValues.calendarId');
 		
 			if($this->Entry->saveAll($data)){
 			
@@ -148,7 +178,9 @@ class EntriesController extends AppController{
 			}	
 		}
 		
-		$this->set('categories', $this->Entry->Category->find('list', array('conditions'=>array('user_id'=>$this->Auth->user('id')))));
+		$this->set('categories', $this->Entry->Category->find('list', 
+						array('conditions'=>array('Category.calendar_id'=>CakeSession::read('UserValues.calendarId'))
+						)));
 	
 		$this->Entry->recursive = 2;
 		$this->data = $this->Entry->read();

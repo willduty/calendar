@@ -41,7 +41,7 @@
 		echo "<tr>";
 		echo "<td class=dlg_hour_cell_hdr>$hour:00 am</td>";
 		$id = $today->format('Y/n/j/') . $hour . "/00/am";
-		echo "<td class=dlg_hour_cell name=hourCell id=$id style='color:purple;'>";
+		echo "<td class=dlg_hour_cell name=hourCellDayView id=$id style='color:purple;'>";
 		if(isset($dayHoursArray[$hour])){
 			foreach($dayHoursArray[$hour] as $entry){
 				echo $this->Calendar->makeCalendarDateEntryLink($entry);
@@ -54,7 +54,7 @@
 		
 		echo "<td class=dlg_hour_cell_hdr>$hour:00 pm</td>";
 		$id = $today->format('Y/n/j/') . $hour . "/00/pm";
-		echo "<td class=dlg_hour_cell name=hourCell id=$id>";
+		echo "<td class=dlg_hour_cell name=hourCellDayView id=$id>";
 		
 		if(isset($dayHoursArray[$hour + 12])){
 			foreach($dayHoursArray[$hour + 12] as $entry){

@@ -28,7 +28,7 @@
 			try{
 				if(!empty($this->request->data)){
 					$data = $this->request->data;
-					$data['Category']['user_id'] = $this->Auth->user('id');
+					$data['Category']['calendar_id'] = CakeSession::read('UserValues.calendarId');
 					if($this->RequestHandler->isAjax()){
 						$success = $this->Category->save($data);
 						$json['success'] = $success;

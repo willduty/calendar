@@ -15,12 +15,12 @@
 </head>
 
 <body>
-	<table id=mainTable>
-		<tr>
-			<td id="header">				
-				<h3> 
-					<a href='<?php echo $this->base; ?>'  style='font-size:17px;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
-				</h3>
+		<div id="header">
+			
+			<div class=wrapper>				
+				
+				<a href='<?php echo $this->base; ?>'  style='font:bold 17px Courier;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
+				
 				<div style='float:right;'>
 				<?php 
 					if($this->action != 'login'){
@@ -31,21 +31,19 @@
 					}
 				?>
 				</div>
-			
-			</td>
-		</tr>
-		<tr>
-			<td style="width:900px; height:600px; padding: 20px 10px 2px 25px;">
-				<div id="content" >
-					<?php echo $content_for_layout; ?>
-				</div>
-			</td>
-		</tr>
+			</div>
 		
-		<tr>
-			<td>			
+		</div>
 		
-				<div id="footer">
+		<div>
+			<div class=wrapper style="padding: 20px 10px 2px 25px;">
+				<?php echo $content_for_layout; ?>	
+			</div>
+		</div>
+		
+		<div id="footer">
+		
+				<div class=wrapper>
 				
 				<?php
 					// if(!($this->params['controller'] == 'entries' && $this->params['action'] == 'index'))
@@ -59,9 +57,8 @@
 				?>
 				</div>
 
-			</td>
-		</tr>
-	</table>
+		</div>
+	
 		
 </body>
 </html>

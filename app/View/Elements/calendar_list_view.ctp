@@ -1,5 +1,5 @@
 
-<table style='width:800px;'>
+<table style='width:800px; background:white;'>
 	<tr>
 			<td colspan=7 style='background-color:black; color:white; align:center; border:1px solid black;'>
 				<table class='calendarHdr'><tr>	
@@ -21,7 +21,7 @@
 		foreach($entries as $entry){
 			echo '<tr>';
 			
-			echo '<td style="width:30%">';
+			echo '<td style="width:30%;">';
 			echo $this->Calendar->makeCalendarDateEntryLink($entry);
 			echo '</td>';
 			
