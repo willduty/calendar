@@ -116,7 +116,7 @@
 <div class=simpleSection>
 	<div style='font:bold 12px arial;'>
 	Acct Created: <span class=data><?php echo $user['User']['created']; ?></span><br>
-	Calendar Entries: <span class=data><?php echo count($user['Entry']); ?></span><br>
+	Calendars: <span class=data><?php echo count($user['Calendar']); ?></span><br>
 	Active Alerts: <span class=data>todo</span><br>
 	</div>
 </div>

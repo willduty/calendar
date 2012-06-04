@@ -49,6 +49,14 @@ class AppController extends Controller {
 	
 	function adjustDataArray(&$dataArray){
 		
+		if(isset($dataArray['Entry'])){
+			foreach($dataArray['Entry'] as $key=>$field)
+				if(strlen($field) == 0)
+					$dataArray['Entry'][$key] = null;
+			
+		}
+		
+		
 		// get any fields in the form post which don't directly represent the data
 		// model and rework them into the data array
 		

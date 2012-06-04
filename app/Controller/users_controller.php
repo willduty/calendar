@@ -132,6 +132,7 @@ class UsersController extends AppController{
 		
 		$id = $this->Auth->user('id');
 		$this->User->id = $id;
+		$this->User->recursive = 3;
 		if(empty($this->data)){
 			$this->data = $this->User->read();
 			$this->set('user', $this->User->read());

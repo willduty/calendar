@@ -19,7 +19,7 @@
 			
 			<div class=wrapper>				
 				
-				<a href='<?php echo $this->base; ?>'  style='font:bold 17px Courier;'>. . . <span style='font-size:30px;'>C</span>alendar</a>
+				<a href='<?php echo $this->base; ?>' style='font:bold 17px Courier;'>&nbsp;.<span style='font-size:30px;'>C</span>alendar</a>
 				
 				<div style='float:right;'>
 				<?php 

@@ -339,7 +339,7 @@ function getYCoord(elem){
 								.find('[name=hourCellDayView]').contextMenu('hourCtxMenu', {
 									  bindings: {
 										'AddEntry': function(t) {	 
-										  location = path + "/add/" + t.getAttribute("id");
+										  location = gPath + "/add/" + t.getAttribute("id");
 										}
 									  }
 								  });
